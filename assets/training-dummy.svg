@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130 170">
+  <defs><linearGradient id="wood" x1="0" x2="1"><stop stop-color="#9a6a3b"/><stop offset=".55" stop-color="#5b3822"/><stop offset="1" stop-color="#2f1c15"/></linearGradient><linearGradient id="iron" x1="0" x2="1"><stop stop-color="#a8a096"/><stop offset="1" stop-color="#383838"/></linearGradient></defs>
+  <path d="M46 21c0-12 9-20 20-20s20 8 20 20v20H46z" fill="url(#iron)" stroke="#222" stroke-width="4"/>
+  <rect x="54" y="37" width="24" height="82" rx="7" fill="url(#wood)" stroke="#2b1c15" stroke-width="4"/>
+  <path d="M20 59h91M26 61l-10 34M104 61l10 34" stroke="url(#wood)" stroke-width="12" stroke-linecap="round"/>
+  <path d="M42 62l47 43M88 62l-46 43" stroke="#b9905a" stroke-width="5" opacity=".9"/>
+  <path d="M38 118h55M48 119l-13 43M82 119l13 43" stroke="url(#wood)" stroke-width="11" stroke-linecap="round"/>
+  <path d="M33 163h65" stroke="#241812" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="65" cy="74" r="10" fill="#7f2f24" stroke="#d9aa67" stroke-width="4"/>
+</svg>
