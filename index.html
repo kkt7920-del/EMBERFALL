@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#15100c">
+  <title>EMBERFALL — 복원판</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">EMBERFALL RESTORATION</p>
+        <h1 id="char-title">버서커 · Lv.1</h1>
+        <p id="char-subtitle" class="muted">XP 0 · 골드 0 · 처치 0</p>
+      </div>
+      <div class="actions">
+        <label class="button primary file-button">
+          세이브 가져오기
+          <input id="import-save" type="file" accept="application/json,.json">
+        </label>
+        <button id="export-save" class="button">세이브 내보내기</button>
+        <button id="reset-save" class="button danger">초기화</button>
+      </div>
+    </header>
+
+    <nav class="tabs" aria-label="화면 선택">
+      <button class="active" data-tab="character">캐릭터</button>
+      <button data-tab="inventory">인벤토리</button>
+      <button data-tab="lab">스킬 체험장</button>
+      <button data-tab="design">복원 설계</button>
+    </nav>
+
+    <main>
+      <section id="view-character" class="view active">
+        <div id="overview"></div>
+        <section class="section-block">
+          <div class="section-head">
+            <div><p class="eyebrow">LOADOUT</p><h2>장착 장비</h2></div>
+            <span class="tag">프리셋 ${(0) + 1}</span>
+          </div>
+          <div id="equipment" class="equipment-grid"></div>
+        </section>
+      </section>
+
+      <section id="view-inventory" class="view">
+        <div class="section-head">
+          <div><p class="eyebrow">BAG</p><h2>인벤토리 <small id="inventory-count"></small></h2></div>
+          <label class="select-wrap">슬롯
+            <select id="slot-filter">
+              <option value="all">전체</option>
+              <option value="main">주무기</option>
+              <option value="off">보조무기</option>
+              <option value="head">투구</option>
+              <option value="chest">갑옷</option>
+              <option value="gloves">장갑</option>
+              <option value="boots">장화</option>
+              <option value="ring">반지</option>
+              <option value="amulet">목걸이</option>
+            </select>
+          </label>
+        </div>
+        <div id="inventory" class="inventory-grid"></div>
+      </section>
+
+      <section id="view-lab" class="view">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">SKILL LAB</p>
+            <h2>스킬 체험장</h2>
+            <p class="muted">세이브에서 확인된 5스킬 구조 위에 새 복원 설계를 얹은 테스트 화면입니다.</p>
+          </div>
+        </div>
+
+        <div class="lab-grid">
+          <aside class="panel controls">
+            <label>주무기
+              <select id="lab-main"></select>
+            </label>
+            <label>보조무기
+              <select id="lab-off"></select>
+            </label>
+            <label>스킬
+              <select id="lab-skill"></select>
+            </label>
+            <div>
+              <span class="label-title">스킬 폼</span>
+              <div id="lab-forms" class="form-list"></div>
+            </div>
+            <div id="compatibility" class="compatibility">호환성</div>
+            <button id="test-skill" class="button primary wide">스킬 사용</button>
+          </aside>
+
+          <div>
+            <div id="arena" class="arena" aria-label="스킬 테스트 공간">
+              <div class="hero-token">🪓</div>
+              <div class="dummy d1">더미</div>
+              <div class="dummy d2">더미</div>
+              <div class="dummy d3">더미</div>
+              <div class="ground-line"></div>
+            </div>
+            <div class="panel log-panel">
+              <h3>전투 로그</h3>
+              <ol id="combat-log"></ol>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="view-design" class="view">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">RECOVERY NOTES</p>
+            <h2>무엇이 복원됐고 무엇이 새 설계인가</h2>
+          </div>
+          <a class="button" href="./docs/RESTORATION_DESIGN.md">전체 설계 문서</a>
+        </div>
+        <div id="design-summary" class="design-grid"></div>
+        <section class="panel matrix-wrap">
+          <h3>스킬 × 보조무기 변형 방향</h3>
+          <p class="muted">같은 변형을 모든 스킬에 동일하게 적용하지 않고, 스킬마다 강지원·변환·금지 관계를 둡니다.</p>
+          <table>
+            <thead><tr><th>스킬</th><th>분산</th><th>확장</th><th>관통</th><th>낙하</th><th>연쇄</th><th>회귀</th><th>공전</th></tr></thead>
+            <tbody>
+              <tr><th>파쇄</th><td>지원</td><td>강지원</td><td>제한</td><td>변환</td><td>지원</td><td>금지</td><td>변환</td></tr>
+              <tr><th>투척</th><td>강지원</td><td>지원</td><td>강지원</td><td>지원</td><td>강지원</td><td>강지원</td><td>지원</td></tr>
+              <tr><th>붕괴 도약</th><td>금지</td><td>강지원</td><td>변환</td><td>강지원</td><td>지원</td><td>금지</td><td>변환</td></tr>
+              <tr><th>혈쇄</th><td>지원</td><td>지원</td><td>변환</td><td>금지</td><td>강지원</td><td>강지원</td><td>강지원</td></tr>
+              <tr><th>광폭</th><td>금지</td><td>지원</td><td>금지</td><td>변환</td><td>지원</td><td>금지</td><td>강지원</td></tr>
+            </tbody>
+          </table>
+        </section>
+      </section>
+    </main>
+
+    <footer>
+      <span>EMBERFALL 복원판 v0.1</span>
+      <span>원본 세이브 필드는 가능한 한 보존합니다.</span>
+    </footer>
+  </div>
+
+  <script type="module" src="./src/app.js"></script>
+</body>
+</html>
