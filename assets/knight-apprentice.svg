@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 210">
+  <defs>
+    <linearGradient id="steel" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#d7d0c6"/><stop offset=".45" stop-color="#77716b"/><stop offset="1" stop-color="#282828"/></linearGradient>
+    <linearGradient id="cloth" x1="0" x2="0" y1="0" y2="1"><stop stop-color="#8e412d"/><stop offset="1" stop-color="#3b1815"/></linearGradient>
+    <linearGradient id="shield" x1="0" x2="1"><stop stop-color="#8b5a35"/><stop offset=".55" stop-color="#3a2c23"/><stop offset="1" stop-color="#151515"/></linearGradient>
+    <filter id="shadow"><feDropShadow dx="0" dy="3" stdDeviation="3" flood-opacity=".45"/></filter>
+  </defs>
+  <g filter="url(#shadow)">
+    <path d="M81 15c19 0 31 12 31 29v22H51V44c0-17 12-29 30-29z" fill="url(#steel)" stroke="#1b1b1b" stroke-width="4"/>
+    <path d="M54 45h55l-8 17H60z" fill="#343434"/>
+    <path d="M69 42h33v8H69z" fill="#0f1010"/>
+    <circle cx="77" cy="46" r="2.5" fill="#d6b177"/><circle cx="94" cy="46" r="2.5" fill="#d6b177"/>
+    <path d="M61 64h43l16 31-9 50H52l-9-50z" fill="url(#steel)" stroke="#222" stroke-width="4"/>
+    <path d="M65 74h34l8 57H57z" fill="url(#cloth)" opacity=".9"/>
+    <path d="M55 82L28 91l8 25 22-12z" fill="url(#steel)" stroke="#222" stroke-width="4"/>
+    <path d="M108 80l28 6-7 26-23-10z" fill="url(#steel)" stroke="#222" stroke-width="4"/>
+    <path d="M67 142l-17 50h22l14-48zM99 142l10 50h22l-18-52z" fill="url(#steel)" stroke="#242424" stroke-width="4"/>
+    <path d="M117 84l39 73" stroke="#2c241d" stroke-width="10" stroke-linecap="round"/>
+    <path d="M145 145l20 34" stroke="#c8c0b5" stroke-width="7" stroke-linecap="round"/>
+    <path d="M139 142l14-8" stroke="#b88f5a" stroke-width="6" stroke-linecap="round"/>
+    <path d="M30 73C6 81 4 127 25 158c14 14 29 17 44 8V81C55 72 43 69 30 73z" fill="url(#shield)" stroke="#d0b07a" stroke-width="4"/>
+    <path d="M18 91l41 50M58 90l-37 48" stroke="#b88950" stroke-width="4" opacity=".85"/>
+    <circle cx="39" cy="118" r="9" fill="#c8ad7c" stroke="#493421" stroke-width="3"/>
+  </g>
+</svg>
