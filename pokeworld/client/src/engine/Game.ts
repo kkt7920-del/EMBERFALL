@@ -4,28 +4,37 @@ import { Matrix, Vector3 } from "@babylonjs/core/Maths/math.vector";
 import { StandardMaterial } from "@babylonjs/core/Materials/standardMaterial";
 import { ShadowGenerator } from "@babylonjs/core/Lights/Shadows/shadowGenerator";
 import "@babylonjs/core/Lights/Shadows/shadowGeneratorSceneComponent";
+import "@babylonjs/core/Culling/ray";
 import { Scene } from "@babylonjs/core/scene";
-import { CAPTURE_THROW_RANGE, BATTLE_START_RANGE, INTERACT_RANGE } from "@shared/config/constants";
+import { BATTLE_START_RANGE, CHUNK_SIZE, INTERACT_RANGE } from "@shared/config/constants";
 import type { ContentDB } from "@shared/data/contentDb";
-import { computeStats, creatureName } from "@shared/data/stats";
+import { creatureName, statsOf } from "@shared/data/stats";
 import { hashString } from "@shared/math/rng";
 import { dist2 } from "@shared/math/vec";
 import type { PlayerAction, ServerMessage } from "@shared/protocol/messages";
 import type { NpcDef, RegionDef } from "@shared/types/content";
 import type { PlayerPrivateState, PlayerSnapshot } from "@shared/types/game";
-import { OVERWORLD } from "@shared/world/terrain";
+import { Block } from "@shared/world/blocks";
+import { TerrainGenerator } from "@shared/world/generator";
+import { VoxelWorld, chunkKey } from "@shared/world/voxelWorld";
+import { OVERWORLD } from "@shared/world/zone";
 import { Sky } from "../air/Sky";
 import { BattleController } from "../battle/BattleController";
+import { BallSystem } from "../capture/BallSystem";
+import { CaptureFx } from "../capture/BallVisuals";
+import { ThrowController } from "../capture/ThrowController";
 import { TouchControls } from "../mobile/TouchControls";
 import { Device } from "../mobile/Device";
 import type { GameConnection } from "../network/Connection";
 import type { LocalConnection } from "../network/LocalGameServer";
-import { CreatureLibrary } from "../pokemon/CreatureLibrary";
-import { CreatureManager } from "../pokemon/CreatureManager";
+import { PokemonAssetRegistry } from "../pokemon/PokemonAssetRegistry";
+import { PokemonLibrary } from "../pokemon/PokemonLibrary";
+import { WildManager } from "../pokemon/WildManager";
 import { Companion } from "../mount/MountVisual";
 import { questHud } from "../quest/QuestTracker";
 import { type ClientSettings, saveSettings, useTouchControls } from "../settings";
-import { createTerrainMaterial } from "../terrain/TerrainMaterial";
+import { createTerrainMaterial, type TerrainMaterials } from "../terrain/TerrainMaterial";
+import { BallHud, BallWheel } from "../ui/BallHud";
 import { BattleUI } from "../ui/BattleUI";
 import { Dialog } from "../ui/Dialog";
 import { Hud } from "../ui/Hud";
@@ -33,8 +42,6 @@ import { closeModal, modalOpen } from "../ui/Modal";
 import { Panels } from "../ui/panels";
 import { openMenu } from "../ui/Menu";
 import { ChunkManager } from "../world/ChunkManager";
-import { ClientTerrain } from "../world/ClientTerrain";
-import { Structures } from "../world/Structures";
 import { Sfx } from "./Audio";
 import { Avatar, type AvatarLook } from "./Avatar";
 import { CameraRig } from "./CameraRig";
@@ -61,8 +68,8 @@ interface Target {
 
 const PLAYER_LOOK: AvatarLook = { skin: "#f2c8a0", hair: "#3a2a20", shirt: "#e8463c", pants: "#2e4a7a" };
 const SHIRTS = ["#3c8be8", "#5fbf4a", "#e8b43c", "#a45ae8", "#e8663c", "#3cc8c0", "#e84a9a"];
-
 const WEATHER_LABEL: Record<string, string> = { clear: "☀ 맑음", rain: "🌧 비", fog: "🌫 안개" };
+const PHASE_LABEL: Record<string, string> = { DAWN: "새벽", DAY: "낮", AFTERNOON: "오후", SUNSET: "노을", NIGHT: "밤" };
 
 export interface GameOptions {
   canvas: HTMLCanvasElement;
@@ -82,27 +89,33 @@ export class Game {
   engine!: AbstractEngine;
   engineKind = "webgl2";
   scene!: Scene;
-  terrain: ClientTerrain;
+  readonly voxels: VoxelWorld;
   chunks!: ChunkManager;
+  terrainMats!: TerrainMaterials;
   sky!: Sky;
   cam!: CameraRig;
   input!: Input;
   touch: TouchControls | null = null;
   hud!: Hud;
+  ballHud!: BallHud;
+  wheel!: BallWheel;
   dialog!: Dialog;
   panels!: Panels;
   battleUI!: BattleUI;
   battle!: BattleController;
   effects!: Effects;
-  creatureLib!: CreatureLibrary;
-  creatures!: CreatureManager;
+  captureFx!: CaptureFx;
+  assets: PokemonAssetRegistry;
+  pokemon!: PokemonLibrary;
+  creatures!: WildManager;
+  balls!: BallSystem;
+  thrower!: ThrowController;
   companion!: Companion;
-  structures!: Structures;
   shadows: ShadowGenerator | null = null;
   readonly sfx = new Sfx();
 
   readonly controller = new PlayerController();
-  private playerAvatar!: Avatar;
+  playerAvatar!: Avatar;
   private avatarMat!: StandardMaterial;
   private readonly npcs = new Map<string, { def: NpcDef; avatar: Avatar }>();
   private readonly remotes = new Map<string, Remote>();
@@ -119,21 +132,23 @@ export class Game {
   private lastTargetScan = 0;
   private lastHud = 0;
   private sequencer: Promise<void> = Promise.resolve();
-  private captureWaiter: ((r: Extract<ServerMessage, { type: "CAPTURE_RESULT" }>) => void) | null = null;
-  private capturingId: string | null = null;
   private deferredDespawn: string[] = [];
   private talkingTo: string | null = null;
-  private preferredOrb = "capture_orb";
   private disposed = false;
   private frameTimes: number[] = [];
+  lastDrawCalls = 0;
+  /** [game logic ms, scene.render ms (CPU side)] per frame, for the perf overlay and tests. */
+  cpuTimes: [number, number][] = [];
   private lastFrame = performance.now();
   private netStatus = "";
-  private readonly mapCache = new Map<string, Promise<ImageData>>();
+  private mapImage: Promise<ImageData> | null = null;
+  private time = 0;
 
   private constructor(private readonly opts: GameOptions) {
     this.db = opts.db;
     this.region = opts.db.defaultRegion();
-    this.terrain = new ClientTerrain(this.region);
+    this.voxels = new VoxelWorld(new TerrainGenerator(this.region), 220);
+    this.assets = new PokemonAssetRegistry(opts.db);
   }
 
   static async create(opts: GameOptions): Promise<Game> {
@@ -154,11 +169,12 @@ export class Game {
     const { canvas, ui, settings } = this.opts;
     const progress = this.opts.onProgress ?? (() => {});
 
-    progress(0.1, "그래픽 엔진 준비 중…");
+    progress(0.08, "그래픽 엔진 준비 중…");
     const info = await createEngine(canvas, settings.renderer === "webgpu");
     this.engine = info.engine;
     this.engineKind = info.kind;
     this.applyResolution();
+    await this.assets.init();
 
     const scene = new Scene(this.engine);
     this.scene = scene;
@@ -171,14 +187,14 @@ export class Game {
 
     this.cam = new CameraRig(scene);
     this.sky = new Sky(scene, settings.particleBudget);
-    this.sky.setViewDistance((settings.chunkRadius + 0.5) * 64);
-    const { terrain: terrainMat } = createTerrainMaterial(scene);
-    this.chunks = new ChunkManager(scene, terrainMat, this.region, settings);
-    this.structures = new Structures(scene, this.region, this.terrain);
+    this.sky.setViewDistance(this.viewDistance(settings));
+    this.terrainMats = createTerrainMaterial(scene);
+    this.chunks = new ChunkManager(scene, this.terrainMats, this.region, settings, this.voxels);
     this.effects = new Effects(scene, settings.particleBudget);
-    this.creatureLib = new CreatureLibrary(scene, this.db);
-    this.creatures = new CreatureManager(this.creatureLib, this.terrain, () => this.zone);
-    this.companion = new Companion(this.creatureLib, this.terrain);
+    this.captureFx = new CaptureFx(scene, settings.particleBudget);
+    this.pokemon = new PokemonLibrary(scene, this.db, this.assets);
+    this.creatures = new WildManager(this.pokemon);
+    this.companion = new Companion(this.pokemon, this.voxels);
 
     this.avatarMat = new StandardMaterial("avatarMat", scene);
     this.avatarMat.specularColor = Color3.Black();
@@ -186,22 +202,21 @@ export class Game {
     this.setupShadows();
 
     // UI
-    // eslint-disable-next-line @typescript-eslint/no-this-alias
-    const game = this;
     this.hud = new Hud(ui);
     this.hud.onAction = (a) => this.input.press(a);
+    this.ballHud = new BallHud(ui, this.db);
+    this.wheel = new BallWheel(ui, this.db);
     this.dialog = new Dialog(ui);
     this.battleUI = new BattleUI(ui, this.db);
     this.panels = new Panels({
       db: this.db,
       region: this.region,
+      assets: this.assets,
       state: () => this.state,
       send: (a) => this.action(a),
-      get preferredOrb() {
-        return game.preferredOrb;
-      },
-      set preferredOrb(v: string) {
-        game.preferredOrb = v;
+      equipBall: (id) => {
+        this.thrower.select(id);
+        this.thrower.setEquipped(true);
       },
     });
 
@@ -209,11 +224,37 @@ export class Game {
     this.input.sensitivity = settings.cameraSensitivity;
     this.input.invertY = settings.invertY;
     this.input.pointerLockAllowed = !Device.touch;
-    if (useTouchControls(settings)) {
-      this.touch = new TouchControls(ui, this.input);
-      ui.insertBefore(this.touch.el, ui.firstChild);
-    }
+    if (useTouchControls(settings)) this.createTouch();
     this.hud.setKeyHints(!this.touch);
+    this.sfx.vibration = settings.vibration !== false;
+
+    this.balls = new BallSystem(scene, this.db, this.voxels, this.creatures, this.captureFx, this.sfx, this.cam, {
+      selfId: () => this.selfId,
+      playerHand: () => this.controller.pos.add(new Vector3(0, 1.3, 0)),
+      speciesName: (id) => this.db.species.get(id)?.name ?? id,
+      gotcha: (title, sub) => this.ballHud.gotcha(title, sub),
+      toast: (text, tone) => this.hud.toast(text, tone),
+    });
+    this.thrower = new ThrowController({
+      db: this.db,
+      world: this.voxels,
+      state: () => this.state,
+      cam: this.cam,
+      controller: this.controller,
+      avatar: this.playerAvatar,
+      balls: this.balls,
+      wild: this.creatures,
+      hud: this.ballHud,
+      sfx: this.sfx,
+      send: (m) => this.connection.send(m),
+      toast: (t, tone) => this.hud.toast(t, tone),
+      keyHints: () => !this.touch,
+    });
+    this.ballHud.onChip = () => this.openWheel();
+    this.ballHud.onPick = (id) => {
+      this.thrower.select(id);
+      this.thrower.setEquipped(true);
+    };
 
     this.battle = new BattleController({
       db: this.db,
@@ -221,28 +262,37 @@ export class Game {
       panels: this.panels,
       camera: this.cam,
       effects: this.effects,
-      lib: this.creatureLib,
+      lib: this.pokemon,
       creatures: this.creatures,
-      terrain: this.terrain,
-      zone: () => this.zone,
+      world: this.voxels,
       playerPos: () => this.controller.pos.clone(),
       playerRot: () => this.controller.rotY,
       state: () => this.state,
-      preferredOrb: () => this.preferredOrb,
       send: (battleId, action) => this.connection.send({ type: "BATTLE_ACTION", battleId, action }),
-      onStart: () => {
-        this.input.releasePointerLock();
-        // The trainer steps aside: keep the camera's view of both creatures clear
-        this.playerAvatar.setEnabled(false);
-        this.hud.setVisible(false);
-      },
-      onEnd: () => {
-        this.input.releasePointerLock();
-        this.playerAvatar.setEnabled(true);
-        this.hud.setVisible(true);
-      },
+      onStart: () => this.input.releasePointerLock(),
+      onEnd: () => this.input.releasePointerLock(),
       setFollowerHidden: (on) => this.companion.hide(on),
       sfx: (n) => this.sfx.play(n),
+      startCatch: (foeId, onThrown, onCancel) => {
+        this.wheel.show(
+          this.thrower.allBalls(),
+          this.thrower.selected,
+          (id) => {
+            const foe = this.creatures.get(foeId);
+            if (foe) this.cam.yaw = Math.atan2(foe.view.root.position.x - this.controller.pos.x, foe.view.root.position.z - this.controller.pos.z);
+            this.cam.pitch = 0.18;
+            this.touch?.setAimOnly(true);
+            this.thrower.enterBattleAim(foeId, id, () => {
+              this.touch?.setAimOnly(false);
+              onThrown();
+            }, () => {
+              this.touch?.setAimOnly(false);
+              onCancel();
+            });
+          },
+          { title: "던질 볼을 고르세요", onClose: onCancel },
+        );
+      },
     });
 
     window.addEventListener("resize", this.onResize);
@@ -251,19 +301,23 @@ export class Game {
     window.addEventListener("keydown", () => this.sfx.unlock(), { once: true });
     this.sfx.enabled = settings.sound;
 
-    // Network
-    progress(0.35, this.connection.mode === "online" ? "서버에 접속 중…" : "월드를 불러오는 중…");
+    // Network (single player shares this voxel store with the local server)
+    progress(0.3, this.connection.mode === "online" ? "서버에 접속 중…" : "월드를 불러오는 중…");
+    (this.connection as Partial<LocalConnection>).setVoxels?.(this.voxels);
     this.connection.onMessage = (m) => this.onMessage(m);
     this.connection.onStatus = (s, detail) => this.onNetStatus(s, detail);
     await this.connection.connect(this.opts.name);
     await new Promise<void>((resolve) => (this.welcomed ? resolve() : this.welcomeWaiters.push(resolve)));
 
-    progress(0.6, "지형 생성 중…");
+    progress(0.55, "지형 생성 중…");
     await new Promise<void>((resolve) => {
       this.chunks.onReady = resolve;
       const pump = () => {
         if (this.disposed) return resolve();
-        this.chunks.update(this.controller.pos.x, this.controller.pos.z, this.terrain.bounds(this.zone));
+        this.chunks.update(this.controller.pos.x, this.controller.pos.z);
+        const loaded = this.chunks.loadedCount;
+        const total = (this.settings.chunkRadius * 2 + 1) ** 2;
+        progress(0.55 + 0.4 * Math.min(1, loaded / total), `지형 생성 중… ${loaded}/${total}`);
         if (this.chunks.onReady) requestAnimationFrame(pump);
       };
       pump();
@@ -272,6 +326,18 @@ export class Game {
 
     this.engine.runRenderLoop(() => this.frame());
     this.exposeDebug();
+  }
+
+  private createTouch(): void {
+    this.touch = new TouchControls(this.opts.ui, this.input);
+    this.opts.ui.insertBefore(this.touch.el, this.opts.ui.firstChild);
+    this.opts.ui.classList.add("is-touch");
+    this.touch.ballEquipped = () => this.thrower?.equipped ?? false;
+    this.touch.onEquip = () => this.thrower.setEquipped(true);
+  }
+
+  private viewDistance(s: ClientSettings): number {
+    return (s.lodTiles + 0.4) * 128;
   }
 
   // ------------------------------------------------------------------ setup helpers
@@ -303,7 +369,7 @@ export class Game {
     const light = this.sky.sun;
     light.autoUpdateExtends = false;
     light.shadowMinZ = 1;
-    light.shadowMaxZ = 220;
+    light.shadowMaxZ = 260;
     const r = q === "high" ? 60 : 42;
     light.orthoLeft = -r;
     light.orthoRight = r;
@@ -321,25 +387,22 @@ export class Game {
     saveSettings(next);
     this.applyResolution();
     this.chunks.setSettings(next);
-    this.sky.setViewDistance((next.chunkRadius + 0.5) * 64);
+    this.sky.setViewDistance(this.viewDistance(next));
     if (prev.particleBudget !== next.particleBudget) {
       this.sky.setParticleBudget(next.particleBudget);
       this.effects.setBudget(next.particleBudget);
+      this.captureFx.setBudget(next.particleBudget);
     }
-    if (prev.shadows !== next.shadows || prev.chunkRadius !== next.chunkRadius || prev.vegetationRadius !== next.vegetationRadius) {
+    if (prev.shadows !== next.shadows || prev.chunkRadius !== next.chunkRadius || prev.vegetationRadius !== next.vegetationRadius || prev.lodTiles !== next.lodTiles) {
       this.setupShadows();
-      const zone = this.zone;
-      this.chunks.setZone("");
-      this.chunks.setZone(zone);
+      this.chunks.reset();
     }
     this.input.sensitivity = next.cameraSensitivity;
     this.input.invertY = next.invertY;
     this.sfx.enabled = next.sound;
+    this.sfx.vibration = next.vibration !== false;
     const wantTouch = useTouchControls(next);
-    if (wantTouch && !this.touch) {
-      this.touch = new TouchControls(this.opts.ui, this.input);
-      this.opts.ui.insertBefore(this.touch.el, this.opts.ui.firstChild);
-    }
+    if (wantTouch && !this.touch) this.createTouch();
     this.touch?.setVisible(wantTouch);
     this.hud.setKeyHints(!wantTouch);
   }
@@ -372,6 +435,7 @@ export class Game {
         this.sky.setClock(m.clock);
         if (reconnect) {
           this.creatures.clear();
+          this.balls.clear();
           for (const r of this.remotes.values()) this.removeRemote(r);
           this.remotes.clear();
           this.battle.cleanup();
@@ -413,7 +477,6 @@ export class Game {
         }
         break;
       case "PLAYER_CORRECT":
-        if (m.zone !== this.zone) this.setZone(m.zone);
         this.controller.teleport(m.x, m.y, m.z, m.rotY);
         this.lastSent = { ...this.lastSent, x: m.x, y: m.y, z: m.z };
         if (m.reason === "teleport") {
@@ -422,30 +485,51 @@ export class Game {
         }
         break;
       case "POKEMON_SPAWN":
-        this.creatures.spawn(m.creatures.filter((c) => c.zone === this.zone));
+        this.creatures.spawn(m.creatures);
         break;
       case "POKEMON_DESPAWN": {
         const now: string[] = [];
         for (const id of m.ids) {
-          if (id === this.capturingId) this.deferredDespawn.push(id);
-          else if (this.battle.view?.entityId === id && m.reason !== "defeated" && m.reason !== "captured") this.deferredDespawn.push(id);
+          if (this.balls.busy.has(id)) {
+            const reason = m.reason;
+            void this.balls.whenDone(id).then(() => this.creatures.despawn([id], reason));
+          } else if (this.battle.view?.entityId === id && m.reason !== "defeated" && m.reason !== "captured") this.deferredDespawn.push(id);
           else now.push(id);
         }
         this.creatures.despawn(now, m.reason);
         break;
       }
       case "POKEMON_MOVE":
-        this.creatures.move(m.creatures);
+        this.creatures.move(m.creatures.filter((c) => !this.balls.busy.has(c.id)));
+        break;
+      case "BALL_SPAWN":
+        if (m.ball.owner === this.selfId) this.thrower.confirm(m.ball.seq);
+        this.balls.onSpawn(m.ball);
+        break;
+      case "BALL_UPDATE":
+        if (m.id.startsWith("seq:")) this.thrower.confirm(Number(m.id.slice(4)));
+        this.balls.onUpdate(m);
+        break;
+      case "CAPTURE_SEQUENCE":
+        void this.balls.playSequence(m);
+        break;
+      case "CAPTURE_RESULT":
+        if (m.success && m.creature) {
+          const name = creatureName(this.db, m.creature);
+          const where = m.sentTo === "box" ? "PC 보관함으로 보냈다" : "파티에 들어왔다";
+          void this.balls.whenDone(m.targetId).then(() => {
+            this.hud.toast(`${name}이(가) ${where}!${m.newSpecies ? " (도감에 새로 등록)" : ""}`, "good");
+          });
+        }
         break;
       case "BATTLE_START":
+        this.thrower.setEquipped(false);
         this.sequencer = this.sequencer.then(() => this.battle.start(m.battle));
         break;
       case "BATTLE_RESULT":
-        this.sequencer = this.sequencer.then(() => this.battle.result(m));
+        // Let a running capture animation finish before the battle log continues
+        this.sequencer = this.sequencer.then(() => (m.battle.entityId ? this.balls.whenDone(m.battle.entityId) : undefined)).then(() => this.battle.result(m));
         if (m.outcome) this.sequencer = this.sequencer.then(() => this.flushDeferred());
-        break;
-      case "CAPTURE_RESULT":
-        this.captureWaiter?.(m);
         break;
       case "QUEST_UPDATE":
         if (this.state) this.state.quests = m.quests;
@@ -489,20 +573,14 @@ export class Game {
   // ------------------------------------------------------------------ world
 
   private setZone(zone: string): void {
-    const changed = zone !== this.zone || !this.chunks.chunkCount;
     this.zone = zone;
-    if (!changed && this.npcs.size) return;
-    this.chunks.setZone(zone);
-    this.structures.build(zone);
-    this.sky.setUnderground(zone !== OVERWORLD);
-    this.creatures.clear();
-    for (const n of this.npcs.values()) n.avatar.dispose();
-    this.npcs.clear();
+    if (this.npcs.size) return;
     for (const def of this.region.npcs) {
-      if ((def.zone ?? OVERWORLD) !== zone) continue;
       const avatar = new Avatar(this.scene, this.avatarMat, def.look, `npc_${def.id}`);
-      avatar.root.position.set(def.x + 0.5, this.terrain.ground(zone, def.x + 0.5, def.z + 0.5, 0.3), def.z + 0.5);
+      const y = def.y ?? this.voxels.topSolid(def.x + 0.5, def.z + 0.5) + 1;
+      avatar.root.position.set(def.x + 0.5, y, def.z + 0.5);
       avatar.root.rotation.y = def.facing;
+      createNameTag(this.scene, def.name, avatar.root);
       this.npcs.set(def.id, { def, avatar });
       if (this.shadows) for (const m of avatar.allMeshes()) this.shadows.addShadowCaster(m, false);
     }
@@ -516,11 +594,11 @@ export class Game {
       const def = mount ? this.db.speciesOf(mount).mount : undefined;
       this.controller.mountModes = def?.modes ?? [];
       this.controller.mountSpeed = def?.speed ?? 1;
-      this.companion.set(mount?.species ?? null, "mount");
+      this.companion.set(mount?.species ?? null, "mount", mount?.size ?? 1);
     } else {
       this.controller.mountModes = [];
       this.controller.mountSpeed = 1;
-      this.companion.set(lead?.species ?? null, "follow");
+      this.companion.set(lead?.species ?? null, "follow", lead?.size ?? 1);
     }
   }
 
@@ -531,7 +609,7 @@ export class Game {
     const avatar = new Avatar(this.scene, this.avatarMat, look, `remote_${p.id}`);
     avatar.root.position.set(p.x, p.y, p.z);
     createNameTag(this.scene, p.name, avatar.root);
-    const companion = new Companion(this.creatureLib, this.terrain);
+    const companion = new Companion(this.pokemon, this.voxels);
     companion.set(p.mount ?? p.follower ?? null, p.mount ? "mount" : "follow");
     this.remotes.set(p.id, { snap: p, avatar, companion, target: new Vector3(p.x, p.y, p.z), rot: p.rotY });
   }
@@ -549,28 +627,36 @@ export class Game {
     if (this.settings.maxFps === 30 && now - this.lastFrame < 31) return;
     const dt = Math.min(0.1, (now - this.lastFrame) / 1000);
     this.lastFrame = now;
+    this.time += dt;
 
-    const busy = this.dialog.open || modalOpen() || this.battle.active || !this.welcomed;
+    const battleAim = this.battle.aiming || this.thrower.battleAim !== null;
+    const busy = this.dialog.open || modalOpen() || (this.battle.active && !battleAim) || !this.welcomed || this.wheel.open;
     this.input.gameplayEnabled = !busy;
-    this.touch?.setGameplay(!busy);
+    this.input.ballMode = this.thrower.equipped && !busy;
+    this.touch?.setGameplay(!busy || battleAim);
     const controls = this.input.frame();
-    this.handleActions(controls.pressed, busy);
+    this.handleActions(controls, busy);
 
-    if (!this.battle.active) this.controller.update(dt, controls, this.cam.yaw, this.terrain, this.zone);
+    const freeMove = !this.battle.active;
+    if (freeMove) this.controller.update(dt, controls, this.cam.yaw, this.voxels);
+    else if (battleAim) this.controller.rotY = this.cam.yaw;
+    this.thrower.update(dt, controls, (!busy && !this.battle.active) || battleAim, !this.battle.active);
 
-    // Player avatar (+ ridden creature)
+    // Player avatar (+ ridden Pokémon)
     const seat = this.companion.seat;
     const pos = this.controller.pos;
     this.playerAvatar.root.position.set(pos.x, pos.y + seat, pos.z);
     this.playerAvatar.root.rotation.y = this.controller.rotY;
     this.playerAvatar.pose = this.controller.mounted ? "sit" : this.controller.anim;
     this.playerAvatar.update(dt);
-    if (!this.battle.active) this.companion.update(dt, this.zone, pos, this.controller.rotY, this.controller.anim);
+    if (!this.battle.active) this.companion.update(dt, pos, this.controller.rotY, this.controller.anim);
 
     this.sendMovement(now);
 
-    this.chunks.update(pos.x, pos.z, this.terrain.bounds(this.zone));
+    const fwd = this.cam.forward();
+    this.chunks.update(pos.x, pos.z, fwd.x, fwd.z);
     this.creatures.update(dt, this.cam.camera.position, this.settings.creatureViewDistance);
+    this.balls.update(dt, pos);
     this.battle.update(dt);
     this.updateRemotes(dt);
     this.updateNpcs(dt);
@@ -579,32 +665,80 @@ export class Game {
       this.lastTargetScan = now;
       this.scanTarget();
     }
-    this.updatePromptAndTag();
+    this.updatePromptAndTag(busy);
 
-    this.cam.update(dt, this.playerAvatar.root.position, controls, this.terrain, this.zone);
+    this.cam.update(dt, this.playerAvatar.root.position, controls, this.voxels);
+    this.updateEnvironment(pos);
     this.sky.update(dt, pos, this.cam.camera.position);
-    this.structures.update(now / 1000);
 
     if (now - this.lastHud > 250) {
       this.lastHud = now;
       this.updateHud();
     }
     this.frameTimes.push(dt);
-    if (this.frameTimes.length > 30) this.frameTimes.shift();
+    if (this.frameTimes.length > 60) this.frameTimes.shift();
     if (this.settings.showFps) this.hud.setFps(this.frameTimes.length / this.frameTimes.reduce((a, b) => a + b, 0));
     else this.hud.setFps(null);
 
+    const logicEnd = performance.now();
     this.scene.render();
+    this.cpuTimes.push([logicEnd - now, performance.now() - logicEnd]);
+    if (this.cpuTimes.length > 120) this.cpuTimes.shift();
+    // Babylon's draw-call counter only resets when instrumentation fetches a frame
+    const dc = (this.engine as unknown as { _drawCalls?: { current: number; fetchNewFrame(): void } })._drawCalls;
+    if (dc) {
+      this.lastDrawCalls = dc.current;
+      dc.fetchNewFrame();
+    }
   }
 
-  private handleActions(pressed: Set<Action>, busy: boolean): void {
-    for (const a of pressed) {
+  /** Underground / underwater detection, lantern, and terrain shader uniforms. */
+  private updateEnvironment(pos: Vector3): void {
+    const v = this.voxels;
+    const cam = this.cam.camera.position;
+    const surface = v.peekChunk(Math.floor(pos.x / CHUNK_SIZE), Math.floor(pos.z / CHUNK_SIZE)) ? v.surfaceHeight(pos.x, pos.z) : 999;
+    const underground = pos.y < surface - 4 && !v.skyVisible(pos.x, pos.y + 2, pos.z);
+    this.sky.setUnderground(underground);
+    let depth: number | null = null;
+    if (v.block(cam.x, cam.y, cam.z) === Block.WATER) {
+      let top = Math.floor(cam.y);
+      while (v.block(cam.x, top + 1, cam.z) === Block.WATER && top < 255) top++;
+      depth = top + 1 - cam.y;
+    }
+    this.sky.setUnderwater(depth);
+    const u = this.terrainMats.uniforms;
+    u.time = this.time;
+    const night = this.sky.phase === "NIGHT";
+    const lantern = underground ? 11 : night ? 7 : 0;
+    u.light = [pos.x, pos.y + 1.6, pos.z, lantern];
+    u.ambientFloor = underground ? 0.1 : 0.16;
+  }
+
+  private openWheel(): void {
+    if (this.wheel.open) return;
+    this.input.releasePointerLock();
+    this.wheel.show(
+      this.thrower.allBalls(),
+      this.thrower.selected,
+      (id) => {
+        this.thrower.select(id);
+        this.thrower.setEquipped(true);
+      },
+      { onPutAway: this.thrower.equipped ? () => this.thrower.setEquipped(false) : undefined },
+    );
+  }
+
+  private handleActions(c: { pressed: Set<Action>; longPress: { x: number; y: number } | null }, busy: boolean): void {
+    for (const a of c.pressed) {
       if (a === "close") {
-        if (modalOpen()) closeModal();
+        if (this.wheel.open) this.wheel.close();
+        else if (modalOpen()) closeModal();
+        else if (this.thrower.battleAim) this.thrower.cancelBattleAim();
+        else if (this.thrower.equipped) this.thrower.setEquipped(false);
         continue;
       }
       if (this.battle.active || this.dialog.open) continue;
-      if (a === "party" || a === "bag" || a === "map" || a === "menu") {
+      if (a === "party" || a === "bag" || a === "map" || a === "menu" || a === "dex") {
         this.input.releasePointerLock();
         if (modalOpen()) {
           closeModal();
@@ -613,15 +747,44 @@ export class Game {
         if (a === "party") this.panels.party();
         else if (a === "bag") this.panels.bag();
         else if (a === "map") this.openMap();
+        else if (a === "dex") this.panels.pokedex();
         else openMenu(this);
         continue;
       }
       if (busy) continue;
-      if (a === "interact") this.interact();
+      if (a === "wheel") this.openWheel();
+      else if (a === "interact") this.interact();
       else if (a === "attack") this.startBattle();
-      else if (a === "capture") void this.throwCapture();
       else if (a === "mount") this.action({ kind: "mount", on: !this.state?.mounted });
     }
+    if (c.longPress && !busy && !this.battle.active) this.pickAt(c.longPress.x, c.longPress.y);
+  }
+
+  /** Long-press on a Pokémon (touch): quick info. */
+  private pickAt(x: number, y: number): void {
+    // CSS pixels: Babylon applies the hardware scaling level itself
+    const ray = this.scene.createPickingRay(x, y, Matrix.Identity(), this.cam.camera);
+    let best: string | null = null;
+    let bestT = Infinity;
+    for (const w of this.creatures.all()) {
+      if (!w.view.root.isEnabled()) continue;
+      const p = w.view.root.position;
+      const hw = Math.max(0.5, w.view.width / 2 + 0.2);
+      const t = rayAabb(ray.origin, ray.direction, p.x - hw, p.y, p.z - hw, p.x + hw, p.y + Math.max(0.8, w.view.height + 0.2), p.z + hw);
+      if (t !== null && t < bestT && t < 40) {
+        bestT = t;
+        best = w.snap.id;
+      }
+    }
+    if (best) this.showWildInfo(best);
+  }
+
+  private showWildInfo(id: string): void {
+    const w = this.creatures.get(id);
+    if (!w) return;
+    this.input.releasePointerLock();
+    const near = Vector3.Distance(this.controller.pos, w.view.root.position) < BATTLE_START_RANGE + 1 + w.view.width / 2;
+    this.panels.wildInfo(w.snap, near && !w.snap.special ? () => this.action({ kind: "battle", target: id }) : undefined);
   }
 
   private sendMovement(now: number): void {
@@ -646,7 +809,7 @@ export class Game {
       const seat = r.companion.seat;
       const base = root.position.clone();
       if (seat) root.position.y = r.target.y + seat;
-      r.companion.update(dt, this.zone, new Vector3(base.x, r.target.y, base.z), root.rotation.y, r.snap.anim);
+      r.companion.update(dt, new Vector3(base.x, r.target.y, base.z), root.rotation.y, r.snap.anim);
     }
   }
 
@@ -658,14 +821,16 @@ export class Game {
       if (this.talkingTo === n.def.id) {
         a.root.rotation.y = Math.atan2(p.x - a.root.position.x, p.z - a.root.position.z);
         a.pose = "talk";
-      } else {
-        a.pose = "idle";
-      }
+      } else a.pose = "idle";
       a.update(dt);
     }
   }
 
   // ------------------------------------------------------------------ interaction
+
+  private objectY(o: { x: number; z: number; y?: number }): number {
+    return o.y !== undefined ? o.y + 1 : this.voxels.topSolid(o.x + 0.5, o.z + 0.5) + 1;
+  }
 
   private scanTarget(): void {
     const p = this.controller.pos;
@@ -673,165 +838,83 @@ export class Game {
     let bestD = INTERACT_RANGE;
     for (const n of this.npcs.values()) {
       const d = dist2(p.x, p.z, n.def.x + 0.5, n.def.z + 0.5);
-      if (d < bestD) {
+      if (d < bestD && Math.abs(n.avatar.root.position.y - p.y) < 4) {
         bestD = d;
         const verb = n.def.role === "trainer" ? "에게 말 걸기" : n.def.role === "clerk" ? "(상점)" : n.def.role === "nurse" ? "(회복)" : "와(과) 대화";
         best = { kind: "npc", id: n.def.id, label: `${n.def.name}${verb}`, pos: n.avatar.root.position.add(new Vector3(0, 2.2, 0)) };
       }
     }
     for (const it of this.region.interactables) {
-      if ((it.zone ?? OVERWORLD) !== this.zone) continue;
       const d = dist2(p.x, p.z, it.x + 0.5, it.z + 0.5);
-      const range = it.kind === "altar" || it.kind === "cave_entrance" || it.kind === "cave_exit" ? INTERACT_RANGE + 1.5 : INTERACT_RANGE;
+      const y = this.objectY(it);
+      if (Math.abs(y - p.y) > 5) continue;
+      const range = it.kind === "altar" ? INTERACT_RANGE + 1.5 : INTERACT_RANGE;
       if (d < Math.min(bestD + 0.01, range) || (d < range && !best)) {
         bestD = d;
-        const verb: Record<string, string> = {
-          sign: "읽기",
-          cave_entrance: "들어가기",
-          cave_exit: "밖으로 나가기",
-          crystal: "조사하기",
-          tablet: "조사하기",
-          altar: "조사하기",
-        };
-        best = { kind: "object", id: it.id, label: `${it.name} ${verb[it.kind] ?? "조사하기"}`, pos: new Vector3(it.x + 0.5, this.terrain.height(this.zone, it.x, it.z) + 1.5, it.z + 0.5) };
+        const verb: Record<string, string> = { sign: "읽기", crystal: "조사하기", tablet: "조사하기", altar: "조사하기" };
+        best = { kind: "object", id: it.id, label: `${it.name} ${verb[it.kind] ?? "조사하기"}`, pos: new Vector3(it.x + 0.5, y + 1.5, it.z + 0.5) };
       }
     }
     if (!best) {
       const w = this.creatures.nearest(p, BATTLE_START_RANGE, (e) => e.view.root.isEnabled());
       if (w) {
         const s = this.db.species.get(w.snap.species)!;
-        best = { kind: "wild", id: w.snap.id, label: `야생 ${s.name} Lv.${w.snap.level} — 배틀`, pos: w.view.root.position.add(new Vector3(0, w.view.height + 0.3, 0)) };
+        best = { kind: "wild", id: w.snap.id, label: `야생 ${s.name} Lv.${w.snap.level} — 정보`, pos: w.view.root.position.add(new Vector3(0, w.view.height + 0.3, 0)) };
       }
     }
     this.target = best;
   }
 
-  private updatePromptAndTag(): void {
-    const busy = this.dialog.open || modalOpen() || this.battle.active;
-    const t = busy ? null : this.target;
+  private updatePromptAndTag(busy: boolean): void {
+    const t = busy || this.thrower.equipped ? null : this.target;
     this.hud.showPrompt(t ? t.label : null, this.touch ? "A" : "E");
 
-    // Floating name over the nearest wild creature in view (within throw range)
+    // Floating name over the nearest wild Pokémon (not while aiming: the reticle shows it)
     let tag: { pos: Vector3; text: string } | null = null;
-    if (!busy) {
-      const w = this.creatures.nearest(this.controller.pos, CAPTURE_THROW_RANGE, (e) => e.view.root.isEnabled());
+    if (!busy && !this.thrower.equipped) {
+      const w = this.creatures.nearest(this.controller.pos, 18, (e) => e.view.root.isEnabled());
       if (w) {
         const s = this.db.species.get(w.snap.species)!;
-        tag = { pos: w.view.root.position.add(new Vector3(0, w.view.height + 0.25, 0)), text: `${s.name} Lv.${w.snap.level}` };
+        tag = { pos: w.view.root.position.add(new Vector3(0, w.view.height + 0.35, 0)), text: `${s.name} Lv.${w.snap.level}${w.snap.alpha ? " ★" : ""}` };
       }
     }
     if (tag) {
       const engine = this.engine;
-      const v = Vector3.Project(
-        tag.pos,
-        Matrix.Identity(),
-        this.scene.getTransformMatrix(),
-        this.cam.camera.viewport.toGlobal(engine.getRenderWidth(), engine.getRenderHeight()),
-      );
+      const v = Vector3.Project(tag.pos, Matrix.Identity(), this.scene.getTransformMatrix(), this.cam.camera.viewport.toGlobal(engine.getRenderWidth(), engine.getRenderHeight()));
       const scale = engine.getHardwareScalingLevel();
       if (v.z > 0 && v.z < 1) this.hud.showTarget(v.x * scale, v.y * scale, tag.text, true);
       else this.hud.showTarget(0, 0, null, true);
     } else this.hud.showTarget(0, 0, null, true);
+
+    // Ground balls nearby: hint to pick them up
+    const lying = this.balls.resting().filter((b) => b.mine);
+    let hint: string | null = null;
+    for (const b of lying) {
+      const d = Math.hypot(b.x - this.controller.pos.x, b.y - this.controller.pos.y, b.z - this.controller.pos.z);
+      if (d < 14) {
+        hint = `떨어진 볼 ${d.toFixed(0)}m — 다가가면 줍는다`;
+        break;
+      }
+    }
+    this.ballHud.setHint(busy ? null : hint);
+    // In battle the menu owns the bottom right until "포획" puts a ball in hand
+    this.ballHud.setVisible(!this.battle.active || !!this.thrower.battleAim);
   }
 
   private interact(): void {
     const t = this.target;
     if (!t) return;
-    if (t.kind === "wild") this.action({ kind: "battle", target: t.id });
+    if (t.kind === "wild") this.showWildInfo(t.id);
     else this.action({ kind: "interact", target: t.id });
   }
 
   private startBattle(): void {
-    const w = this.creatures.nearest(this.controller.pos, BATTLE_START_RANGE + 1, (e) => e.view.root.isEnabled());
+    const w = this.creatures.nearest(this.controller.pos, BATTLE_START_RANGE + 1.5, (e) => e.view.root.isEnabled());
     if (!w) {
-      this.hud.toast("근처에 배틀할 야생 크리처가 없다. 가까이 다가가자!", "bad");
+      this.hud.toast("근처에 배틀할 야생 포켓몬이 없다. 가까이 다가가자!", "bad");
       return;
     }
     this.action({ kind: "battle", target: w.snap.id });
-  }
-
-  private pickOrb(): string | null {
-    const inv = this.state?.inventory ?? {};
-    if ((inv[this.preferredOrb] ?? 0) > 0) return this.preferredOrb;
-    return Object.keys(inv).find((id) => this.db.items.get(id)?.kind === "capture" && (inv[id] ?? 0) > 0) ?? null;
-  }
-
-  private async throwCapture(): Promise<void> {
-    if (this.capturingId) return;
-    const orb = this.pickOrb();
-    if (!orb) {
-      this.hud.toast("포획구가 없다! 상점에서 살 수 있다.", "bad");
-      return;
-    }
-    const p = this.controller.pos;
-    const yaw = this.cam.yaw;
-    // Prefer creatures in front of the camera
-    const w =
-      this.creatures.nearest(p, CAPTURE_THROW_RANGE, (e) => {
-        if (!e.view.root.isEnabled()) return false;
-        const dx = e.view.root.position.x - p.x;
-        const dz = e.view.root.position.z - p.z;
-        return (dx * Math.sin(yaw) + dz * Math.cos(yaw)) / Math.max(0.01, Math.hypot(dx, dz)) > 0.35;
-      }) ?? this.creatures.nearest(p, 8, (e) => e.view.root.isEnabled());
-    if (!w) {
-      this.hud.toast("포획구를 던질 크리처가 주변에 없다.", "bad");
-      return;
-    }
-
-    const id = w.snap.id;
-    this.capturingId = id;
-    const item = this.db.items.get(orb)!;
-    const targetPos = w.view.root.position.clone();
-    this.controller.rotY = Math.atan2(targetPos.x - p.x, targetPos.z - p.z);
-    this.playerAvatar.playThrow();
-    this.sfx.play("throw");
-
-    const result = new Promise<Extract<ServerMessage, { type: "CAPTURE_RESULT" }> | null>((resolve) => {
-      const timer = setTimeout(() => resolve(null), 6000);
-      this.captureWaiter = (r) => {
-        if (r.targetId !== id) return;
-        clearTimeout(timer);
-        resolve(r);
-      };
-    });
-    this.connection.send({ type: "CAPTURE_THROW", targetId: id, item: orb });
-
-    let release!: () => void;
-    const done = new Promise<void>((r) => (release = r));
-    this.sequencer = this.sequencer.then(() => done);
-
-    try {
-      await this.effects.throwOrb(p.add(new Vector3(0, 1.6, 0)), targetPos.add(new Vector3(0, w.view.height * 0.5, 0)), item.color);
-      const r = await result;
-      if (!r || r.shakes === 0 && !r.success) {
-        this.effects.hideOrb(false);
-        if (r) this.hud.toast("포획구가 튕겨 나갔다!", "bad");
-        return;
-      }
-      w.held = true;
-      w.view.setVisible(false);
-      const ground = this.terrain.ground(this.zone, targetPos.x, targetPos.z, 0.2);
-      const level = this.terrain.waterLevel(this.zone);
-      await this.effects.shakeOrb(new Vector3(targetPos.x, Math.max(ground, level ?? ground) + 0.16, targetPos.z), r.shakes);
-      this.effects.hideOrb(r.success);
-      if (r.success) {
-        this.sfx.play("capture");
-        const name = r.creature ? creatureName(this.db, r.creature) : "크리처";
-        this.hud.toast(`${name}을(를) 잡았다! (${r.sentTo === "box" ? "보관함" : "파티"}에 추가)`, "good");
-      } else {
-        w.held = false;
-        this.hud.toast(r.startedBattle ? "포획구에서 빠져나와 덤벼든다!" : "포획구에서 빠져나와 도망쳤다!", "bad");
-      }
-    } finally {
-      this.captureWaiter = null;
-      this.capturingId = null;
-      const pending = this.deferredDespawn.filter((d) => d === id);
-      if (pending.length) {
-        this.deferredDespawn = this.deferredDespawn.filter((d) => d !== id);
-        this.creatures.despawn(pending, "captured");
-      }
-      release();
-    }
   }
 
   // ------------------------------------------------------------------ HUD
@@ -839,51 +922,33 @@ export class Game {
   private updateHud(): void {
     const st = this.state;
     const p = this.controller.pos;
-    const area = this.region.areas.find((a) => (a.zone ?? OVERWORLD) === this.zone && dist2(p.x, p.z, a.x, a.z) <= a.radius && a.radius < 100) ??
-      this.region.areas.find((a) => (a.zone ?? OVERWORLD) === this.zone && dist2(p.x, p.z, a.x, a.z) <= a.radius);
-    this.hud.setLocation(area?.name ?? (this.zone === OVERWORLD ? this.region.name : "동굴"));
+    const areas = this.region.areas
+      .filter((a) => dist2(p.x, p.z, a.x, a.z) <= a.radius && (a.minY === undefined || p.y >= a.minY) && (a.maxY === undefined || p.y <= a.maxY))
+      .sort((a, b) => a.radius - b.radius);
+    const biome = this.voxels.peekChunk(Math.floor(p.x / CHUNK_SIZE), Math.floor(p.z / CHUNK_SIZE)) ? this.voxels.biomeAt(p.x, p.y, p.z) : "";
+    this.hud.setLocation(areas[0]?.name ?? this.region.name, biome);
     const hour = this.sky.hour;
     const hh = Math.floor(hour);
     const mm = Math.floor((hour - hh) * 60);
     const icon = hour >= 6 && hour < 18 ? "🌤" : "🌙";
-    this.hud.setMeta(`${icon} ${String(hh).padStart(2, "0")}:${String(mm).padStart(2, "0")}`, this.zone === OVERWORLD ? WEATHER_LABEL[this.sky.weather] : "⛏ 지하", st?.money ?? 0);
+    this.hud.setMeta(`${icon} ${String(hh).padStart(2, "0")}:${String(mm).padStart(2, "0")} ${PHASE_LABEL[this.sky.phase]}`, this.sky.isUnderground ? "⛏ 지하" : WEATHER_LABEL[this.sky.weather], st?.money ?? 0);
     const lead = st?.party[0];
     if (lead) {
       const s = this.db.speciesOf(lead);
-      this.hud.setLead({ name: creatureName(this.db, lead), level: lead.level, hp: lead.hp, maxHp: computeStats(s, lead.level, lead.ivs).hp, color: s.model.colors.primary });
+      this.hud.setLead({ name: creatureName(this.db, lead), level: lead.level, hp: lead.hp, maxHp: statsOf(this.db, lead).hp, color: this.db.typeColor(s.types[0]) });
     } else this.hud.setLead(null);
     this.hud.setQuest(st ? questHud(this.db, st) : "");
     this.hud.setNet(this.netStatus);
   }
 
   openMap(): void {
-    const zone = this.zone;
-    let bounds: { minX: number; minZ: number; span: number };
-    let size: number;
-    let scale: number;
-    if (zone === OVERWORLD) {
-      const r = this.region;
-      const minX = r.mountains.westX - 40;
-      const maxX = r.coast.eastX + 60;
-      const minZ = r.coast.deepZ - 40;
-      const maxZ = r.mountains.northZ + 40;
-      const span = Math.max(maxX - minX, maxZ - minZ);
-      scale = Math.ceil(span / 240);
-      size = Math.ceil(span / scale);
-      bounds = { minX, minZ, span: size * scale };
-    } else {
-      const b = this.terrain.bounds(zone)!;
-      scale = 1;
-      size = b.maxX - b.minX;
-      bounds = { minX: b.minX, minZ: b.minZ, span: size };
-    }
-    let image = this.mapCache.get(zone);
-    if (!image) {
-      image = this.chunks.requestMap(zone, bounds.minX, bounds.minZ, size, scale);
-      this.mapCache.set(zone, image);
-    }
+    const b = this.region.bounds;
+    const span = Math.max(b.maxX - b.minX, b.maxZ - b.minZ);
+    const scale = Math.ceil(span / 320);
+    const size = Math.ceil(span / scale);
+    if (!this.mapImage) this.mapImage = this.chunks.requestMap(b.minX, b.minZ, size, scale);
     const p = this.controller.pos;
-    this.panels.map({ zone, image, bounds, player: { x: p.x, z: p.z, rotY: this.controller.rotY } });
+    this.panels.map({ image: this.mapImage, bounds: { minX: b.minX, minZ: b.minZ, span: size * scale }, player: { x: p.x, z: p.z, rotY: this.controller.rotY } });
   }
 
   async saveGame(): Promise<void> {
@@ -931,6 +996,12 @@ export class Game {
       set yaw(v: number) {
         game.cam.yaw = v;
       },
+      get pitch() {
+        return game.cam.pitch;
+      },
+      set pitch(v: number) {
+        game.cam.pitch = v;
+      },
       get battle() {
         return game.battle.view;
       },
@@ -938,7 +1009,7 @@ export class Game {
         return game.target;
       },
       get chunks() {
-        return { loaded: game.chunks.loadedCount, total: game.chunks.chunkCount };
+        return { loaded: game.chunks.loadedCount, total: game.chunks.chunkCount, far: game.chunks.farCount, voxels: game.voxels.size, buildMs: game.chunks.buildTimes.slice(-10) };
       },
       get engineKind() {
         return game.engineKind;
@@ -949,27 +1020,83 @@ export class Game {
       get netStatus() {
         return game.netStatus;
       },
-      creatures: () => [...game.creatures.all()].map((w) => ({ ...w.snap, x: w.view.root.position.x, z: w.view.root.position.z })),
+      get aim() {
+        const t = game.thrower.target;
+        return { equipped: game.thrower.equipped, selected: game.thrower.selected, target: t ? t.snap.id : null, battleAim: !!game.thrower.battleAim, last: game.thrower.lastThrow, camYaw: game.cam.yaw, forward: game.cam.forward().asArray() };
+      },
+      get sounds() {
+        return [...game.sfx.log];
+      },
+      balls: () => ({ flying: game.balls.flying(), resting: game.balls.resting(), busy: [...game.balls.busy] }),
+      creatures: () =>
+        [...game.creatures.all()].map((w) => ({
+          ...w.snap,
+          x: w.view.root.position.x,
+          y: w.view.root.position.y,
+          z: w.view.root.position.z,
+          visible: w.view.root.isEnabled(),
+          held: w.held,
+          asset: w.view.status,
+          body: w.view.body.kind,
+          height: w.view.height,
+        })),
+      assets: () => game.assets.report(),
+      block: (x: number, y: number, z: number) => game.voxels.block(x, y, z),
+      biome: (x: number, y: number, z: number) => game.voxels.biomeAt(x, y, z),
+      column: (x: number, z: number) => {
+        const c = game.voxels.gen.column(x, z);
+        return { ...c };
+      },
       stats: () => ({
         fps: game.engine.getFps(),
-        drawCalls: (game.scene as unknown as { getEngine: () => { _drawCalls?: { current: number } } }).getEngine()._drawCalls?.current,
+        drawCalls: game.lastDrawCalls,
         meshes: game.scene.meshes.length,
         activeMeshes: game.scene.getActiveMeshes().length,
         vertices: game.scene.getTotalVertices(),
+        terrainMeshes: game.chunks.drawnMeshes(),
+        frameMs: (game.frameTimes.reduce((a, b) => a + b, 0) / Math.max(1, game.frameTimes.length)) * 1000,
+        logicMs: game.cpuTimes.reduce((a, b) => a + b[0], 0) / Math.max(1, game.cpuTimes.length),
+        logicMsP95: [...game.cpuTimes.map((c) => c[0])].sort((a, b) => a - b)[Math.floor(game.cpuTimes.length * 0.95)] ?? 0,
+        renderCpuMs: game.cpuTimes.reduce((a, b) => a + b[1], 0) / Math.max(1, game.cpuTimes.length),
       }),
+      pinned: () => [...game.voxels["pinned" as never] as unknown as Set<number>].length,
+      chunkKey,
       debug: local
         ? {
-            teleport: (zone: string, x: number, z: number) => local.sim?.debugTeleport("local", zone, x, z),
-            spawn: (species: string, level: number, distance = 6) => local.sim?.debugSpawn("local", species, level, distance),
+            teleport: (x: number, z: number, y?: number) => local.sim?.debugTeleport("local", x, z, y),
+            spawn: (species: string, level: number, distance = 6, opts: { alpha?: boolean; hpFraction?: number } = {}) => local.sim?.debugSpawn("local", species, level, distance, opts),
             setHour: (h: number) => local.sim?.debugSetHour(h),
             addCreature: (species: string, level: number) => local.sim?.debugAddCreature("local", species, level),
-            give: (item: string, n: number) => {
-              const s = local.sim?.playerSave("local");
-              if (s) s.inventory[item] = (s.inventory[item] ?? 0) + n;
-            },
+            give: (item: string, n: number) => local.sim?.debugGive("local", item, n),
+            forceCapture: (o: "success" | "fail" | "critical" | null) => local.sim?.debugForceCapture(o),
+            serverCreatures: () => local.sim?.creaturesNear("local") ?? [],
+            serverBalls: () => local.sim?.ballsNear("local") ?? [],
+            inspect: () => local.sim?.inspect(),
           }
         : null,
       net: () => game.connection,
     };
   }
+}
+
+function rayAabb(o: Vector3, d: Vector3, minX: number, minY: number, minZ: number, maxX: number, maxY: number, maxZ: number): number | null {
+  let tmin = 0;
+  let tmax = Infinity;
+  const os = [o.x, o.y, o.z];
+  const ds = [d.x, d.y, d.z];
+  const lo = [minX, minY, minZ];
+  const hi = [maxX, maxY, maxZ];
+  for (let i = 0; i < 3; i++) {
+    if (Math.abs(ds[i]) < 1e-9) {
+      if (os[i] < lo[i] || os[i] > hi[i]) return null;
+      continue;
+    }
+    let t1 = (lo[i] - os[i]) / ds[i];
+    let t2 = (hi[i] - os[i]) / ds[i];
+    if (t1 > t2) [t1, t2] = [t2, t1];
+    tmin = Math.max(tmin, t1);
+    tmax = Math.min(tmax, t2);
+    if (tmin > tmax) return null;
+  }
+  return tmin;
 }

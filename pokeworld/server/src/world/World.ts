@@ -2,72 +2,96 @@ import { SEA_LEVEL } from "@shared/config/constants";
 import type { ContentDB } from "@shared/data/contentDb";
 import { dist2 } from "@shared/math/vec";
 import type { AreaDef, InteractableDef, Layer, NpcDef, RegionDef } from "@shared/types/content";
-import type { BiomeName } from "@shared/world/blocks";
-import { OVERWORLD, TerrainCache, WorldTerrain, caveZoneId, groundUnder } from "@shared/world/terrain";
+import { Block, type BiomeName, LIGHT, SOLID } from "@shared/world/blocks";
+import { TerrainGenerator } from "@shared/world/generator";
+import { VoxelWorld } from "@shared/world/voxelWorld";
 
-/** Server-side view of the region: cached terrain queries plus static NPCs, objects and areas. */
+export { OVERWORLD } from "@shared/world/zone";
+import { OVERWORLD } from "@shared/world/zone";
+
+/**
+ * Server-side view of the region: the voxel world (generated on demand,
+ * or shared with the client renderer in single player) plus static NPCs,
+ * objects and areas.
+ */
 export class World {
   readonly region: RegionDef;
-  readonly terrain: WorldTerrain;
-  private readonly caches = new Map<string, TerrainCache>();
+  readonly voxels: VoxelWorld;
 
-  constructor(readonly db: ContentDB) {
+  constructor(
+    readonly db: ContentDB,
+    voxels?: VoxelWorld,
+  ) {
     this.region = db.defaultRegion();
-    this.terrain = new WorldTerrain(this.region);
-    for (const id of this.terrain.zoneIds()) this.caches.set(id, new TerrainCache(this.terrain.zone(id)));
+    this.voxels = voxels ?? new VoxelWorld(new TerrainGenerator(this.region), 256);
   }
 
-  cache(zone: string): TerrainCache {
-    const c = this.caches.get(zone);
-    if (!c) throw new Error(`unknown zone ${zone}`);
-    return c;
+  get gen(): TerrainGenerator {
+    return this.voxels.gen;
   }
 
   hasZone(zone: string): boolean {
-    return this.caches.has(zone);
+    return zone === OVERWORLD;
   }
 
-  height(zone: string, x: number, z: number): number {
-    return this.cache(zone).height(x, z);
+  block(x: number, y: number, z: number): number {
+    return this.voxels.block(x, y, z);
   }
 
-  /** Feet height for a body of the given radius standing at x/z. */
-  ground(zone: string, x: number, z: number, radius = 0.3): number {
-    return groundUnder(this.cache(zone), x, z, radius);
+  solid(x: number, y: number, z: number): boolean {
+    return SOLID[this.voxels.block(x, y, z)] === 1;
   }
 
-  biome(zone: string, x: number, z: number): BiomeName {
-    return this.cache(zone).biome(x, z);
+  /** Feet height on the top surface of a column (for spawning at the surface, respawn points). */
+  surfaceFeet(x: number, z: number): number {
+    return this.voxels.topSolid(x, z) + 1;
   }
 
-  waterLevel(zone: string): number | null {
-    return this.terrain.zone(zone).waterLevel;
+  /** Feet height near `y` where a body of `height` fits, or null. */
+  floorNear(x: number, y: number, z: number, height = 1.8, maxRise = 1, maxDrop = 6): number | null {
+    return this.voxels.floorNear(x, y, z, Math.max(1, Math.ceil(height)), maxRise, maxDrop);
   }
 
-  /** Metres of water above the ground (0 on land or in dry zones). */
-  waterDepth(zone: string, x: number, z: number): number {
-    const level = this.waterLevel(zone);
-    if (level === null) return 0;
-    return Math.max(0, level - this.height(zone, x, z));
+  biomeAt(x: number, y: number, z: number): BiomeName {
+    return this.voxels.biomeAt(x, y, z);
   }
 
-  inBounds(zone: string, x: number, z: number, margin = 0): boolean {
-    const b = this.terrain.zone(zone).bounds;
-    if (!b) return true;
-    return x >= b.minX + margin && z >= b.minZ + margin && x <= b.maxX - margin && z <= b.maxZ - margin;
+  /** Top of the water the point is in, or null. */
+  waterSurface(x: number, y: number, z: number): number | null {
+    return this.voxels.waterSurfaceAt(x, y, z);
   }
 
-  ceiling(zone: string): number | null {
-    return this.terrain.zone(zone).ceiling;
+  /** Metres of water above the floor at this column (0 on land). */
+  waterDepth(x: number, z: number): number {
+    const top = this.voxels.waterTop(x, z);
+    if (top < 0 || this.voxels.block(x, top, z) !== Block.WATER) return 0;
+    let y = top;
+    while (y > 0 && this.voxels.block(x, y, z) === Block.WATER) y--;
+    return top - y;
   }
 
-  /** Which traversal layers a spot supports. */
-  layersAt(zone: string, x: number, z: number): Layer[] {
-    const depth = this.waterDepth(zone, x, z);
+  inWater(x: number, y: number, z: number): boolean {
+    return this.voxels.block(x, y, z) === Block.WATER;
+  }
+
+  /** Which traversal layers a column supports at the surface. */
+  layersAt(x: number, z: number): Layer[] {
+    const depth = this.waterDepth(x, z);
     const layers: Layer[] = ["air"];
-    if (depth >= 1.2) layers.push("water_surface");
-    else if (depth === 0) layers.push("land");
+    if (depth >= 1.5) layers.push("water_surface");
+    if (depth >= 4) layers.push("underwater");
+    if (depth === 0) layers.push("land");
     return layers;
+  }
+
+  /** Rough light level 0..15 at a point (sky if open, else nearby block light). */
+  lightLevel(x: number, y: number, z: number, daylight: number): number {
+    const sky = this.voxels.skyVisible(x, y + 1, z) ? Math.round(15 * daylight) : 0;
+    return Math.max(sky, this.voxels.blockLightNear(x, y, z, 3));
+  }
+
+  isEmissive(b: number): boolean {
+    return LIGHT[b] > 0;
   }
 
   npc(id: string): NpcDef | undefined {
@@ -78,30 +102,14 @@ export class World {
     return this.region.interactables.find((i) => i.id === id);
   }
 
-  zoneOfNpc(n: NpcDef): string {
-    return n.zone ?? OVERWORLD;
+  /** Feet height of an NPC or object. */
+  objectY(o: { x: number; z: number; y?: number }): number {
+    if (o.y !== undefined) return o.y + 1;
+    return this.surfaceFeet(o.x, o.z);
   }
 
-  zoneOfInteractable(i: InteractableDef): string {
-    return i.zone ?? OVERWORLD;
-  }
-
-  areasAt(zone: string, x: number, z: number): AreaDef[] {
-    return this.region.areas.filter((a) => (a.zone ?? OVERWORLD) === zone && dist2(x, z, a.x, a.z) <= a.radius);
-  }
-
-  /** Where the player stands after leaving a cave: a few metres out of the arch. */
-  caveExitPoint(caveId: string): { x: number; z: number } {
-    const cave = this.region.caves.find((c) => c.id === caveId);
-    if (!cave) throw new Error(`unknown cave ${caveId}`);
-    const f = this.terrain.overworld.caveFacing(cave);
-    return { x: cave.entrance.x + f.x * 6 + 0.5, z: cave.entrance.z + f.z * 6 + 0.5 };
-  }
-
-  caveStart(caveId: string): { zone: string; x: number; z: number } {
-    const cave = this.region.caves.find((c) => c.id === caveId);
-    if (!cave) throw new Error(`unknown cave ${caveId}`);
-    return { zone: caveZoneId(cave.id), x: cave.start.x + 0.5, z: cave.start.z + 4.5 };
+  areasAt(x: number, y: number, z: number): AreaDef[] {
+    return this.region.areas.filter((a) => dist2(x, z, a.x, a.z) <= a.radius && (a.minY === undefined || y >= a.minY) && (a.maxY === undefined || y <= a.maxY));
   }
 
   structureDistance(id: string, x: number, z: number): number {
@@ -109,11 +117,13 @@ export class World {
     if (ruin) return dist2(x, z, ruin.x, ruin.z);
     const b = this.region.buildings.find((r) => r.id === id);
     if (b) return dist2(x, z, b.x, b.z);
+    const w = this.region.shipwrecks.find((r) => r.id === id);
+    if (w) return dist2(x, z, w.x, w.z);
     return Infinity;
   }
 
-  /** Surface height a swimmer floats at. */
-  swimHeight(zone: string): number {
-    return (this.waterLevel(zone) ?? SEA_LEVEL) - 0.45;
+  /** Sea level (used for flying heights over water). */
+  get seaLevel(): number {
+    return SEA_LEVEL;
   }
 }

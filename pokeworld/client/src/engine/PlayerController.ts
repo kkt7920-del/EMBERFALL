@@ -3,13 +3,16 @@ import { MOVE } from "@shared/config/constants";
 import { lerpAngle } from "@shared/math/vec";
 import type { MountMode } from "@shared/types/content";
 import type { AnimState } from "@shared/types/game";
-import type { ClientTerrain } from "../world/ClientTerrain";
+import { Block } from "@shared/world/blocks";
+import { type Body, bodyBlocked, moveBody, onGround, unstick } from "@shared/world/physics";
+import type { VoxelWorld } from "@shared/world/voxelWorld";
 import type { Controls } from "./Input";
 
 /**
- * Local player movement (client-side prediction). Uses the same voxel
- * heightmap and limits the server validates against; the server corrects us
- * if we ever disagree.
+ * Local player movement (client-side prediction) with voxel collision:
+ * walking with auto-step, jumping, swimming at the surface, diving, and
+ * flying on a mount. The server validates the result and corrects us if we
+ * ever disagree.
  */
 export class PlayerController {
   readonly pos = new Vector3();
@@ -19,7 +22,13 @@ export class PlayerController {
   anim: AnimState = "idle";
   mountModes: MountMode[] = [];
   mountSpeed = 1;
+  /** Head under water. */
+  submerged = false;
+  inWater = false;
+  /** Faces the camera direction while aiming instead of the movement direction. */
+  strafe = false;
   private moving = false;
+  private readonly body: Body = { x: 0, y: 0, z: 0, halfW: MOVE.radius, height: MOVE.height };
 
   teleport(x: number, y: number, z: number, rotY?: number): void {
     this.pos.set(x, y, z);
@@ -36,23 +45,27 @@ export class PlayerController {
     return this.mountModes.includes("fly");
   }
 
-  update(dt: number, c: Controls, yaw: number, terrain: ClientTerrain, zone: string): void {
-    const R = MOVE.radius;
-    const level = terrain.waterLevel(zone);
-    const ceiling = terrain.ceiling(zone);
-    const bounds = terrain.bounds(zone);
+  update(dt: number, c: Controls, yaw: number, world: VoxelWorld): void {
     const p = this.pos;
+    const b = this.body;
+    b.x = p.x;
+    b.y = p.y;
+    b.z = p.z;
+    if (bodyBlocked(world, b)) unstick(world, b, 4);
 
-    const columnHere = terrain.height(zone, p.x, p.z);
-    const depthHere = level === null ? 0 : level - columnHere;
+    const water = (y: number) => world.block(b.x, y, b.z) === Block.WATER;
+    this.inWater = water(b.y + 0.9);
+    this.submerged = water(b.y + 1.6);
     const swimMount = this.mountModes.includes("swim");
-    const inWater = !this.flying && level !== null && depthHere > 0.9 && p.y < level - 0.2;
+    const swimming = !this.flying && this.inWater;
+    const airborneFly = this.flying && !this.onGround;
 
     // Speed for the current medium
     let speed: number = c.run ? MOVE.run : MOVE.walk;
-    if (inWater) speed = swimMount ? MOVE.run * this.mountSpeed * 1.1 : MOVE.swim;
-    else if (this.flying && !this.onGround) speed = MOVE.fly * this.mountSpeed * (c.run ? 1.25 : 1);
+    if (swimming) speed = swimMount ? MOVE.run * this.mountSpeed * 1.1 : MOVE.swim * (c.run ? 1.3 : 1);
+    else if (airborneFly) speed = MOVE.fly * this.mountSpeed * (c.run ? 1.25 : 1);
     else if (this.mounted) speed = MOVE.run * this.mountSpeed * (c.run ? 1.15 : 0.9);
+    if (this.strafe && !this.mounted) speed *= 0.75;
 
     // Horizontal movement relative to the camera
     const fx = Math.sin(yaw);
@@ -62,73 +75,73 @@ export class PlayerController {
     const mag = Math.min(1, Math.hypot(mx, mz));
     this.moving = mag > 0.05;
 
-    const airborneFly = this.flying && !this.onGround;
-    const blocked = (g: number) => (airborneFly ? g > p.y + 0.05 : g - p.y > MOVE.stepHeight);
-    const inside = (x: number, z: number) => !bounds || (x > bounds.minX + 1 && z > bounds.minZ + 1 && x < bounds.maxX - 1 && z < bounds.maxZ - 1);
-
     if (this.moving) {
       const step = speed * dt;
-      const nx = p.x + mx * step;
-      if (inside(nx, p.z) && !blocked(terrain.ground(zone, nx, p.z, R))) p.x = nx;
-      const nz = p.z + mz * step;
-      if (inside(p.x, nz) && !blocked(terrain.ground(zone, p.x, nz, R))) p.z = nz;
-      this.rotY = lerpAngle(this.rotY, Math.atan2(mx, mz), Math.min(1, dt * 12));
+      const res = moveBody(world, b, mx * step, 0, mz * step, airborneFly ? 0 : this.onGround || swimming ? MOVE.stepHeight : 0);
+      // Climb out of water onto a ledge
+      if (swimming && (res.hitX || res.hitZ) && !this.submerged) {
+        const lift = { ...b };
+        lift.y = Math.floor(b.y) + 1.05;
+        if (!bodyBlocked(world, lift, lift.x + mx * 0.4, lift.y, lift.z + mz * 0.4)) {
+          b.y = lift.y;
+          moveBody(world, b, mx * 0.4, 0, mz * 0.4, 0);
+        }
+      }
     }
+    if (this.strafe) this.rotY = lerpAngle(this.rotY, yaw, Math.min(1, dt * 16));
+    else if (this.moving) this.rotY = lerpAngle(this.rotY, Math.atan2(mx, mz), Math.min(1, dt * 12));
 
-    const ground = terrain.ground(zone, p.x, p.z, R);
-
+    // Vertical
     if (this.flying) {
       if (c.jumpHeld) this.velY = 8;
       else if (c.descendHeld) this.velY = -9;
       else if (!this.onGround) this.velY = Math.max(this.velY - 10 * dt, -2.5);
       else this.velY = 0;
-      p.y += this.velY * dt;
-      if (p.y <= ground) {
-        p.y = ground;
+      if (this.inWater && this.velY < 0) this.velY = 0;
+      const r = moveBody(world, b, 0, this.velY * dt, 0);
+      if (r.hitY && this.velY < 0) {
         this.velY = 0;
         this.onGround = true;
-      } else this.onGround = false;
-      if (level !== null && p.y < level - 0.2 && depthHere > 0.5) p.y = level - 0.2;
-      p.y = Math.min(p.y, 120);
-    } else if (inWater) {
-      const surface = swimMount ? level! - 0.35 : level! - 1.05;
-      p.y += (surface - p.y) * Math.min(1, dt * 6);
-      this.velY = 0;
+      } else this.onGround = onGround(world, b);
+      if (b.y > 250) b.y = 250;
+    } else if (swimming) {
       this.onGround = false;
-      // Climb out onto a ledge
-      if (c.pressed.has("jump") || (this.moving && ground > p.y && ground - p.y < 1.6)) {
-        if (ground - p.y < 1.6 && ground > surface) {
-          p.y = ground;
-          this.onGround = true;
-        } else if (c.pressed.has("jump")) this.velY = 5;
+      if (swimMount) {
+        // Ride on the surface
+        let surface = b.y;
+        while (water(surface + 1.2)) surface += 1;
+        const target = Math.floor(surface + 1.2) - 0.55;
+        b.y += (target - b.y) * Math.min(1, dt * 6);
+        this.velY = 0;
+      } else {
+        if (c.jumpHeld) this.velY = Math.min(this.velY + 14 * dt, 3.2);
+        else if (c.descendHeld) this.velY = Math.max(this.velY - 14 * dt, -3.2);
+        else {
+          // Float up to the surface, bob with the head above water
+          const target = this.submerged ? 1.6 : water(b.y + 1.35) ? 0.6 : -0.6;
+          this.velY += (target - this.velY) * Math.min(1, dt * 3);
+        }
+        const r = moveBody(world, b, 0, this.velY * dt, 0);
+        if (r.hitY) this.velY = 0;
+        if (c.pressed.has("jump") && !this.submerged) this.velY = 5.5;
       }
     } else {
       if (this.onGround && c.pressed.has("jump")) {
         this.velY = MOVE.jumpVelocity * (this.mounted ? 1.1 : 1);
         this.onGround = false;
       }
-      this.velY -= MOVE.gravity * dt;
-      p.y += this.velY * dt;
-      if (p.y <= ground) {
-        p.y = ground;
+      this.velY = Math.max(this.velY - MOVE.gravity * dt, -55);
+      const r = moveBody(world, b, 0, this.velY * dt, 0);
+      if (r.hitY) {
+        if (this.velY < 0) this.onGround = true;
         this.velY = 0;
-        this.onGround = true;
-      } else if (this.onGround && p.y - ground < 0.6 && this.velY <= 0) {
-        // Stick to the ground walking down steps
-        p.y = ground;
-        this.velY = 0;
-      } else {
-        this.onGround = false;
-      }
+      } else this.onGround = this.velY <= 0 && onGround(world, b);
     }
 
-    if (ceiling !== null && p.y + MOVE.height > ceiling) {
-      p.y = ceiling - MOVE.height;
-      this.velY = Math.min(0, this.velY);
-    }
-
-    const nowInWater = !this.flying && level !== null && level - terrain.height(zone, p.x, p.z) > 0.9 && p.y < level - 0.2;
-    if (nowInWater) this.anim = "swim";
+    p.set(b.x, b.y, b.z);
+    const nowWater = !this.flying && world.block(b.x, b.y + 0.9, b.z) === Block.WATER;
+    const under = nowWater && world.block(b.x, b.y + 1.6, b.z) === Block.WATER;
+    if (nowWater) this.anim = under && !swimMount ? "dive" : "swim";
     else if (this.flying && !this.onGround) this.anim = "fly";
     else if (!this.onGround) this.anim = "jump";
     else if (this.moving) this.anim = c.run || this.mounted ? "run" : "walk";

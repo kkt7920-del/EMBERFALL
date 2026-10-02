@@ -1,0 +1,75 @@
+{
+ "id": "ekans",
+ "dexNumber": 23,
+ "name": "Ekans",
+ "types": [
+  "poison"
+ ],
+ "baseStats": {
+  "hp": 35,
+  "atk": 60,
+  "def": 44,
+  "spa": 40,
+  "spd": 54,
+  "spe": 55
+ },
+ "catchRate": 255,
+ "baseExp": 58,
+ "height": 2.0,
+ "weight": 6.9,
+ "baseScale": 1.0,
+ "hitbox": {
+  "width": 1.0,
+  "height": 0.6
+ },
+ "genderRatio": 0.5,
+ "abilities": [
+  "Intimidate"
+ ],
+ "modelId": "ekans",
+ "textureId": "ekans",
+ "movement": {
+  "land": true,
+  "water": false,
+  "underwater": false,
+  "air": false
+ },
+ "animations": {
+  "idle": "ground_idle",
+  "walk": "ground_walk",
+  "run": "ground_run",
+  "swim": "water_swim",
+  "fly": "air_fly",
+  "battleIdle": "battle_idle",
+  "attack": "physical",
+  "recoil": "recoil",
+  "faint": "faint",
+  "capture": "capture"
+ },
+ "behavior": {
+  "temperament": "aggressive",
+  "speed": 0.9
+ },
+ "learnset": [
+  {
+   "level": 1,
+   "move": "poison_sting"
+  },
+  {
+   "level": 1,
+   "move": "leer"
+  },
+  {
+   "level": 9,
+   "move": "bite"
+  },
+  {
+   "level": 12,
+   "move": "acid"
+  },
+  {
+   "level": 17,
+   "move": "sludge"
+  }
+ ]
+}

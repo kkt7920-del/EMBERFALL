@@ -1,0 +1,83 @@
+{
+ "id": "psyduck",
+ "dexNumber": 54,
+ "name": "Psyduck",
+ "types": [
+  "water"
+ ],
+ "baseStats": {
+  "hp": 50,
+  "atk": 52,
+  "def": 48,
+  "spa": 65,
+  "spd": 50,
+  "spe": 55
+ },
+ "catchRate": 190,
+ "baseExp": 64,
+ "height": 0.8,
+ "weight": 19.6,
+ "baseScale": 1.0,
+ "hitbox": {
+  "width": 0.64,
+  "height": 0.8
+ },
+ "genderRatio": 0.5,
+ "abilities": [
+  "Damp"
+ ],
+ "modelId": "psyduck",
+ "textureId": "psyduck",
+ "movement": {
+  "land": true,
+  "water": true,
+  "underwater": false,
+  "air": false
+ },
+ "animations": {
+  "idle": "ground_idle",
+  "walk": "ground_walk",
+  "run": "ground_run",
+  "swim": "water_swim",
+  "fly": "air_fly",
+  "battleIdle": "battle_idle",
+  "attack": "physical",
+  "recoil": "recoil",
+  "faint": "faint",
+  "capture": "capture"
+ },
+ "behavior": {
+  "temperament": "neutral",
+  "speed": 0.8
+ },
+ "learnset": [
+  {
+   "level": 1,
+   "move": "water_gun"
+  },
+  {
+   "level": 1,
+   "move": "scratch"
+  },
+  {
+   "level": 3,
+   "move": "tail_whip"
+  },
+  {
+   "level": 6,
+   "move": "confusion"
+  },
+  {
+   "level": 12,
+   "move": "water_pulse"
+  },
+  {
+   "level": 18,
+   "move": "psybeam"
+  }
+ ],
+ "evolution": {
+  "to": "golduck",
+  "level": 33
+ }
+}

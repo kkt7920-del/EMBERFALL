@@ -1,0 +1,84 @@
+{
+ "id": "gible",
+ "dexNumber": 443,
+ "name": "Gible",
+ "types": [
+  "dragon",
+  "ground"
+ ],
+ "baseStats": {
+  "hp": 58,
+  "atk": 70,
+  "def": 45,
+  "spa": 40,
+  "spd": 45,
+  "spe": 42
+ },
+ "catchRate": 45,
+ "baseExp": 60,
+ "height": 0.7,
+ "weight": 20.5,
+ "baseScale": 1.0,
+ "hitbox": {
+  "width": 0.56,
+  "height": 0.7
+ },
+ "genderRatio": 0.5,
+ "abilities": [
+  "Sand Veil"
+ ],
+ "modelId": "gible",
+ "textureId": "gible",
+ "movement": {
+  "land": true,
+  "water": false,
+  "underwater": false,
+  "air": false
+ },
+ "animations": {
+  "idle": "ground_idle",
+  "walk": "ground_walk",
+  "run": "ground_run",
+  "swim": "water_swim",
+  "fly": "air_fly",
+  "battleIdle": "battle_idle",
+  "attack": "physical",
+  "recoil": "recoil",
+  "faint": "faint",
+  "capture": "capture"
+ },
+ "behavior": {
+  "temperament": "aggressive",
+  "speed": 1.0
+ },
+ "learnset": [
+  {
+   "level": 1,
+   "move": "tackle"
+  },
+  {
+   "level": 1,
+   "move": "mud_slap"
+  },
+  {
+   "level": 6,
+   "move": "dragon_breath"
+  },
+  {
+   "level": 12,
+   "move": "bulldoze"
+  },
+  {
+   "level": 18,
+   "move": "bite"
+  },
+  {
+   "level": 24,
+   "move": "dig"
+  },
+  {
+   "level": 30,
+   "move": "dragon_claw"
+  }
+ ]
+}

@@ -1,0 +1,83 @@
+{
+ "id": "clefairy",
+ "dexNumber": 35,
+ "name": "Clefairy",
+ "types": [
+  "fairy"
+ ],
+ "baseStats": {
+  "hp": 70,
+  "atk": 45,
+  "def": 48,
+  "spa": 60,
+  "spd": 65,
+  "spe": 35
+ },
+ "catchRate": 150,
+ "baseExp": 113,
+ "height": 0.6,
+ "weight": 7.5,
+ "baseScale": 1.0,
+ "hitbox": {
+  "width": 0.5,
+  "height": 0.6
+ },
+ "genderRatio": 0.75,
+ "abilities": [
+  "Cute Charm"
+ ],
+ "modelId": "clefairy",
+ "textureId": "clefairy",
+ "movement": {
+  "land": true,
+  "water": false,
+  "underwater": false,
+  "air": false
+ },
+ "animations": {
+  "idle": "ground_idle",
+  "walk": "ground_walk",
+  "run": "ground_run",
+  "swim": "water_swim",
+  "fly": "air_fly",
+  "battleIdle": "battle_idle",
+  "attack": "physical",
+  "recoil": "recoil",
+  "faint": "faint",
+  "capture": "capture"
+ },
+ "behavior": {
+  "temperament": "timid",
+  "speed": 0.8
+ },
+ "learnset": [
+  {
+   "level": 1,
+   "move": "pound"
+  },
+  {
+   "level": 1,
+   "move": "growl"
+  },
+  {
+   "level": 4,
+   "move": "sing"
+  },
+  {
+   "level": 8,
+   "move": "disarming_voice"
+  },
+  {
+   "level": 12,
+   "move": "defense_curl"
+  },
+  {
+   "level": 20,
+   "move": "rest"
+  },
+  {
+   "level": 28,
+   "move": "moonblast"
+  }
+ ]
+}

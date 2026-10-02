@@ -1,0 +1,88 @@
+{
+ "id": "butterfree",
+ "dexNumber": 12,
+ "name": "Butterfree",
+ "types": [
+  "bug",
+  "flying"
+ ],
+ "baseStats": {
+  "hp": 60,
+  "atk": 45,
+  "def": 50,
+  "spa": 90,
+  "spd": 80,
+  "spe": 70
+ },
+ "catchRate": 45,
+ "baseExp": 178,
+ "height": 1.1,
+ "weight": 32.0,
+ "baseScale": 1.0,
+ "hitbox": {
+  "width": 0.88,
+  "height": 1.1
+ },
+ "genderRatio": 0.5,
+ "abilities": [
+  "Compound Eyes"
+ ],
+ "modelId": "butterfree",
+ "textureId": "butterfree",
+ "movement": {
+  "land": false,
+  "water": false,
+  "underwater": false,
+  "air": true
+ },
+ "animations": {
+  "idle": "ground_idle",
+  "walk": "ground_walk",
+  "run": "ground_run",
+  "swim": "water_swim",
+  "fly": "air_fly",
+  "battleIdle": "battle_idle",
+  "attack": "physical",
+  "recoil": "recoil",
+  "faint": "faint",
+  "capture": "capture"
+ },
+ "behavior": {
+  "temperament": "timid",
+  "speed": 1.0
+ },
+ "learnset": [
+  {
+   "level": 1,
+   "move": "gust"
+  },
+  {
+   "level": 1,
+   "move": "confusion"
+  },
+  {
+   "level": 12,
+   "move": "poison_powder"
+  },
+  {
+   "level": 12,
+   "move": "stun_spore"
+  },
+  {
+   "level": 12,
+   "move": "sleep_powder"
+  },
+  {
+   "level": 16,
+   "move": "struggle_bug"
+  },
+  {
+   "level": 22,
+   "move": "psybeam"
+  },
+  {
+   "level": 28,
+   "move": "air_slash"
+  }
+ ]
+}

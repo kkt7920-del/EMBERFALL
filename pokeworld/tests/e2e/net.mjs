@@ -49,11 +49,11 @@ await walkTo(a.page, 0.5, 23.5, 2.6);
 await a.page.keyboard.press("KeyE");
 await a.page.waitForSelector(".dialog:not(.hidden)", { timeout: 8000 });
 for (let i = 0; i < 4 && (await a.page.$(".dialog:not(.hidden)")); i++) await a.page.keyboard.press("KeyE");
-await a.page.click('[data-species="leafbun"]');
+await a.page.click('[data-species="bulbasaur"] button');
 await a.page.waitForFunction(() => window.__pokeworld.state?.party.length === 1, null, { timeout: 8000 });
 for (let i = 0; i < 4 && (await a.page.$(".dialog:not(.hidden)")); i++) await a.page.keyboard.press("KeyE");
 const idA = await pw(a.page, () => window.__pokeworld.game.playerId);
-check("server grants the starter to A", (await pw(a.page, () => window.__pokeworld.state.party[0].species)) === "leafbun");
+check("server grants the starter to A", (await pw(a.page, () => window.__pokeworld.state.party[0].species)) === "bulbasaur");
 
 // Client cannot teleport: the server corrects an impossible move
 await pw(a.page, () => window.__pokeworld.game.connection.send({ type: "PLAYER_MOVE", seq: 99999, x: 400, y: 30, z: 400, rotY: 0, anim: "run" }));
@@ -82,7 +82,7 @@ await a.page.waitForFunction(() => /온라인/.test(window.__pokeworld?.netStatu
 check("client reconnects automatically after the server returns", /온라인/.test(await pw(a.page, () => window.__pokeworld.netStatus)));
 const idA2 = await pw(a.page, () => window.__pokeworld.game.playerId);
 check("same player resumed (id + token)", idA2 === idA, `${idA} -> ${idA2}`);
-check("server-side save survived the crash", (await pw(a.page, () => window.__pokeworld.state.party[0]?.species)) === "leafbun");
+check("server-side save survived the crash", (await pw(a.page, () => window.__pokeworld.state.party[0]?.species)) === "bulbasaur");
 const moved = await pw(a.page, () => window.__pokeworld.pos);
 check("game keeps running after reconnect", Number.isFinite(moved.x));
 

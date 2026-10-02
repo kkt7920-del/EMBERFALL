@@ -4,7 +4,10 @@ import { ContentDB, type ContentFiles } from "@shared/data/contentDb";
  * The content pack is bundled from /content at build time. Replace the JSON
  * files (species, models, spawns, regions, ...) to ship a different pack.
  */
-const files = import.meta.glob("../../content/**/*.json", { eager: true, import: "default" }) as ContentFiles;
+const files = import.meta.glob(["../../content/**/*.json", "!../../content/pokemon/{models,textures,animations,cries}/**", "!../../content/pokemon/assets.json"], {
+  eager: true,
+  import: "default",
+}) as ContentFiles;
 
 let cached: ContentDB | null = null;
 

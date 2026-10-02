@@ -1,0 +1,80 @@
+{
+ "id": "pidgeotto",
+ "dexNumber": 17,
+ "name": "Pidgeotto",
+ "types": [
+  "normal",
+  "flying"
+ ],
+ "baseStats": {
+  "hp": 63,
+  "atk": 60,
+  "def": 55,
+  "spa": 50,
+  "spd": 50,
+  "spe": 71
+ },
+ "catchRate": 120,
+ "baseExp": 122,
+ "height": 1.1,
+ "weight": 30.0,
+ "baseScale": 1.0,
+ "hitbox": {
+  "width": 0.88,
+  "height": 1.1
+ },
+ "genderRatio": 0.5,
+ "abilities": [
+  "Keen Eye"
+ ],
+ "modelId": "pidgeotto",
+ "textureId": "pidgeotto",
+ "movement": {
+  "land": true,
+  "water": false,
+  "underwater": false,
+  "air": true
+ },
+ "animations": {
+  "idle": "ground_idle",
+  "walk": "ground_walk",
+  "run": "ground_run",
+  "swim": "water_swim",
+  "fly": "air_fly",
+  "battleIdle": "battle_idle",
+  "attack": "physical",
+  "recoil": "recoil",
+  "faint": "faint",
+  "capture": "capture"
+ },
+ "behavior": {
+  "temperament": "neutral",
+  "speed": 1.2
+ },
+ "learnset": [
+  {
+   "level": 1,
+   "move": "gust"
+  },
+  {
+   "level": 1,
+   "move": "quick_attack"
+  },
+  {
+   "level": 13,
+   "move": "wing_attack"
+  },
+  {
+   "level": 22,
+   "move": "twister"
+  },
+  {
+   "level": 29,
+   "move": "aerial_ace"
+  }
+ ],
+ "evolution": {
+  "to": "pidgeot",
+  "level": 36
+ }
+}

@@ -1,0 +1,80 @@
+{
+ "id": "bellsprout",
+ "dexNumber": 69,
+ "name": "Bellsprout",
+ "types": [
+  "grass",
+  "poison"
+ ],
+ "baseStats": {
+  "hp": 50,
+  "atk": 75,
+  "def": 35,
+  "spa": 70,
+  "spd": 30,
+  "spe": 40
+ },
+ "catchRate": 255,
+ "baseExp": 60,
+ "height": 0.7,
+ "weight": 4.0,
+ "baseScale": 1.0,
+ "hitbox": {
+  "width": 0.56,
+  "height": 0.7
+ },
+ "genderRatio": 0.5,
+ "abilities": [
+  "Chlorophyll"
+ ],
+ "modelId": "bellsprout",
+ "textureId": "bellsprout",
+ "movement": {
+  "land": true,
+  "water": false,
+  "underwater": false,
+  "air": false
+ },
+ "animations": {
+  "idle": "ground_idle",
+  "walk": "ground_walk",
+  "run": "ground_run",
+  "swim": "water_swim",
+  "fly": "air_fly",
+  "battleIdle": "battle_idle",
+  "attack": "physical",
+  "recoil": "recoil",
+  "faint": "faint",
+  "capture": "capture"
+ },
+ "behavior": {
+  "temperament": "neutral",
+  "speed": 0.8
+ },
+ "learnset": [
+  {
+   "level": 1,
+   "move": "vine_whip"
+  },
+  {
+   "level": 7,
+   "move": "growl"
+  },
+  {
+   "level": 11,
+   "move": "sleep_powder"
+  },
+  {
+   "level": 13,
+   "move": "poison_powder"
+  },
+  {
+   "level": 17,
+   "move": "acid"
+  },
+  {
+   "level": 23,
+   "move": "razor_leaf"
+  }
+ ]
+}

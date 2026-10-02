@@ -1,0 +1,63 @@
+{
+ "id": "abra",
+ "dexNumber": 63,
+ "name": "Abra",
+ "types": [
+  "psychic"
+ ],
+ "baseStats": {
+  "hp": 25,
+  "atk": 20,
+  "def": 15,
+  "spa": 105,
+  "spd": 55,
+  "spe": 90
+ },
+ "catchRate": 200,
+ "baseExp": 62,
+ "height": 0.9,
+ "weight": 19.5,
+ "baseScale": 1.0,
+ "hitbox": {
+  "width": 0.72,
+  "height": 0.9
+ },
+ "genderRatio": 0.25,
+ "abilities": [
+  "Synchronize"
+ ],
+ "modelId": "abra",
+ "textureId": "abra",
+ "movement": {
+  "land": true,
+  "water": false,
+  "underwater": false,
+  "air": false
+ },
+ "animations": {
+  "idle": "ground_idle",
+  "walk": "ground_walk",
+  "run": "ground_run",
+  "swim": "water_swim",
+  "fly": "air_fly",
+  "battleIdle": "battle_idle",
+  "attack": "physical",
+  "recoil": "recoil",
+  "faint": "faint",
+  "capture": "capture"
+ },
+ "behavior": {
+  "temperament": "timid",
+  "speed": 0.6
+ },
+ "learnset": [
+  {
+   "level": 1,
+   "move": "confusion"
+  },
+  {
+   "level": 10,
+   "move": "psybeam"
+  }
+ ]
+}

@@ -1,0 +1,76 @@
+{
+ "id": "graveler",
+ "dexNumber": 75,
+ "name": "Graveler",
+ "types": [
+  "rock",
+  "ground"
+ ],
+ "baseStats": {
+  "hp": 55,
+  "atk": 95,
+  "def": 115,
+  "spa": 45,
+  "spd": 45,
+  "spe": 35
+ },
+ "catchRate": 120,
+ "baseExp": 137,
+ "height": 1.0,
+ "weight": 105.0,
+ "baseScale": 1.0,
+ "hitbox": {
+  "width": 0.8,
+  "height": 1.0
+ },
+ "genderRatio": 0.5,
+ "abilities": [
+  "Rock Head"
+ ],
+ "modelId": "graveler",
+ "textureId": "graveler",
+ "movement": {
+  "land": true,
+  "water": false,
+  "underwater": false,
+  "air": false
+ },
+ "animations": {
+  "idle": "ground_idle",
+  "walk": "ground_walk",
+  "run": "ground_run",
+  "swim": "water_swim",
+  "fly": "air_fly",
+  "battleIdle": "battle_idle",
+  "attack": "physical",
+  "recoil": "recoil",
+  "faint": "faint",
+  "capture": "capture"
+ },
+ "behavior": {
+  "temperament": "neutral",
+  "speed": 0.6
+ },
+ "learnset": [
+  {
+   "level": 1,
+   "move": "rock_throw"
+  },
+  {
+   "level": 1,
+   "move": "bulldoze"
+  },
+  {
+   "level": 1,
+   "move": "rock_tomb"
+  },
+  {
+   "level": 30,
+   "move": "rock_slide"
+  },
+  {
+   "level": 36,
+   "move": "earthquake"
+  }
+ ]
+}

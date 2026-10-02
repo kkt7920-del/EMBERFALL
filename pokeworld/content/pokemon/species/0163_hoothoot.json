@@ -1,0 +1,80 @@
+{
+ "id": "hoothoot",
+ "dexNumber": 163,
+ "name": "Hoothoot",
+ "types": [
+  "normal",
+  "flying"
+ ],
+ "baseStats": {
+  "hp": 60,
+  "atk": 30,
+  "def": 30,
+  "spa": 36,
+  "spd": 56,
+  "spe": 50
+ },
+ "catchRate": 255,
+ "baseExp": 52,
+ "height": 0.7,
+ "weight": 21.2,
+ "baseScale": 1.0,
+ "hitbox": {
+  "width": 0.56,
+  "height": 0.7
+ },
+ "genderRatio": 0.5,
+ "abilities": [
+  "Insomnia"
+ ],
+ "modelId": "hoothoot",
+ "textureId": "hoothoot",
+ "movement": {
+  "land": true,
+  "water": false,
+  "underwater": false,
+  "air": true
+ },
+ "animations": {
+  "idle": "ground_idle",
+  "walk": "ground_walk",
+  "run": "ground_run",
+  "swim": "water_swim",
+  "fly": "air_fly",
+  "battleIdle": "battle_idle",
+  "attack": "physical",
+  "recoil": "recoil",
+  "faint": "faint",
+  "capture": "capture"
+ },
+ "behavior": {
+  "temperament": "neutral",
+  "speed": 0.9
+ },
+ "learnset": [
+  {
+   "level": 1,
+   "move": "tackle"
+  },
+  {
+   "level": 1,
+   "move": "growl"
+  },
+  {
+   "level": 5,
+   "move": "peck"
+  },
+  {
+   "level": 9,
+   "move": "confusion"
+  },
+  {
+   "level": 15,
+   "move": "psybeam"
+  },
+  {
+   "level": 21,
+   "move": "air_slash"
+  }
+ ]
+}

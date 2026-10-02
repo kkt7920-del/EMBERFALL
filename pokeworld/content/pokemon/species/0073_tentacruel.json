@@ -1,0 +1,76 @@
+{
+ "id": "tentacruel",
+ "dexNumber": 73,
+ "name": "Tentacruel",
+ "types": [
+  "water",
+  "poison"
+ ],
+ "baseStats": {
+  "hp": 80,
+  "atk": 70,
+  "def": 65,
+  "spa": 80,
+  "spd": 120,
+  "spe": 100
+ },
+ "catchRate": 60,
+ "baseExp": 180,
+ "height": 1.6,
+ "weight": 55.0,
+ "baseScale": 1.0,
+ "hitbox": {
+  "width": 1.2,
+  "height": 1.4
+ },
+ "genderRatio": 0.5,
+ "abilities": [
+  "Clear Body"
+ ],
+ "modelId": "tentacruel",
+ "textureId": "tentacruel",
+ "movement": {
+  "land": false,
+  "water": true,
+  "underwater": true,
+  "air": false
+ },
+ "animations": {
+  "idle": "ground_idle",
+  "walk": "ground_walk",
+  "run": "ground_run",
+  "swim": "water_swim",
+  "fly": "air_fly",
+  "battleIdle": "battle_idle",
+  "attack": "physical",
+  "recoil": "recoil",
+  "faint": "faint",
+  "capture": "capture"
+ },
+ "behavior": {
+  "temperament": "aggressive",
+  "speed": 1.1
+ },
+ "learnset": [
+  {
+   "level": 1,
+   "move": "acid"
+  },
+  {
+   "level": 1,
+   "move": "water_pulse"
+  },
+  {
+   "level": 1,
+   "move": "bubble_beam"
+  },
+  {
+   "level": 30,
+   "move": "sludge"
+  },
+  {
+   "level": 40,
+   "move": "hydro_pump"
+  }
+ ]
+}

@@ -1,0 +1,76 @@
+{
+ "id": "golurk",
+ "dexNumber": 623,
+ "name": "Golurk",
+ "types": [
+  "ground",
+  "ghost"
+ ],
+ "baseStats": {
+  "hp": 89,
+  "atk": 124,
+  "def": 80,
+  "spa": 55,
+  "spd": 80,
+  "spe": 55
+ },
+ "catchRate": 90,
+ "baseExp": 169,
+ "height": 2.8,
+ "weight": 330.0,
+ "baseScale": 1.0,
+ "hitbox": {
+  "width": 1.8,
+  "height": 2.8
+ },
+ "genderRatio": -1,
+ "abilities": [
+  "Iron Fist"
+ ],
+ "modelId": "golurk",
+ "textureId": "golurk",
+ "movement": {
+  "land": true,
+  "water": false,
+  "underwater": false,
+  "air": false
+ },
+ "animations": {
+  "idle": "ground_idle",
+  "walk": "ground_walk",
+  "run": "ground_run",
+  "swim": "water_swim",
+  "fly": "air_fly",
+  "battleIdle": "battle_idle",
+  "attack": "physical",
+  "recoil": "recoil",
+  "faint": "faint",
+  "capture": "capture"
+ },
+ "behavior": {
+  "temperament": "aggressive",
+  "speed": 0.7
+ },
+ "learnset": [
+  {
+   "level": 1,
+   "move": "pound"
+  },
+  {
+   "level": 1,
+   "move": "rock_tomb"
+  },
+  {
+   "level": 1,
+   "move": "shadow_ball"
+  },
+  {
+   "level": 1,
+   "move": "bulldoze"
+  },
+  {
+   "level": 43,
+   "move": "earthquake"
+  }
+ ]
+}

@@ -1,0 +1,80 @@
+{
+ "id": "jigglypuff",
+ "dexNumber": 39,
+ "name": "Jigglypuff",
+ "types": [
+  "normal",
+  "fairy"
+ ],
+ "baseStats": {
+  "hp": 115,
+  "atk": 45,
+  "def": 20,
+  "spa": 45,
+  "spd": 25,
+  "spe": 20
+ },
+ "catchRate": 170,
+ "baseExp": 95,
+ "height": 0.5,
+ "weight": 5.5,
+ "baseScale": 1.0,
+ "hitbox": {
+  "width": 0.5,
+  "height": 0.5
+ },
+ "genderRatio": 0.75,
+ "abilities": [
+  "Cute Charm"
+ ],
+ "modelId": "jigglypuff",
+ "textureId": "jigglypuff",
+ "movement": {
+  "land": true,
+  "water": false,
+  "underwater": false,
+  "air": false
+ },
+ "animations": {
+  "idle": "ground_idle",
+  "walk": "ground_walk",
+  "run": "ground_run",
+  "swim": "water_swim",
+  "fly": "air_fly",
+  "battleIdle": "battle_idle",
+  "attack": "physical",
+  "recoil": "recoil",
+  "faint": "faint",
+  "capture": "capture"
+ },
+ "behavior": {
+  "temperament": "neutral",
+  "speed": 0.8
+ },
+ "learnset": [
+  {
+   "level": 1,
+   "move": "sing"
+  },
+  {
+   "level": 1,
+   "move": "pound"
+  },
+  {
+   "level": 4,
+   "move": "defense_curl"
+  },
+  {
+   "level": 8,
+   "move": "disarming_voice"
+  },
+  {
+   "level": 16,
+   "move": "rest"
+  },
+  {
+   "level": 20,
+   "move": "body_slam"
+  }
+ ]
+}

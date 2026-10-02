@@ -1,163 +1,252 @@
 {
-  "id": "core_types",
-  "types": [
-    {
-      "id": "normal",
-      "name": "일반",
-      "color": "#a8a29a"
-    },
-    {
-      "id": "fire",
-      "name": "불",
-      "color": "#f0803c"
-    },
-    {
-      "id": "water",
-      "name": "물",
-      "color": "#4a90e0"
-    },
-    {
-      "id": "grass",
-      "name": "풀",
-      "color": "#5cb85c"
-    },
-    {
-      "id": "electric",
-      "name": "전기",
-      "color": "#f2c81e"
-    },
-    {
-      "id": "rock",
-      "name": "바위",
-      "color": "#b0985a"
-    },
-    {
-      "id": "ground",
-      "name": "땅",
-      "color": "#c89a5a"
-    },
-    {
-      "id": "bug",
-      "name": "벌레",
-      "color": "#9ab83a"
-    },
-    {
-      "id": "flying",
-      "name": "바람",
-      "color": "#8aa8f0"
-    },
-    {
-      "id": "dark",
-      "name": "어둠",
-      "color": "#5a4a6a"
-    },
-    {
-      "id": "fairy",
-      "name": "요정",
-      "color": "#f08ac8"
-    },
-    {
-      "id": "steel",
-      "name": "강철",
-      "color": "#a0a8b8"
-    },
-    {
-      "id": "psychic",
-      "name": "정신",
-      "color": "#e85a8a"
-    }
-  ],
-  "effectiveness": {
-    "normal": {
-      "rock": 0.5,
-      "steel": 0.5
-    },
-    "fire": {
-      "grass": 2,
-      "bug": 2,
-      "steel": 2,
-      "fire": 0.5,
-      "water": 0.5,
-      "rock": 0.5
-    },
-    "water": {
-      "fire": 2,
-      "rock": 2,
-      "ground": 2,
-      "water": 0.5,
-      "grass": 0.5
-    },
-    "grass": {
-      "water": 2,
-      "rock": 2,
-      "ground": 2,
-      "fire": 0.5,
-      "grass": 0.5,
-      "bug": 0.5,
-      "flying": 0.5,
-      "steel": 0.5
-    },
-    "electric": {
-      "water": 2,
-      "flying": 2,
-      "grass": 0.5,
-      "electric": 0.5,
-      "ground": 0
-    },
-    "rock": {
-      "fire": 2,
-      "bug": 2,
-      "flying": 2,
-      "ground": 0.5,
-      "steel": 0.5
-    },
-    "ground": {
-      "fire": 2,
-      "electric": 2,
-      "rock": 2,
-      "steel": 2,
-      "grass": 0.5,
-      "bug": 0.5,
-      "flying": 0
-    },
-    "bug": {
-      "grass": 2,
-      "psychic": 2,
-      "dark": 2,
-      "fire": 0.5,
-      "flying": 0.5,
-      "steel": 0.5,
-      "fairy": 0.5
-    },
-    "flying": {
-      "grass": 2,
-      "bug": 2,
-      "electric": 0.5,
-      "rock": 0.5,
-      "steel": 0.5
-    },
-    "dark": {
-      "psychic": 2,
-      "dark": 0.5,
-      "fairy": 0.5
-    },
-    "fairy": {
-      "dark": 2,
-      "fire": 0.5,
-      "steel": 0.5
-    },
-    "steel": {
-      "rock": 2,
-      "fairy": 2,
-      "fire": 0.5,
-      "water": 0.5,
-      "electric": 0.5,
-      "steel": 0.5
-    },
-    "psychic": {
-      "psychic": 0.5,
-      "steel": 0.5,
-      "dark": 0
-    }
+ "types": [
+  {
+   "id": "normal",
+   "name": "노말",
+   "color": "#a8a878"
+  },
+  {
+   "id": "fire",
+   "name": "불꽃",
+   "color": "#f08030"
+  },
+  {
+   "id": "water",
+   "name": "물",
+   "color": "#6890f0"
+  },
+  {
+   "id": "grass",
+   "name": "풀",
+   "color": "#78c850"
+  },
+  {
+   "id": "electric",
+   "name": "전기",
+   "color": "#f8d030"
+  },
+  {
+   "id": "ice",
+   "name": "얼음",
+   "color": "#98d8d8"
+  },
+  {
+   "id": "fighting",
+   "name": "격투",
+   "color": "#c03028"
+  },
+  {
+   "id": "poison",
+   "name": "독",
+   "color": "#a040a0"
+  },
+  {
+   "id": "ground",
+   "name": "땅",
+   "color": "#e0c068"
+  },
+  {
+   "id": "flying",
+   "name": "비행",
+   "color": "#a890f0"
+  },
+  {
+   "id": "psychic",
+   "name": "에스퍼",
+   "color": "#f85888"
+  },
+  {
+   "id": "bug",
+   "name": "벌레",
+   "color": "#a8b820"
+  },
+  {
+   "id": "rock",
+   "name": "바위",
+   "color": "#b8a038"
+  },
+  {
+   "id": "ghost",
+   "name": "고스트",
+   "color": "#705898"
+  },
+  {
+   "id": "dragon",
+   "name": "드래곤",
+   "color": "#7038f8"
+  },
+  {
+   "id": "dark",
+   "name": "악",
+   "color": "#705848"
+  },
+  {
+   "id": "steel",
+   "name": "강철",
+   "color": "#b8b8d0"
+  },
+  {
+   "id": "fairy",
+   "name": "페어리",
+   "color": "#ee99ac"
   }
+ ],
+ "effectiveness": {
+  "normal": {
+   "rock": 0.5,
+   "ghost": 0,
+   "steel": 0.5
+  },
+  "fire": {
+   "fire": 0.5,
+   "water": 0.5,
+   "grass": 2,
+   "ice": 2,
+   "bug": 2,
+   "rock": 0.5,
+   "dragon": 0.5,
+   "steel": 2
+  },
+  "water": {
+   "fire": 2,
+   "water": 0.5,
+   "grass": 0.5,
+   "ground": 2,
+   "rock": 2,
+   "dragon": 0.5
+  },
+  "electric": {
+   "water": 2,
+   "electric": 0.5,
+   "grass": 0.5,
+   "ground": 0,
+   "flying": 2,
+   "dragon": 0.5
+  },
+  "grass": {
+   "fire": 0.5,
+   "water": 2,
+   "grass": 0.5,
+   "poison": 0.5,
+   "ground": 2,
+   "flying": 0.5,
+   "bug": 0.5,
+   "rock": 2,
+   "dragon": 0.5,
+   "steel": 0.5
+  },
+  "ice": {
+   "fire": 0.5,
+   "water": 0.5,
+   "grass": 2,
+   "ice": 0.5,
+   "ground": 2,
+   "flying": 2,
+   "dragon": 2,
+   "steel": 0.5
+  },
+  "fighting": {
+   "normal": 2,
+   "ice": 2,
+   "poison": 0.5,
+   "flying": 0.5,
+   "psychic": 0.5,
+   "bug": 0.5,
+   "rock": 2,
+   "ghost": 0,
+   "dark": 2,
+   "steel": 2,
+   "fairy": 0.5
+  },
+  "poison": {
+   "grass": 2,
+   "poison": 0.5,
+   "ground": 0.5,
+   "rock": 0.5,
+   "ghost": 0.5,
+   "steel": 0,
+   "fairy": 2
+  },
+  "ground": {
+   "fire": 2,
+   "electric": 2,
+   "grass": 0.5,
+   "poison": 2,
+   "flying": 0,
+   "bug": 0.5,
+   "rock": 2,
+   "steel": 2
+  },
+  "flying": {
+   "electric": 0.5,
+   "grass": 2,
+   "fighting": 2,
+   "bug": 2,
+   "rock": 0.5,
+   "steel": 0.5
+  },
+  "psychic": {
+   "fighting": 2,
+   "poison": 2,
+   "psychic": 0.5,
+   "dark": 0,
+   "steel": 0.5
+  },
+  "bug": {
+   "fire": 0.5,
+   "grass": 2,
+   "fighting": 0.5,
+   "poison": 0.5,
+   "flying": 0.5,
+   "psychic": 2,
+   "ghost": 0.5,
+   "dark": 2,
+   "steel": 0.5,
+   "fairy": 0.5
+  },
+  "rock": {
+   "fire": 2,
+   "ice": 2,
+   "fighting": 0.5,
+   "ground": 0.5,
+   "flying": 2,
+   "bug": 2,
+   "steel": 0.5
+  },
+  "ghost": {
+   "normal": 0,
+   "psychic": 2,
+   "ghost": 2,
+   "dark": 0.5
+  },
+  "dragon": {
+   "dragon": 2,
+   "steel": 0.5,
+   "fairy": 0
+  },
+  "dark": {
+   "fighting": 0.5,
+   "psychic": 2,
+   "ghost": 2,
+   "dark": 0.5,
+   "fairy": 0.5
+  },
+  "steel": {
+   "fire": 0.5,
+   "water": 0.5,
+   "electric": 0.5,
+   "ice": 2,
+   "rock": 2,
+   "steel": 0.5,
+   "fairy": 2
+  },
+  "fairy": {
+   "fire": 0.5,
+   "fighting": 2,
+   "poison": 0.5,
+   "dragon": 2,
+   "dark": 2,
+   "steel": 0.5
+  }
+ }
 }

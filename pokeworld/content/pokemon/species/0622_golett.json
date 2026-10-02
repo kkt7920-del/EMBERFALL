@@ -1,0 +1,84 @@
+{
+ "id": "golett",
+ "dexNumber": 622,
+ "name": "Golett",
+ "types": [
+  "ground",
+  "ghost"
+ ],
+ "baseStats": {
+  "hp": 59,
+  "atk": 74,
+  "def": 50,
+  "spa": 35,
+  "spd": 50,
+  "spe": 35
+ },
+ "catchRate": 190,
+ "baseExp": 61,
+ "height": 1.0,
+ "weight": 92.0,
+ "baseScale": 1.0,
+ "hitbox": {
+  "width": 0.8,
+  "height": 1.0
+ },
+ "genderRatio": -1,
+ "abilities": [
+  "Iron Fist"
+ ],
+ "modelId": "golett",
+ "textureId": "golett",
+ "movement": {
+  "land": true,
+  "water": false,
+  "underwater": false,
+  "air": false
+ },
+ "animations": {
+  "idle": "ground_idle",
+  "walk": "ground_walk",
+  "run": "ground_run",
+  "swim": "water_swim",
+  "fly": "air_fly",
+  "battleIdle": "battle_idle",
+  "attack": "physical",
+  "recoil": "recoil",
+  "faint": "faint",
+  "capture": "capture"
+ },
+ "behavior": {
+  "temperament": "neutral",
+  "speed": 0.6
+ },
+ "learnset": [
+  {
+   "level": 1,
+   "move": "pound"
+  },
+  {
+   "level": 1,
+   "move": "astonish"
+  },
+  {
+   "level": 4,
+   "move": "defense_curl"
+  },
+  {
+   "level": 8,
+   "move": "mud_slap"
+  },
+  {
+   "level": 12,
+   "move": "rock_tomb"
+  },
+  {
+   "level": 20,
+   "move": "shadow_ball"
+  }
+ ],
+ "evolution": {
+  "to": "golurk",
+  "level": 43
+ }
+}

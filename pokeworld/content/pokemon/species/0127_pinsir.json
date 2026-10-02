@@ -1,0 +1,75 @@
+{
+ "id": "pinsir",
+ "dexNumber": 127,
+ "name": "Pinsir",
+ "types": [
+  "bug"
+ ],
+ "baseStats": {
+  "hp": 65,
+  "atk": 125,
+  "def": 100,
+  "spa": 55,
+  "spd": 70,
+  "spe": 85
+ },
+ "catchRate": 45,
+ "baseExp": 175,
+ "height": 1.5,
+ "weight": 55.0,
+ "baseScale": 1.0,
+ "hitbox": {
+  "width": 1.2,
+  "height": 1.5
+ },
+ "genderRatio": 0.5,
+ "abilities": [
+  "Hyper Cutter"
+ ],
+ "modelId": "pinsir",
+ "textureId": "pinsir",
+ "movement": {
+  "land": true,
+  "water": false,
+  "underwater": false,
+  "air": false
+ },
+ "animations": {
+  "idle": "ground_idle",
+  "walk": "ground_walk",
+  "run": "ground_run",
+  "swim": "water_swim",
+  "fly": "air_fly",
+  "battleIdle": "battle_idle",
+  "attack": "physical",
+  "recoil": "recoil",
+  "faint": "faint",
+  "capture": "capture"
+ },
+ "behavior": {
+  "temperament": "aggressive",
+  "speed": 1.0
+ },
+ "learnset": [
+  {
+   "level": 1,
+   "move": "harden"
+  },
+  {
+   "level": 1,
+   "move": "fury_cutter"
+  },
+  {
+   "level": 8,
+   "move": "rock_smash"
+  },
+  {
+   "level": 16,
+   "move": "bug_bite"
+  },
+  {
+   "level": 24,
+   "move": "take_down"
+  }
+ ]
+}

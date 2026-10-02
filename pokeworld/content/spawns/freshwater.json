@@ -1,0 +1,246 @@
+[
+ {
+  "id": "rv_magikarp",
+  "species": "magikarp",
+  "biomes": [
+   "river",
+   "lake"
+  ],
+  "level": {
+   "min": 3,
+   "max": 12
+  },
+  "weight": 20,
+  "rarity": "common",
+  "alphaChance": 0.012,
+  "layer": "water_surface"
+ },
+ {
+  "id": "rv_goldeen",
+  "species": "goldeen",
+  "biomes": [
+   "river",
+   "lake"
+  ],
+  "level": {
+   "min": 5,
+   "max": 12
+  },
+  "weight": 12,
+  "rarity": "common",
+  "alphaChance": 0.012,
+  "layer": "water_surface"
+ },
+ {
+  "id": "rv_poliwag",
+  "species": "poliwag",
+  "biomes": [
+   "river",
+   "lake",
+   "underground_river"
+  ],
+  "level": {
+   "min": 4,
+   "max": 10
+  },
+  "weight": 10,
+  "rarity": "common",
+  "alphaChance": 0.012,
+  "layer": "water_surface"
+ },
+ {
+  "id": "rv_psyduck",
+  "species": "psyduck",
+  "biomes": [
+   "river",
+   "lake"
+  ],
+  "level": {
+   "min": 6,
+   "max": 11
+  },
+  "weight": 7,
+  "rarity": "common",
+  "alphaChance": 0.012,
+  "layer": "water_surface"
+ },
+ {
+  "id": "rv_psyduck_bank",
+  "species": "psyduck",
+  "biomes": [
+   "river",
+   "lake",
+   "plains",
+   "forest_edge"
+  ],
+  "level": {
+   "min": 6,
+   "max": 11
+  },
+  "weight": 4,
+  "rarity": "common",
+  "alphaChance": 0.012,
+  "subBiomes": [
+   "riverbank"
+  ]
+ },
+ {
+  "id": "rv_marill",
+  "species": "marill",
+  "biomes": [
+   "river",
+   "lake"
+  ],
+  "level": {
+   "min": 6,
+   "max": 11
+  },
+  "weight": 6,
+  "rarity": "common",
+  "alphaChance": 0.012,
+  "layer": "water_surface"
+ },
+ {
+  "id": "rv_wooper",
+  "species": "wooper",
+  "biomes": [
+   "river",
+   "lake",
+   "underground_river"
+  ],
+  "level": {
+   "min": 5,
+   "max": 10
+  },
+  "weight": 6,
+  "rarity": "common",
+  "alphaChance": 0.012,
+  "subBiomes": [
+   "riverbank"
+  ]
+ },
+ {
+  "id": "rv_slowpoke",
+  "species": "slowpoke",
+  "biomes": [
+   "river",
+   "lake",
+   "beach",
+   "plains",
+   "forest_edge"
+  ],
+  "level": {
+   "min": 8,
+   "max": 13
+  },
+  "weight": 4,
+  "rarity": "uncommon",
+  "alphaChance": 0.012,
+  "subBiomes": [
+   "riverbank"
+  ]
+ },
+ {
+  "id": "rv_goldeen_u",
+  "species": "goldeen",
+  "biomes": [
+   "lake"
+  ],
+  "level": {
+   "min": 8,
+   "max": 14
+  },
+  "weight": 6,
+  "rarity": "common",
+  "alphaChance": 0.012,
+  "layer": "underwater"
+ },
+ {
+  "id": "lk_gyarados",
+  "species": "gyarados",
+  "biomes": [
+   "lake"
+  ],
+  "level": {
+   "min": 20,
+   "max": 25
+  },
+  "weight": 0.6,
+  "rarity": "rare",
+  "layer": "water_surface",
+  "waterDepth": {
+   "min": 4,
+   "max": 99
+  }
+ },
+ {
+  "id": "lk_dratini",
+  "species": "dratini",
+  "biomes": [
+   "lake",
+   "river"
+  ],
+  "level": {
+   "min": 10,
+   "max": 16
+  },
+  "weight": 0.45,
+  "rarity": "very_rare",
+  "layer": "underwater",
+  "waterDepth": {
+   "min": 3,
+   "max": 99
+  }
+ },
+ {
+  "id": "lk_golduck",
+  "species": "golduck",
+  "biomes": [
+   "lake"
+  ],
+  "level": {
+   "min": 18,
+   "max": 24
+  },
+  "weight": 1.5,
+  "rarity": "rare",
+  "layer": "water_surface"
+ },
+ {
+  "id": "rv_waterfall_poliwag",
+  "species": "poliwag",
+  "biomes": [
+   "river",
+   "mountain",
+   "forest"
+  ],
+  "level": {
+   "min": 8,
+   "max": 14
+  },
+  "weight": 8,
+  "rarity": "common",
+  "alphaChance": 0.012,
+  "layer": "water_surface",
+  "subBiomes": [
+   "waterfall"
+  ]
+ },
+ {
+  "id": "rv_waterfall_dratini",
+  "species": "dratini",
+  "biomes": [
+   "river"
+  ],
+  "level": {
+   "min": 12,
+   "max": 18
+  },
+  "weight": 1.2,
+  "rarity": "rare",
+  "layer": "underwater",
+  "subBiomes": [
+   "waterfall"
+  ]
+ }
+]

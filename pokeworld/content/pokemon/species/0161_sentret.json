@@ -1,0 +1,79 @@
+{
+ "id": "sentret",
+ "dexNumber": 161,
+ "name": "Sentret",
+ "types": [
+  "normal"
+ ],
+ "baseStats": {
+  "hp": 35,
+  "atk": 46,
+  "def": 34,
+  "spa": 35,
+  "spd": 45,
+  "spe": 20
+ },
+ "catchRate": 255,
+ "baseExp": 43,
+ "height": 0.8,
+ "weight": 6.0,
+ "baseScale": 1.0,
+ "hitbox": {
+  "width": 0.64,
+  "height": 0.8
+ },
+ "genderRatio": 0.5,
+ "abilities": [
+  "Run Away"
+ ],
+ "modelId": "sentret",
+ "textureId": "sentret",
+ "movement": {
+  "land": true,
+  "water": false,
+  "underwater": false,
+  "air": false
+ },
+ "animations": {
+  "idle": "ground_idle",
+  "walk": "ground_walk",
+  "run": "ground_run",
+  "swim": "water_swim",
+  "fly": "air_fly",
+  "battleIdle": "battle_idle",
+  "attack": "physical",
+  "recoil": "recoil",
+  "faint": "faint",
+  "capture": "capture"
+ },
+ "behavior": {
+  "temperament": "timid",
+  "speed": 1.0
+ },
+ "learnset": [
+  {
+   "level": 1,
+   "move": "scratch"
+  },
+  {
+   "level": 1,
+   "move": "defense_curl"
+  },
+  {
+   "level": 4,
+   "move": "quick_attack"
+  },
+  {
+   "level": 7,
+   "move": "swift"
+  },
+  {
+   "level": 13,
+   "move": "headbutt"
+  },
+  {
+   "level": 19,
+   "move": "rest"
+  }
+ ]
+}

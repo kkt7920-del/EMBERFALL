@@ -14,7 +14,7 @@ export function stageMultiplier(stage: number): number {
 }
 
 export function effectiveStat(db: ContentDB, c: CreatureInstance, stat: StageKey, stages: Stages): number {
-  return computeStats(db.speciesOf(c), c.level, c.ivs)[stat] * stageMultiplier(stages[stat]);
+  return computeStats(db.speciesOf(c), c.level, c.ivs, c.nature)[stat] * (stat === "spe" && c.status === "paralysis" ? 0.5 : 1) * stageMultiplier(stages[stat]);
 }
 
 export interface DamageResult {
@@ -50,6 +50,7 @@ export function computeDamage(
   if (eff === 0) return { damage: 0, eff, crit: false };
 
   const roll = 0.85 + rng.next() * 0.15;
-  const damage = Math.max(1, Math.floor(base * stab * eff * (crit ? 1.5 : 1) * roll));
+  const burn = physical && attacker.status === "burn" ? 0.5 : 1;
+  const damage = Math.max(1, Math.floor(base * stab * eff * (crit ? 1.5 : 1) * roll * burn));
   return { damage, eff, crit };
 }

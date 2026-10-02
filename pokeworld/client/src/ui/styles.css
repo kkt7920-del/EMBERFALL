@@ -1065,3 +1065,652 @@ button {
     display: none;
   }
 }
+
+/* ------------------------------------------------------------------ Poké Ball HUD */
+
+.ball-icon {
+  position: relative;
+  display: inline-block;
+  flex: none;
+  border-radius: 50%;
+  border: 2px solid #1e1e1e;
+  vertical-align: middle;
+  box-sizing: border-box;
+}
+
+.ball-icon-btn {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 34%;
+  height: 34%;
+  border-radius: 50%;
+  border: 2px solid #1e1e1e;
+  transform: translate(-50%, -50%);
+  box-sizing: border-box;
+}
+
+.ball-hud {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 6;
+}
+
+.ball-dock {
+  position: absolute;
+  right: calc(var(--gap) * 1.5 + var(--safe-right));
+  bottom: calc(var(--gap) * 3 + var(--safe-bottom) + var(--font-small));
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: calc(var(--gap) * 0.6);
+}
+
+/* On touch screens the dock sits left of the button cluster */
+.is-touch .ball-dock {
+  right: calc(var(--gap) * 1.5 + var(--safe-right) + var(--btn) * 3.6);
+  bottom: calc(var(--gap) * 1.5 + var(--safe-bottom));
+}
+
+.ball-chip {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: calc(var(--gap) * 0.8);
+  padding: calc(var(--gap) * 0.6) calc(var(--gap) * 1.2) calc(var(--gap) * 0.6) calc(var(--gap) * 0.8);
+  border-radius: 999px;
+  border: 2px solid var(--line);
+  background: var(--panel);
+  color: var(--text);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+  transition: border-color 0.15s, transform 0.15s;
+}
+
+.ball-chip.equipped {
+  border-color: var(--accent);
+  transform: scale(1.05);
+}
+
+.ball-chip.empty {
+  opacity: 0.55;
+}
+
+.ball-text {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4em;
+  white-space: nowrap;
+}
+
+.ball-count {
+  color: var(--accent);
+  font-size: var(--font-big);
+  font-variant-numeric: tabular-nums;
+}
+
+.ball-strip {
+  display: flex;
+  gap: calc(var(--gap) * 0.4);
+  pointer-events: auto;
+}
+
+.ball-slot {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-width: calc(var(--btn) * 0.62);
+  padding: 4px 4px 2px;
+  border-radius: calc(var(--radius) * 0.7);
+  border: 2px solid transparent;
+  background: rgba(18, 24, 38, 0.66);
+  color: var(--text);
+  font: inherit;
+  font-size: var(--font-small);
+  cursor: pointer;
+}
+
+.ball-slot.active {
+  border-color: var(--accent);
+  background: rgba(255, 207, 74, 0.18);
+}
+
+.ball-slot kbd {
+  position: absolute;
+  left: 2px;
+  top: 0;
+  font-size: 10px;
+  color: var(--muted);
+  font-family: inherit;
+}
+
+.ball-slot small {
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+.is-touch .ball-strip {
+  display: none;
+}
+
+/* Crosshair: white, yellow when a Pokémon in range is under it */
+.reticle {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 34px;
+  height: 34px;
+  transform: translate(-50%, -50%);
+  --rc: rgba(255, 255, 255, 0.92);
+  transition: transform 0.12s;
+  filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.8));
+}
+
+.reticle i {
+  position: absolute;
+  background: var(--rc);
+  border-radius: 2px;
+}
+
+.reticle .r-top,
+.reticle .r-bottom {
+  left: 50%;
+  width: 3px;
+  height: 10px;
+  margin-left: -1.5px;
+}
+
+.reticle .r-top {
+  top: 0;
+}
+
+.reticle .r-bottom {
+  bottom: 0;
+}
+
+.reticle .r-left,
+.reticle .r-right {
+  top: 50%;
+  width: 10px;
+  height: 3px;
+  margin-top: -1.5px;
+}
+
+.reticle .r-left {
+  left: 0;
+}
+
+.reticle .r-right {
+  right: 0;
+}
+
+.reticle .r-dot {
+  left: 50%;
+  top: 50%;
+  width: 4px;
+  height: 4px;
+  margin: -2px 0 0 -2px;
+  border-radius: 50%;
+}
+
+.reticle.locked {
+  --rc: #ffd23f;
+  transform: translate(-50%, -50%) scale(0.82) rotate(45deg);
+}
+
+.aim-label {
+  position: absolute;
+  left: 50%;
+  top: calc(50% + 30px);
+  transform: translateX(-50%);
+  padding: 3px 12px;
+  border-radius: 999px;
+  background: rgba(18, 24, 38, 0.78);
+  border: 1px solid #ffd23f;
+  color: #ffe38a;
+  font-weight: 800;
+  text-align: center;
+  white-space: pre-line;
+  line-height: 1.25;
+}
+
+.power-ring {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 64px;
+  height: 64px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: conic-gradient(#ffd23f calc(var(--p, 0) * 1%), rgba(255, 255, 255, 0.18) 0);
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 5px), #000 calc(100% - 4px));
+  mask: radial-gradient(farthest-side, transparent calc(100% - 5px), #000 calc(100% - 4px));
+}
+
+.gotcha {
+  position: absolute;
+  left: 50%;
+  top: 24%;
+  transform: translateX(-50%);
+  text-align: center;
+  padding: calc(var(--gap) * 1.2) calc(var(--gap) * 3);
+  border-radius: var(--radius);
+  background: linear-gradient(180deg, rgba(255, 210, 63, 0.95), rgba(240, 160, 30, 0.95));
+  color: #2a1a00;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+}
+
+.gotcha.show {
+  animation: gotcha-pop 0.45s cubic-bezier(0.2, 1.6, 0.4, 1) both;
+}
+
+.gotcha-title {
+  font-size: calc(var(--font-big) * 1.5);
+  font-weight: 900;
+  letter-spacing: 0.04em;
+}
+
+.gotcha-sub {
+  font-weight: 700;
+}
+
+@keyframes gotcha-pop {
+  from {
+    transform: translateX(-50%) scale(0.4);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(-50%) scale(1);
+    opacity: 1;
+  }
+}
+
+.ball-hint {
+  position: absolute;
+  left: 50%;
+  bottom: calc(var(--gap) * 2 + var(--safe-bottom) + 12vh);
+  transform: translateX(-50%);
+  padding: 4px 14px;
+  border-radius: 999px;
+  background: rgba(18, 24, 38, 0.72);
+  color: var(--text);
+  font-size: var(--font-small);
+  white-space: nowrap;
+}
+
+/* ------------------------------------------------------------------ Ball Wheel */
+
+.ball-wheel {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap);
+  background: rgba(6, 10, 20, 0.45);
+  pointer-events: auto;
+}
+
+.wheel-title {
+  font-weight: 800;
+  font-size: var(--font-big);
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+}
+
+.wheel-ring {
+  position: relative;
+  width: min(70vmin, 440px);
+  height: min(70vmin, 440px);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(18, 24, 38, 0.55) 0 30%, rgba(18, 24, 38, 0.82) 31% 69%, rgba(18, 24, 38, 0.2) 70%);
+  border: 2px solid var(--line);
+}
+
+.wheel-slot {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  width: calc(var(--btn) * 1.25);
+  padding: 4px;
+  border: 2px solid transparent;
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: var(--font-small);
+  cursor: pointer;
+}
+
+.wheel-slot.active {
+  border-color: var(--accent);
+  background: rgba(255, 207, 74, 0.16);
+}
+
+.wheel-slot.empty {
+  opacity: 0.35;
+}
+
+.wheel-name {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.wheel-count {
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.wheel-center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 26%;
+  height: 26%;
+  border-radius: 50%;
+  border: 2px solid var(--line);
+  background: var(--panel-solid);
+  color: var(--text);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* ------------------------------------------------------------------ touch BALL button */
+
+.btn-ball {
+  right: calc(var(--btn) * 0.2);
+  bottom: calc(var(--btn) * 1.95);
+  background: linear-gradient(180deg, rgba(227, 53, 13, 0.75) 0 46%, rgba(20, 20, 20, 0.8) 46% 54%, rgba(240, 240, 240, 0.7) 54%);
+  color: #fff;
+  text-shadow: 0 1px 3px #000;
+}
+
+.touch-aim-only .touch-buttons .tbtn:not(.btn-ball) {
+  display: none;
+}
+
+.touch-aim-only.touch-disabled .touch-buttons {
+  display: block;
+}
+
+/* ------------------------------------------------------------------ battle extras */
+
+.battle-ui.aiming .bmenu,
+.battle-ui.aiming .bmessage {
+  display: none;
+}
+
+.battle-ui.aiming {
+  pointer-events: none;
+}
+
+.status-chip {
+  display: inline-block;
+  padding: 0 6px;
+  margin-right: 4px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 800;
+  font-style: normal;
+  color: #fff;
+  vertical-align: middle;
+}
+
+.s-sleep {
+  background: #8c8c9c;
+}
+
+.s-freeze {
+  background: #5ab4e6;
+}
+
+.s-paralysis {
+  background: #d8b020;
+  color: #2a2000;
+}
+
+.s-poison {
+  background: #a050c8;
+}
+
+.s-burn {
+  background: #e0602c;
+}
+
+.gender {
+  margin-left: 2px;
+  font-weight: 900;
+}
+
+.gender.male {
+  color: #6ab0ff;
+}
+
+.gender.female {
+  color: #ff7eb6;
+}
+
+.alpha-badge {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 0 5px;
+  border-radius: 4px;
+  background: #d23c3c;
+  color: #fff;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  vertical-align: middle;
+}
+
+.hpfill {
+  height: 100%;
+  border-radius: inherit;
+  transition: width 0.4s ease, background 0.4s;
+}
+
+/* ------------------------------------------------------------------ portraits, Pokédex, models */
+
+.portrait {
+  position: relative;
+  flex: none;
+  width: calc(var(--btn) * 0.95);
+  height: calc(var(--btn) * 0.95);
+  border-radius: var(--radius);
+  border: 3px solid var(--line);
+  background: #20283c;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  overflow: hidden;
+}
+
+.portrait.big {
+  width: calc(var(--btn) * 1.5);
+  height: calc(var(--btn) * 1.5);
+}
+
+.portrait .dex {
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+}
+
+.portrait .asset {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  padding: 0 4px;
+  border-radius: 3px;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.portrait.asset-missing {
+  background: repeating-conic-gradient(#ff00dc 0 25%, #101010 0 50%) 0 0 / 16px 16px;
+}
+
+.portrait.asset-missing .dex,
+.portrait.asset-missing .asset {
+  background: rgba(10, 6, 14, 0.85);
+  padding: 0 4px;
+  border-radius: 3px;
+}
+
+.portrait.asset-ready .asset {
+  background: var(--good);
+  color: #062010;
+}
+
+.portrait.asset-error .asset {
+  background: var(--bad);
+}
+
+.dex-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: calc(var(--gap) * 0.6);
+}
+
+.dex-entry {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: calc(var(--gap) * 0.7);
+  border-radius: calc(var(--radius) * 0.8);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--line);
+}
+
+.dex-entry.unknown {
+  opacity: 0.45;
+}
+
+.dex-entry.caught {
+  border-color: rgba(255, 207, 74, 0.6);
+}
+
+.dex-entry .dex {
+  color: var(--muted);
+  font-size: var(--font-small);
+  font-variant-numeric: tabular-nums;
+}
+
+.dex-name {
+  font-weight: 800;
+}
+
+.dex-state {
+  font-size: var(--font-small);
+  color: var(--accent);
+}
+
+.model-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 50vh;
+  overflow-y: auto;
+}
+
+.model-row {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--gap) * 0.8);
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.model-row .dex {
+  width: 3.5em;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.model-row .dex-name {
+  flex: 1;
+}
+
+.model-status {
+  font-size: var(--font-small);
+  font-family: ui-monospace, monospace;
+}
+
+.model-row.asset-missing .model-status {
+  color: #ff8af0;
+}
+
+.model-row.asset-ready .model-status {
+  color: var(--good);
+}
+
+.model-row.asset-error .model-status {
+  color: var(--bad);
+}
+
+.info-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: calc(var(--gap) * 0.6) 0;
+}
+
+.info-table th {
+  width: 7em;
+  text-align: left;
+  color: var(--muted);
+  font-weight: 600;
+  padding: 3px 6px 3px 0;
+  vertical-align: top;
+}
+
+.info-table td {
+  padding: 3px 0;
+}
+
+.stat-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stat-row {
+  display: grid;
+  grid-template-columns: 5em 1fr 3em;
+  align-items: center;
+  gap: 8px;
+}
+
+.stat-row b {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.bar.stat > div {
+  background: #6ab0ff;
+}
+
+.move-card {
+  border-left-width: 4px;
+}
+
+.toast.inline {
+  position: static;
+  transform: none;
+  margin-bottom: var(--gap);
+  animation: none;
+}
+
+.ball-hud.dock-hidden .ball-dock {
+  display: none;
+}

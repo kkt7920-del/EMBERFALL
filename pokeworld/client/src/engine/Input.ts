@@ -1,4 +1,4 @@
-export type Action = "jump" | "interact" | "attack" | "capture" | "mount" | "party" | "bag" | "map" | "menu" | "close";
+export type Action = "jump" | "interact" | "attack" | "capture" | "mount" | "party" | "bag" | "map" | "menu" | "close" | "wheel" | "dex";
 
 export interface Controls {
   /** x: strafe right, y: forward; length <= 1 */
@@ -9,6 +9,10 @@ export interface Controls {
   look: { dx: number; dy: number };
   zoom: number;
   pressed: Set<Action>;
+  /** Poké Ball throwing: button edges (mouse left / BALL button), number-key pick, wheel cycling. */
+  ball: { down: boolean; up: boolean; held: boolean; select: number | null; cycle: number };
+  /** Screen point of a touch long-press (Pokémon info), if any this frame. */
+  longPress: { x: number; y: number } | null;
 }
 
 const KEY_ACTIONS: Record<string, Action> = {
@@ -23,6 +27,8 @@ const KEY_ACTIONS: Record<string, Action> = {
   KeyB: "bag",
   KeyI: "bag",
   KeyM: "map",
+  KeyX: "dex",
+  KeyG: "wheel",
   Escape: "close",
 };
 
@@ -42,6 +48,14 @@ export class Input {
   touchMove = { x: 0, y: 0 };
   touchRun = false;
   touchJumpHeld = false;
+  /** When a ball is in hand the mouse wheel cycles balls and the left button throws. */
+  ballMode = false;
+  private ballDown = false;
+  private ballUp = false;
+  private ballHeld = false;
+  private ballSelect: number | null = null;
+  private ballCycle = 0;
+  private longPressAt: { x: number; y: number } | null = null;
   /** Blocks game input (dialogs, menus, battle). UI keys still work. */
   gameplayEnabled = true;
   pointerLockAllowed = true;
@@ -61,20 +75,30 @@ export class Input {
         const req = canvas.requestPointerLock?.() as unknown as Promise<void> | undefined;
         req?.catch?.(() => {});
       }
+      if (e.button === 0 && this.ballMode && this.gameplayEnabled) this.pressBall(true);
       this.dragging = true;
       this.lastX = e.clientX;
       this.lastY = e.clientY;
     });
     window.addEventListener("pointerup", (e) => {
-      if (e.pointerType === "mouse") this.dragging = false;
+      if (e.pointerType !== "mouse") return;
+      this.dragging = false;
+      if (e.button === 0 && this.ballHeld) this.pressBall(false);
     });
     window.addEventListener("pointermove", (e) => {
       if (e.pointerType !== "mouse") return;
       if (document.pointerLockElement === canvas) {
-        // Some environments report no movementX while locked; fall back to client deltas
-        const dx = e.movementX || e.clientX - this.lastX;
-        const dy = e.movementY || e.clientY - this.lastY;
-        this.addLook(dx, dy);
+        // Some environments report no movementX while locked; fall back to client deltas,
+        // but never to the jump between the pre-lock cursor and a locked position
+        let dx = e.movementX;
+        let dy = e.movementY;
+        if (!dx && !dy) {
+          dx = e.clientX - this.lastX;
+          dy = e.clientY - this.lastY;
+          if (Math.abs(dx) > 120 || Math.abs(dy) > 120) dx = dy = 0;
+        }
+        // Chrome occasionally reports a huge first movement after locking
+        if (Math.abs(dx) < 400 && Math.abs(dy) < 400) this.addLook(dx, dy);
       } else if (this.dragging && (e.buttons & 1 || e.buttons & 2)) {
         this.addLook(e.clientX - this.lastX, e.clientY - this.lastY);
       }
@@ -85,7 +109,8 @@ export class Input {
       "wheel",
       (e) => {
         e.preventDefault();
-        this.zoom += Math.sign(e.deltaY);
+        if (this.ballMode && !e.shiftKey) this.ballCycle += Math.sign(e.deltaY);
+        else this.zoom += Math.sign(e.deltaY);
       },
       { passive: false },
     );
@@ -99,6 +124,8 @@ export class Input {
       const action = KEY_ACTIONS[e.code];
       if (action) this.press(action);
       if (e.code === "KeyQ") this.press("menu");
+      const digit = /^Digit([1-9])$/.exec(e.code);
+      if (digit) this.ballSelect = Number(digit[1]) - 1;
     }
     this.keys.add(e.code);
   };
@@ -114,6 +141,25 @@ export class Input {
 
   press(action: Action): void {
     this.pressed.add(action);
+  }
+
+  /** BALL button / left mouse edge. */
+  pressBall(down: boolean): void {
+    if (down) {
+      this.ballDown = true;
+      this.ballHeld = true;
+    } else {
+      this.ballUp = true;
+      this.ballHeld = false;
+    }
+  }
+
+  selectBall(index: number): void {
+    this.ballSelect = index;
+  }
+
+  reportLongPress(x: number, y: number): void {
+    this.longPressAt = { x, y };
   }
 
   releasePointerLock(): void {
@@ -142,8 +188,15 @@ export class Input {
       look: { dx: this.lookDx, dy: this.lookDy },
       zoom: this.zoom,
       pressed: new Set(this.pressed),
+      ball: { down: this.ballDown, up: this.ballUp, held: this.ballHeld, select: this.ballSelect, cycle: this.ballCycle },
+      longPress: this.longPressAt,
     };
     this.pressed.clear();
+    this.ballDown = false;
+    this.ballUp = false;
+    this.ballSelect = null;
+    this.ballCycle = 0;
+    this.longPressAt = null;
     this.lookDx = 0;
     this.lookDy = 0;
     this.zoom = 0;

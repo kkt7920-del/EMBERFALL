@@ -1,0 +1,85 @@
+{
+ "id": "ponyta",
+ "dexNumber": 77,
+ "name": "Ponyta",
+ "types": [
+  "fire"
+ ],
+ "baseStats": {
+  "hp": 50,
+  "atk": 85,
+  "def": 55,
+  "spa": 65,
+  "spd": 65,
+  "spe": 90
+ },
+ "catchRate": 190,
+ "baseExp": 82,
+ "height": 1.0,
+ "weight": 30.0,
+ "baseScale": 1.0,
+ "hitbox": {
+  "width": 0.8,
+  "height": 1.0
+ },
+ "genderRatio": 0.5,
+ "abilities": [
+  "Run Away"
+ ],
+ "modelId": "ponyta",
+ "textureId": "ponyta",
+ "movement": {
+  "land": true,
+  "water": false,
+  "underwater": false,
+  "air": false
+ },
+ "animations": {
+  "idle": "ground_idle",
+  "walk": "ground_walk",
+  "run": "ground_run",
+  "swim": "water_swim",
+  "fly": "air_fly",
+  "battleIdle": "battle_idle",
+  "attack": "physical",
+  "recoil": "recoil",
+  "faint": "faint",
+  "capture": "capture"
+ },
+ "behavior": {
+  "temperament": "timid",
+  "speed": 1.5
+ },
+ "learnset": [
+  {
+   "level": 1,
+   "move": "tackle"
+  },
+  {
+   "level": 1,
+   "move": "growl"
+  },
+  {
+   "level": 5,
+   "move": "tail_whip"
+  },
+  {
+   "level": 10,
+   "move": "ember"
+  },
+  {
+   "level": 15,
+   "move": "flame_wheel"
+  },
+  {
+   "level": 20,
+   "move": "take_down"
+  }
+ ],
+ "mount": {
+  "modes": [
+   "land"
+  ],
+  "speed": 1.35
+ }
+}

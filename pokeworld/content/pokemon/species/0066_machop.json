@@ -1,0 +1,75 @@
+{
+ "id": "machop",
+ "dexNumber": 66,
+ "name": "Machop",
+ "types": [
+  "fighting"
+ ],
+ "baseStats": {
+  "hp": 70,
+  "atk": 80,
+  "def": 50,
+  "spa": 35,
+  "spd": 35,
+  "spe": 35
+ },
+ "catchRate": 180,
+ "baseExp": 61,
+ "height": 0.8,
+ "weight": 19.5,
+ "baseScale": 1.0,
+ "hitbox": {
+  "width": 0.64,
+  "height": 0.8
+ },
+ "genderRatio": 0.25,
+ "abilities": [
+  "Guts"
+ ],
+ "modelId": "machop",
+ "textureId": "machop",
+ "movement": {
+  "land": true,
+  "water": false,
+  "underwater": false,
+  "air": false
+ },
+ "animations": {
+  "idle": "ground_idle",
+  "walk": "ground_walk",
+  "run": "ground_run",
+  "swim": "water_swim",
+  "fly": "air_fly",
+  "battleIdle": "battle_idle",
+  "attack": "physical",
+  "recoil": "recoil",
+  "faint": "faint",
+  "capture": "capture"
+ },
+ "behavior": {
+  "temperament": "neutral",
+  "speed": 0.9
+ },
+ "learnset": [
+  {
+   "level": 1,
+   "move": "low_kick"
+  },
+  {
+   "level": 1,
+   "move": "leer"
+  },
+  {
+   "level": 7,
+   "move": "karate_chop"
+  },
+  {
+   "level": 13,
+   "move": "rock_smash"
+  },
+  {
+   "level": 19,
+   "move": "bulldoze"
+  }
+ ]
+}

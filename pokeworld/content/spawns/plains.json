@@ -1,0 +1,251 @@
+[
+ {
+  "id": "pl_pidgey",
+  "species": "pidgey",
+  "biomes": [
+   "plains",
+   "forest_edge",
+   "town"
+  ],
+  "level": {
+   "min": 2,
+   "max": 5
+  },
+  "weight": 20,
+  "rarity": "common",
+  "alphaChance": 0.012,
+  "time": [
+   "dawn",
+   "day",
+   "afternoon",
+   "dusk"
+  ]
+ },
+ {
+  "id": "pl_pidgey_air",
+  "species": "pidgey",
+  "biomes": [
+   "plains",
+   "forest_edge"
+  ],
+  "level": {
+   "min": 3,
+   "max": 6
+  },
+  "weight": 6,
+  "rarity": "common",
+  "alphaChance": 0.012,
+  "layer": "air",
+  "time": [
+   "dawn",
+   "day",
+   "afternoon"
+  ]
+ },
+ {
+  "id": "pl_rattata",
+  "species": "rattata",
+  "biomes": [
+   "plains",
+   "town",
+   "forest_edge"
+  ],
+  "level": {
+   "min": 2,
+   "max": 5
+  },
+  "weight": 18,
+  "rarity": "common",
+  "alphaChance": 0.012
+ },
+ {
+  "id": "pl_sentret",
+  "species": "sentret",
+  "biomes": [
+   "plains"
+  ],
+  "level": {
+   "min": 2,
+   "max": 5
+  },
+  "weight": 12,
+  "rarity": "common",
+  "alphaChance": 0.012,
+  "time": [
+   "dawn",
+   "day",
+   "afternoon"
+  ]
+ },
+ {
+  "id": "pl_spearow",
+  "species": "spearow",
+  "biomes": [
+   "plains",
+   "hills"
+  ],
+  "level": {
+   "min": 4,
+   "max": 7
+  },
+  "weight": 8,
+  "rarity": "common",
+  "alphaChance": 0.012
+ },
+ {
+  "id": "pl_pikachu",
+  "species": "pikachu",
+  "biomes": [
+   "plains",
+   "forest_edge"
+  ],
+  "level": {
+   "min": 4,
+   "max": 7
+  },
+  "weight": 3.5,
+  "rarity": "uncommon",
+  "alphaChance": 0.012,
+  "time": [
+   "dawn",
+   "day",
+   "afternoon"
+  ],
+  "subBiomes": [
+   "flower_field",
+   "meadow"
+  ]
+ },
+ {
+  "id": "pl_jigglypuff",
+  "species": "jigglypuff",
+  "biomes": [
+   "plains"
+  ],
+  "level": {
+   "min": 5,
+   "max": 8
+  },
+  "weight": 3,
+  "rarity": "uncommon",
+  "alphaChance": 0.012,
+  "time": [
+   "day",
+   "afternoon",
+   "dusk"
+  ]
+ },
+ {
+  "id": "pl_ponyta",
+  "species": "ponyta",
+  "biomes": [
+   "plains",
+   "hills"
+  ],
+  "level": {
+   "min": 8,
+   "max": 12
+  },
+  "weight": 3,
+  "rarity": "uncommon",
+  "alphaChance": 0.012,
+  "altitude": {
+   "min": 64,
+   "max": 100
+  }
+ },
+ {
+  "id": "pl_growlithe",
+  "species": "growlithe",
+  "biomes": [
+   "plains"
+  ],
+  "level": {
+   "min": 6,
+   "max": 9
+  },
+  "weight": 2.5,
+  "rarity": "uncommon",
+  "alphaChance": 0.012
+ },
+ {
+  "id": "pl_ekans",
+  "species": "ekans",
+  "biomes": [
+   "plains",
+   "hills"
+  ],
+  "level": {
+   "min": 4,
+   "max": 7
+  },
+  "weight": 4,
+  "rarity": "uncommon",
+  "alphaChance": 0.012
+ },
+ {
+  "id": "pl_eevee",
+  "species": "eevee",
+  "biomes": [
+   "plains",
+   "forest_edge"
+  ],
+  "level": {
+   "min": 5,
+   "max": 9
+  },
+  "weight": 0.9,
+  "rarity": "rare"
+ },
+ {
+  "id": "pl_tauros",
+  "species": "tauros",
+  "biomes": [
+   "plains"
+  ],
+  "level": {
+   "min": 12,
+   "max": 16
+  },
+  "weight": 0.7,
+  "rarity": "rare"
+ },
+ {
+  "id": "tw_meowth",
+  "species": "meowth",
+  "biomes": [
+   "town",
+   "plains"
+  ],
+  "level": {
+   "min": 4,
+   "max": 7
+  },
+  "weight": 7,
+  "rarity": "common",
+  "alphaChance": 0.012,
+  "time": [
+   "dusk",
+   "night"
+  ]
+ },
+ {
+  "id": "tw_magnemite",
+  "species": "magnemite",
+  "biomes": [
+   "town"
+  ],
+  "level": {
+   "min": 6,
+   "max": 9
+  },
+  "weight": 2,
+  "rarity": "uncommon",
+  "alphaChance": 0.012,
+  "time": [
+   "dusk",
+   "night"
+  ],
+  "layer": "air"
+ }
+]

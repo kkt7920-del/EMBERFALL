@@ -16,6 +16,36 @@ const BUTTONS: { action: Action; icon: string; label: string; key: string }[] = 
   { action: "menu", icon: "☰", label: "메뉴", key: "Q" },
 ];
 
+const BIOME_LABEL: Record<string, string> = {
+  plains: "초원",
+  forest_edge: "숲 가장자리",
+  forest: "숲",
+  deep_forest: "깊은 숲",
+  hills: "언덕",
+  mountain: "산",
+  snow_mountain: "설산",
+  volcano: "화산",
+  river: "강",
+  lake: "호수",
+  beach: "해변",
+  coast: "연안",
+  shallow_sea: "얕은 바다",
+  open_ocean: "대양",
+  deep_ocean: "심해",
+  abyss: "심연",
+  cold_ocean: "차가운 바다",
+  town: "마을",
+  ruins: "유적",
+  island: "섬",
+  cave: "동굴",
+  cavern: "대동굴",
+  underground_river: "지하 강",
+  crystal_cave: "수정 동굴",
+  mine: "폐광",
+  deep_cave: "깊은 동굴",
+  ancient_ruin: "고대 유적",
+};
+
 export class Hud {
   readonly el: HTMLDivElement;
   private readonly location: HTMLDivElement;
@@ -46,7 +76,8 @@ export class Hud {
       "div",
       { class: "keyhints hidden" },
       h("div", { html: "<kbd>WASD</kbd> 이동 <kbd>Shift</kbd> 달리기 <kbd>Space</kbd> 점프 <kbd>마우스</kbd> 카메라" }),
-      h("div", { html: "<kbd>E</kbd> 대화·조사 <kbd>F</kbd> 배틀 <kbd>R</kbd> 포획구 던지기 <kbd>T</kbd> 탑승" }),
+      h("div", { html: "<kbd>E</kbd> 대화·정보 <kbd>F</kbd> 배틀 <kbd>T</kbd> 탑승 <kbd>X</kbd> 도감" }),
+      h("div", { html: "<kbd>R</kbd>/<kbd>1-9</kbd> 볼 들기 <kbd>휠</kbd> 볼 바꾸기 <kbd>좌클릭</kbd> 짧게=던지기 · 길게=힘 모으기 <kbd>G</kbd> 볼 휠" }),
     );
 
     const buttons = h(
@@ -82,8 +113,9 @@ export class Hud {
     this.el.classList.toggle("hidden", !on);
   }
 
-  setLocation(text: string): void {
-    if (this.location.textContent !== text) this.location.textContent = text;
+  setLocation(text: string, biome = ""): void {
+    const label = biome ? `${text} · ${BIOME_LABEL[biome] ?? biome}` : text;
+    if (this.location.textContent !== label) this.location.textContent = label;
   }
 
   setMeta(time: string, weather: string, money: number): void {

@@ -30,14 +30,15 @@ interface SkyKey {
 
 // Sky colour keyframes over a day
 const KEYS: SkyKey[] = [
-  { hour: 0, top: [0.02, 0.03, 0.1], horizon: [0.07, 0.09, 0.2], sun: 0.12, hemi: 0.32, ground: [0.08, 0.08, 0.14] },
-  { hour: 5, top: [0.05, 0.06, 0.18], horizon: [0.22, 0.16, 0.28], sun: 0.15, hemi: 0.35, ground: [0.1, 0.1, 0.16] },
+  // Night keeps enough moonlight to recognise Pokémon
+  { hour: 0, top: [0.03, 0.05, 0.14], horizon: [0.09, 0.12, 0.26], sun: 0.28, hemi: 0.5, ground: [0.1, 0.11, 0.18] },
+  { hour: 5, top: [0.06, 0.08, 0.2], horizon: [0.24, 0.18, 0.3], sun: 0.25, hemi: 0.48, ground: [0.12, 0.12, 0.18] },
   { hour: 6.5, top: [0.32, 0.46, 0.75], horizon: [0.98, 0.66, 0.46], sun: 0.6, hemi: 0.55, ground: [0.32, 0.26, 0.22] },
   { hour: 9, top: [0.3, 0.56, 0.95], horizon: [0.68, 0.84, 0.98], sun: 1.0, hemi: 0.7, ground: [0.36, 0.34, 0.3] },
   { hour: 16, top: [0.3, 0.55, 0.93], horizon: [0.7, 0.84, 0.96], sun: 0.95, hemi: 0.68, ground: [0.36, 0.34, 0.3] },
   { hour: 18.2, top: [0.36, 0.34, 0.62], horizon: [0.98, 0.52, 0.36], sun: 0.55, hemi: 0.5, ground: [0.3, 0.22, 0.2] },
-  { hour: 19.8, top: [0.06, 0.07, 0.2], horizon: [0.2, 0.14, 0.3], sun: 0.15, hemi: 0.36, ground: [0.1, 0.1, 0.16] },
-  { hour: 24, top: [0.02, 0.03, 0.1], horizon: [0.07, 0.09, 0.2], sun: 0.12, hemi: 0.32, ground: [0.08, 0.08, 0.14] },
+  { hour: 19.8, top: [0.07, 0.08, 0.22], horizon: [0.22, 0.16, 0.32], sun: 0.25, hemi: 0.48, ground: [0.12, 0.12, 0.18] },
+  { hour: 24, top: [0.03, 0.05, 0.14], horizon: [0.09, 0.12, 0.26], sun: 0.28, hemi: 0.5, ground: [0.1, 0.11, 0.18] },
 ];
 
 function sample(hour: number): SkyKey {
@@ -68,6 +69,7 @@ export class Sky {
   private clock: WorldClock = { time: 0, hour: 9, period: "day", weather: "clear" };
   private clockReceivedAt = performance.now();
   private underground = false;
+  private underwater = false;
   private fogEnd = 200;
   private lastGradientHour = -1;
   readonly sunDirection = new Vector3(-0.4, -1, 0.3);
@@ -127,7 +129,7 @@ export class Sky {
     this.clouds.isPickable = false;
     const n = 28;
     this.cloudOffsets = new Float32Array(n * 3);
-    for (let i = 0; i < n; i++) this.cloudOffsets.set([hash2(i, 1, 9) * 900 - 450, 82 + hash2(i, 2, 9) * 14, hash2(i, 3, 9) * 900 - 450], i * 3);
+    for (let i = 0; i < n; i++) this.cloudOffsets.set([hash2(i, 1, 9) * 900 - 450, 158 + hash2(i, 2, 9) * 16, hash2(i, 3, 9) * 900 - 450], i * 3);
     this.clouds.thinInstanceSetBuffer("matrix", new Float32Array(n * 16), 16, false);
   }
 
@@ -146,12 +148,36 @@ export class Sky {
     return this.clock.weather;
   }
 
+  /** Under a cave roof: dark fog, no sky. */
   setUnderground(on: boolean): void {
+    if (on === this.underground) return;
     this.underground = on;
     this.dome.setEnabled(!on);
     this.sunDisc.setEnabled(!on);
     this.moonDisc.setEnabled(!on);
     this.clouds.setEnabled(!on);
+  }
+
+  /** Camera below the water surface: blue fog that thickens with depth. */
+  setUnderwater(depth: number | null): void {
+    this.underwater = depth !== null;
+    this.waterDepth = depth ?? 0;
+  }
+
+  private waterDepth = 0;
+
+  get isUnderground(): boolean {
+    return this.underground;
+  }
+
+  /** Day phase label for the HUD. */
+  get phase(): "DAWN" | "DAY" | "AFTERNOON" | "SUNSET" | "NIGHT" {
+    const h = this.hour;
+    if (h >= 5 && h < 7) return "DAWN";
+    if (h >= 7 && h < 12) return "DAY";
+    if (h >= 12 && h < 17) return "AFTERNOON";
+    if (h >= 17 && h < 19.5) return "SUNSET";
+    return "NIGHT";
   }
 
   setViewDistance(metres: number): void {
@@ -169,6 +195,14 @@ export class Sky {
     const hour = this.hour;
     const k = sample(hour);
 
+    if (this.underwater) {
+      const d = Math.min(1, this.waterDepth / 40);
+      const c = new Color3(0.08 - d * 0.06, 0.28 - d * 0.2, 0.45 - d * 0.28).scale(Math.max(0.35, k.hemi + 0.3));
+      scene.clearColor = new Color4(c.r, c.g, c.b, 1);
+      scene.fogColor = c;
+      scene.fogStart = 1;
+      scene.fogEnd = 34 - d * 16;
+    }
     if (this.underground) {
       const c = new Color3(0.05, 0.045, 0.07);
       scene.clearColor = new Color4(c.r, c.g, c.b, 1);
@@ -182,6 +216,10 @@ export class Sky {
       this.lantern.intensity = 1.25;
       this.lantern.position.set(focus.x, focus.y + 2.2, focus.z);
       this.updateRain(false, cameraPos);
+      if (this.underwater) {
+        scene.fogStart = 1;
+        scene.fogEnd = 18;
+      }
       return;
     }
 
@@ -190,10 +228,12 @@ export class Sky {
     const dim = rain ? 0.7 : fog ? 0.85 : 1;
 
     const horizon = new Color3(k.horizon[0] * dim, k.horizon[1] * dim, k.horizon[2] * dim);
-    scene.clearColor = new Color4(horizon.r, horizon.g, horizon.b, 1);
-    scene.fogColor = horizon;
-    scene.fogEnd = fog ? Math.min(this.fogEnd, 70) : this.fogEnd;
-    scene.fogStart = scene.fogEnd * (fog ? 0.15 : 0.55);
+    if (!this.underwater) {
+      scene.clearColor = new Color4(horizon.r, horizon.g, horizon.b, 1);
+      scene.fogColor = horizon;
+      scene.fogEnd = fog ? Math.min(this.fogEnd, 70) : this.fogEnd;
+      scene.fogStart = scene.fogEnd * (fog ? 0.15 : 0.5);
+    }
 
     if (Math.abs(hour - this.lastGradientHour) > 0.05 || dim !== 1) {
       this.lastGradientHour = hour;
@@ -219,7 +259,7 @@ export class Sky {
     this.sun.position.copyFrom(focus.subtract(this.sunDirection.scale(80)));
     // Top faces get hemi + sun; keep the sum near 1 so textures don't wash out
     this.sun.intensity = k.sun * 0.62 * dim * (above ? 1 : 0.45);
-    this.sun.diffuse = above ? new Color3(1, 0.95, 0.85) : new Color3(0.6, 0.7, 1);
+    this.sun.diffuse = above ? new Color3(1, 0.95, 0.85) : new Color3(0.62, 0.72, 1);
     this.hemi.intensity = k.hemi * 0.72 * dim;
     this.hemi.diffuse = new Color3(0.95, 0.97, 1);
     this.hemi.groundColor = new Color3(k.ground[0] * 1.4, k.ground[1] * 1.4, k.ground[2] * 1.4);
@@ -230,7 +270,7 @@ export class Sky {
     this.moonDisc.setEnabled(sunDir.y < 0.1);
 
     const night = hour < 5.5 || hour > 19.2;
-    this.lantern.intensity = night ? 0.9 : 0;
+    this.lantern.intensity = night ? 0.7 : 0;
     this.lantern.position.set(focus.x, focus.y + 2.2, focus.z);
 
     // Clouds drift and wrap around the focus point
@@ -242,9 +282,9 @@ export class Sky {
       let z = this.cloudOffsets[i * 3 + 2];
       x = ((((x - focus.x) % 900) + 1350) % 900) - 450 + focus.x;
       z = ((((z - focus.z) % 900) + 1350) % 900) - 450 + focus.z;
-      const sx = 14 + hash2(i, 4, 9) * 26;
-      const sz = 10 + hash2(i, 5, 9) * 20;
-      Matrix.ComposeToRef(new Vector3(sx, 3 + hash2(i, 6, 9) * 2, sz), Quaternion.Identity(), new Vector3(x, this.cloudOffsets[i * 3 + 1], z), m);
+      const sx = 16 + hash2(i, 4, 9) * 30;
+      const sz = 12 + hash2(i, 5, 9) * 22;
+      Matrix.ComposeToRef(new Vector3(Math.round(sx / 4) * 4, 4, Math.round(sz / 4) * 4), Quaternion.Identity(), new Vector3(Math.round(x / 4) * 4, this.cloudOffsets[i * 3 + 1], Math.round(z / 4) * 4), m);
       m.copyToArray(buf, i * 16);
     }
     this.clouds.thinInstanceSetBuffer("matrix", buf, 16, false);

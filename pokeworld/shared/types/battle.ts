@@ -1,4 +1,5 @@
-import type { CreatureInstance } from "./game";
+import type { StatusCondition } from "./content";
+import type { CreatureInstance, Gender } from "./game";
 
 export type BattleKind = "wild" | "trainer" | "guardian" | "legendary";
 
@@ -6,7 +7,6 @@ export type BattleAction =
   | { kind: "move"; index: number }
   | { kind: "switch"; index: number }
   | { kind: "item"; item: string; target: number }
-  | { kind: "capture"; item: string }
   | { kind: "run" };
 
 export type Side = "player" | "foe";
@@ -18,6 +18,10 @@ export interface BattleCreatureView {
   level: number;
   hp: number;
   maxHp: number;
+  gender: Gender;
+  status?: StatusCondition;
+  alpha?: boolean;
+  size: number;
 }
 
 export type BattleEvent =
@@ -30,6 +34,7 @@ export type BattleEvent =
   | { t: "faint"; side: Side }
   | { t: "switch"; side: Side; creature: BattleCreatureView }
   | { t: "capture"; item: string; shakes: number; success: boolean }
+  | { t: "status"; side: Side; status: StatusCondition | null }
   | { t: "exp"; uid: string; name: string; amount: number }
   | { t: "level"; uid: string; name: string; level: number }
   | { t: "learn"; uid: string; name: string; move: string; replaced?: string }

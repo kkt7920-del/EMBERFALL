@@ -1,0 +1,83 @@
+{
+ "id": "charizard",
+ "dexNumber": 6,
+ "name": "Charizard",
+ "types": [
+  "fire",
+  "flying"
+ ],
+ "baseStats": {
+  "hp": 78,
+  "atk": 84,
+  "def": 78,
+  "spa": 109,
+  "spd": 85,
+  "spe": 100
+ },
+ "catchRate": 45,
+ "baseExp": 240,
+ "height": 1.7,
+ "weight": 90.5,
+ "baseScale": 1.0,
+ "hitbox": {
+  "width": 1.4,
+  "height": 1.7
+ },
+ "genderRatio": 0.125,
+ "abilities": [
+  "Blaze"
+ ],
+ "modelId": "charizard",
+ "textureId": "charizard",
+ "movement": {
+  "land": true,
+  "water": false,
+  "underwater": false,
+  "air": true
+ },
+ "animations": {
+  "idle": "ground_idle",
+  "walk": "ground_walk",
+  "run": "ground_run",
+  "swim": "water_swim",
+  "fly": "air_fly",
+  "battleIdle": "battle_idle",
+  "attack": "physical",
+  "recoil": "recoil",
+  "faint": "faint",
+  "capture": "capture"
+ },
+ "behavior": {
+  "temperament": "aggressive",
+  "speed": 1.1
+ },
+ "learnset": [
+  {
+   "level": 1,
+   "move": "fire_fang"
+  },
+  {
+   "level": 1,
+   "move": "wing_attack"
+  },
+  {
+   "level": 1,
+   "move": "flamethrower"
+  },
+  {
+   "level": 36,
+   "move": "air_slash"
+  },
+  {
+   "level": 46,
+   "move": "dragon_claw"
+  }
+ ],
+ "mount": {
+  "modes": [
+   "land",
+   "fly"
+  ],
+  "speed": 1.3
+ }
+}

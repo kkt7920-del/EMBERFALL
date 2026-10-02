@@ -1,0 +1,86 @@
+{
+ "id": "ho_oh",
+ "dexNumber": 250,
+ "name": "Ho-Oh",
+ "types": [
+  "fire",
+  "flying"
+ ],
+ "baseStats": {
+  "hp": 106,
+  "atk": 130,
+  "def": 90,
+  "spa": 110,
+  "spd": 154,
+  "spe": 90
+ },
+ "catchRate": 3,
+ "baseExp": 306,
+ "height": 3.8,
+ "weight": 199.0,
+ "baseScale": 1.0,
+ "hitbox": {
+  "width": 3.0,
+  "height": 3.2
+ },
+ "genderRatio": -1,
+ "abilities": [
+  "Pressure"
+ ],
+ "modelId": "ho_oh",
+ "textureId": "ho_oh",
+ "movement": {
+  "land": false,
+  "water": false,
+  "underwater": false,
+  "air": true
+ },
+ "animations": {
+  "idle": "ground_idle",
+  "walk": "ground_walk",
+  "run": "ground_run",
+  "swim": "water_swim",
+  "fly": "air_fly",
+  "battleIdle": "battle_idle",
+  "attack": "physical",
+  "recoil": "recoil",
+  "faint": "faint",
+  "capture": "capture"
+ },
+ "behavior": {
+  "temperament": "neutral",
+  "speed": 1.2
+ },
+ "learnset": [
+  {
+   "level": 1,
+   "move": "gust"
+  },
+  {
+   "level": 1,
+   "move": "flamethrower"
+  },
+  {
+   "level": 1,
+   "move": "sacred_fire"
+  },
+  {
+   "level": 1,
+   "move": "ancient_power"
+  },
+  {
+   "level": 1,
+   "move": "air_slash"
+  }
+ ],
+ "mount": {
+  "modes": [
+   "fly"
+  ],
+  "speed": 1.6
+ },
+ "legendary": true,
+ "encounter": {
+  "requiresBattle": true
+ }
+}

@@ -1,0 +1,75 @@
+{
+ "id": "blastoise",
+ "dexNumber": 9,
+ "name": "Blastoise",
+ "types": [
+  "water"
+ ],
+ "baseStats": {
+  "hp": 79,
+  "atk": 83,
+  "def": 100,
+  "spa": 85,
+  "spd": 105,
+  "spe": 78
+ },
+ "catchRate": 45,
+ "baseExp": 239,
+ "height": 1.6,
+ "weight": 85.5,
+ "baseScale": 1.0,
+ "hitbox": {
+  "width": 1.4,
+  "height": 1.6
+ },
+ "genderRatio": 0.125,
+ "abilities": [
+  "Torrent"
+ ],
+ "modelId": "blastoise",
+ "textureId": "blastoise",
+ "movement": {
+  "land": true,
+  "water": true,
+  "underwater": true,
+  "air": false
+ },
+ "animations": {
+  "idle": "ground_idle",
+  "walk": "ground_walk",
+  "run": "ground_run",
+  "swim": "water_swim",
+  "fly": "air_fly",
+  "battleIdle": "battle_idle",
+  "attack": "physical",
+  "recoil": "recoil",
+  "faint": "faint",
+  "capture": "capture"
+ },
+ "behavior": {
+  "temperament": "neutral",
+  "speed": 0.8
+ },
+ "learnset": [
+  {
+   "level": 1,
+   "move": "water_pulse"
+  },
+  {
+   "level": 1,
+   "move": "bite"
+  },
+  {
+   "level": 1,
+   "move": "aqua_tail"
+  },
+  {
+   "level": 36,
+   "move": "surf"
+  },
+  {
+   "level": 44,
+   "move": "hydro_pump"
+  }
+ ]
+}

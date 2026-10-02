@@ -40,6 +40,7 @@ for (const [suite, env] of [
   ["play.mjs", { URL: url }],
   ["mobile.mjs", { URL: url }],
   ["features.mjs", { URL: url }],
+  ["models.mjs", { URL: url }],
   // net.mjs runs its own game server on :2567, which the Vite proxy forwards /ws to
   ["net.mjs", { URL: url }],
   ["pwa.mjs", { URL: prodUrl }],

@@ -7,10 +7,10 @@ export type StatKey = "hp" | "atk" | "def" | "spa" | "spd" | "spe";
 export type Stats = Record<StatKey, number>;
 export const STAT_KEYS: readonly StatKey[] = ["hp", "atk", "def", "spa", "spd", "spe"];
 
-export type TimePeriod = "dawn" | "day" | "dusk" | "night";
+export type TimePeriod = "dawn" | "day" | "afternoon" | "dusk" | "night";
 export type Weather = "clear" | "rain" | "fog";
 export type Layer = "land" | "water_surface" | "underwater" | "air";
-export type MovementMode = "walk" | "swim" | "fly";
+export type MovementMode = "walk" | "swim" | "dive" | "fly";
 export type MountMode = "land" | "swim" | "fly";
 
 export interface TypeDef {
@@ -25,10 +25,15 @@ export interface TypeChartDef {
   effectiveness: Record<string, Record<string, number>>;
 }
 
+export type StatusCondition = "sleep" | "freeze" | "paralysis" | "poison" | "burn";
+
 export type MoveEffect =
   | { kind: "stat"; target: "self" | "foe"; stat: Exclude<StatKey, "hp">; stages: number; chance?: number }
   | { kind: "heal"; fraction: number }
-  | { kind: "drain"; fraction: number };
+  | { kind: "drain"; fraction: number }
+  | { kind: "status"; status: StatusCondition; chance?: number }
+  | { kind: "rest" }
+  | { kind: "none" };
 
 export interface MoveDef {
   id: string;
@@ -44,93 +49,101 @@ export interface MoveDef {
   fx?: "melee" | "projectile" | "aura";
 }
 
-export interface ModelColors {
-  primary: string;
-  secondary: string;
-  accent: string;
-  eye?: string;
-}
-
-export type PartRole =
-  | "body"
-  | "head"
-  | "legFL"
-  | "legFR"
-  | "legBL"
-  | "legBR"
-  | "legL"
-  | "legR"
-  | "armL"
-  | "armR"
-  | "wingL"
-  | "wingR"
-  | "tail"
-  | "fin"
-  | "deco";
-
-export interface PartDef {
-  name: string;
-  role: PartRole;
-  /** Box size in model units (1 unit = 1 m at scale 1). */
-  size: [number, number, number];
-  /** Position of the part pivot relative to its parent pivot. */
-  pos: [number, number, number];
-  /** Offset of the box centre from its pivot (legs hang below the hip, wings extend sideways). */
-  offset?: [number, number, number];
-  color: "primary" | "secondary" | "accent" | "eye" | string;
-  parent?: string;
-}
-
-export type Rig = "quadruped" | "biped" | "bird" | "fish" | "blob" | "bat";
-
-export interface ModelTemplateDef {
-  id: string;
-  rig: Rig;
-  parts: PartDef[];
-}
-
-export interface AnimationProfileDef {
-  rig: Rig;
-  idle: { bob: number; speed: number };
-  walk: { freq: number; swing: number; bob: number };
-  run: { freq: number; swing: number; bob: number };
-  swim: { freq: number; sway: number; bob: number };
-  fly: { flapFreq: number; flapAngle: number; bob: number };
-  battleIdle: { bob: number; speed: number };
-  attack: { lunge: number; duration: number };
-  faint: { duration: number };
-}
-
+/**
+ * A Pokémon species (content/pokemon/species/*.json). Visuals are referenced
+ * by id only (modelId/textureId); the client's PokemonAssetRegistry resolves
+ * them to user-provided model files, or reports MISSING_POKEMON_ASSET.
+ */
 export interface SpeciesDef {
   id: string;
+  dexNumber: number;
   name: string;
   types: string[];
   baseStats: Stats;
   /** 3 (hard) .. 255 (easy). */
   catchRate: number;
   baseExp: number;
+  /** Official height (m) and weight (kg). */
+  height: number;
+  weight: number;
+  /** Multiplier applied to the model on top of its own units. */
+  baseScale: number;
+  /** Collision/capture box at scale 1 (blocks). */
+  hitbox: { width: number; height: number };
+  /** Fraction of females, or -1 for genderless. */
+  genderRatio: number;
+  abilities: string[];
+  modelId: string;
+  textureId: string;
+  movement: { land: boolean; water: boolean; underwater: boolean; air: boolean };
+  /** Animation names in the model's animation set, per pose. */
+  animations: Partial<Record<PokemonAnimSlot, string>>;
+  behavior: { temperament: "timid" | "neutral" | "aggressive"; speed: number };
   learnset: { level: number; move: string }[];
   evolution?: { to: string; level: number };
-  model: { template: string; colors: ModelColors; scale?: number };
-  behavior: {
-    movement: MovementMode[];
-    temperament: "timid" | "neutral" | "aggressive";
-    speed: number;
-  };
   mount?: { modes: MountMode[]; speed: number };
   legendary?: boolean;
-  description: string;
+  /** Capture restrictions: some Pokémon must be battled before a ball can work. */
+  encounter?: { requiresBattle?: boolean; storyFlag?: string };
+}
+
+export type PokemonAnimSlot = "idle" | "walk" | "run" | "swim" | "fly" | "battleIdle" | "attack" | "recoil" | "faint" | "capture";
+
+export interface BallLook {
+  top: string;
+  bottom: string;
+  band: string;
+  button: string;
+  stripe?: string;
 }
 
 export interface ItemDef {
   id: string;
   name: string;
+  nameKo?: string;
   kind: "capture" | "heal" | "key" | "material";
   price?: number;
-  captureBonus?: number;
   heal?: number;
+  cureStatus?: boolean;
+  /** Poké Ball colours (capture items). */
+  ball?: BallLook;
   color: string;
   description: string;
+}
+
+/** A situational ball modifier (content/capture/balls.json). */
+export type BallCondition =
+  | { when: "firstTurn"; maxTurn: number; multiplier: number }
+  | { when: "water"; multiplier: number }
+  | { when: "dark"; maxLight: number; multiplier: number }
+  | { when: "cave"; multiplier: number }
+  | { when: "night"; multiplier: number }
+  | { when: "targetType"; types: string[]; multiplier: number }
+  | { when: "turnScaling"; perTurn: number; max: number }
+  | { when: "previouslyCaught"; multiplier: number }
+  | { when: "lowLevel"; maxLevel: number; multiplier: number };
+
+export interface BallDef {
+  baseMultiplier?: number;
+  conditions?: BallCondition[];
+}
+
+/** Every capture coefficient (content/capture/capture.json). */
+export interface CaptureConfigDef {
+  id: string;
+  maxShakes: number;
+  shakeChecks: number;
+  shakeExponent: number;
+  status: Record<"none" | StatusCondition, number>;
+  lowLevel: { belowLevel: number; base: number; perLevel: number; divisor: number };
+  overLevel: { perLevel: number; min: number };
+  alphaMultiplier: number;
+  legendaryMultiplier: number;
+  rareMultiplier: Partial<Record<"rare" | "very_rare", number>>;
+  fieldThrow: { unawareBonus: number; battleBonus: number };
+  environment: { underwaterPenalty: number };
+  critical: { enabled: boolean; caughtSteps: [number, number][]; scale: number; dexSize: number };
+  maxModifiedRate: number;
 }
 
 export interface Range {
@@ -141,9 +154,11 @@ export interface Range {
 export interface SpawnRuleDef {
   id: string;
   species: string;
-  /** "overworld" or "cave:<id>". Defaults to overworld. */
-  zone?: string;
+  /** Region id; defaults to every region. */
+  region?: string;
   biomes: string[];
+  /** Finer terrain features: riverbank, waterfall, flower_field, meadow, clearing, cliff, reef, crater, summit. */
+  subBiomes?: string[];
   layer?: Layer;
   time?: TimePeriod[];
   weather?: Weather[];
@@ -152,6 +167,8 @@ export interface SpawnRuleDef {
   level: Range;
   weight: number;
   rarity: "common" | "uncommon" | "rare" | "very_rare";
+  /** Chance that a spawn from this rule is an Alpha (bigger, stronger, harder to catch). */
+  alphaChance?: number;
   /** Quest that must be completed before this spawn appears. */
   quest?: string;
   /** Only within this many metres of a named ruin/structure. */
@@ -176,6 +193,7 @@ export interface BuildingDef {
   z: number;
   w: number;
   d: number;
+  /** Wall height in blocks (roof sits on top). */
   h: number;
   roof: "red" | "blue" | "green" | "orange";
   door: "n" | "s" | "e" | "w";
@@ -185,9 +203,10 @@ export interface NpcDef {
   id: string;
   name: string;
   role: "professor" | "nurse" | "clerk" | "villager" | "trainer" | "elder";
-  zone?: string;
   x: number;
   z: number;
+  /** Feet height; defaults to the ground under x/z. */
+  y?: number;
   facing: number;
   look: { skin: string; hair: string; shirt: string; pants: string };
   dialogue: string[];
@@ -197,27 +216,14 @@ export interface NpcDef {
 
 export interface InteractableDef {
   id: string;
-  kind: "tablet" | "altar" | "crystal" | "cave_entrance" | "cave_exit" | "sign";
+  kind: "tablet" | "altar" | "crystal" | "sign";
   name: string;
-  zone?: string;
   x: number;
   z: number;
+  /** Block height of the object's base; defaults to the ground under x/z. */
+  y?: number;
   text?: string[];
-  cave?: string;
   item?: { id: string; count: number };
-}
-
-export interface CaveDef {
-  id: string;
-  name: string;
-  /** Overworld point the entrance faces; also where the player returns. */
-  entrance: { x: number; z: number };
-  size: number;
-  seed: number;
-  /** Interior spawn point (cave-local coordinates). */
-  start: { x: number; z: number };
-  /** Main tunnel, guarantees the back chamber is reachable. */
-  tunnel: [number, number][];
 }
 
 export interface RuinDef {
@@ -226,15 +232,93 @@ export interface RuinDef {
   x: number;
   z: number;
   radius: number;
+  /** "temple" sits on land, "sunken" on the sea floor. */
+  style?: "temple" | "sunken";
 }
 
 export interface AreaDef {
   id: string;
   name: string;
-  zone?: string;
   x: number;
   z: number;
   radius: number;
+  /** Optional vertical band (cave areas under the surface). */
+  minY?: number;
+  maxY?: number;
+}
+
+/**
+ * A river from source to mouth. Its water level is derived from the terrain
+ * (never rising downstream); steep drops in the mountains become waterfalls.
+ */
+export interface RiverDef {
+  id: string;
+  points: [number, number][];
+  width: number;
+  depth: number;
+  /** Caps the level (e.g. a river flowing out of a lake starts at the lake surface). */
+  maxLevel?: number;
+}
+
+export interface LakeDef {
+  x: number;
+  z: number;
+  rx: number;
+  rz: number;
+  depth: number;
+  /** Water surface height. */
+  level: number;
+}
+
+/** Mountain range along a ridge line; peaks reach `height`. */
+export interface MountainRangeDef {
+  points: [number, number][];
+  width: number;
+  height: number;
+}
+
+export interface VolcanoDef {
+  x: number;
+  z: number;
+  radius: number;
+  height: number;
+  crater: number;
+}
+
+/** Underground chamber of a cave system. */
+export interface CaveChamberDef {
+  id: string;
+  kind: "cavern" | "crystal" | "ruin" | "lake";
+  x: number;
+  y: number;
+  z: number;
+  rx: number;
+  ry: number;
+  rz: number;
+}
+
+/**
+ * A hand-placed cave system carved into the voxel world. `path` starts at the
+ * entrance (y = null means "on the surface there"), and every point is [x, y, z].
+ */
+export interface CaveSystemDef {
+  id: string;
+  name: string;
+  path: [number, number | null, number][];
+  radius: number;
+  chambers: CaveChamberDef[];
+  /** Timbered mine tunnel. */
+  mine?: [number, number, number][];
+  /** Underground river: water runs along the floor of this tunnel. */
+  river?: [number, number, number][];
+}
+
+export interface ShipwreckDef {
+  id: string;
+  x: number;
+  z: number;
+  /** 0: bow points +x, 1: bow points +z. */
+  axis: 0 | 1;
 }
 
 export interface RegionDef {
@@ -246,18 +330,24 @@ export interface RegionDef {
   /** Species the professor offers as a first partner. */
   starters: string[];
   startingMoney: number;
+  /** Map panel extent. */
+  bounds: { minX: number; maxX: number; minZ: number; maxZ: number };
   town: { x: number; z: number; radius: number; height: number };
   roads: { points: [number, number][]; width: number }[];
-  river: { points: [number, number][]; width: number };
-  lakes: { x: number; z: number; rx: number; rz: number; depth: number }[];
-  coast: { z: number; beachWidth: number; deepZ: number; eastX: number };
+  rivers: RiverDef[];
+  lakes: LakeDef[];
+  /** Sea lies south of `z` and east of `eastX` (both wobble with noise). */
+  coast: { z: number; eastX: number; beachWidth: number; coldWestX: number };
   forests: { x: number; z: number; rx: number; rz: number }[];
   hills: { x: number; z: number; radius: number; height: number }[];
-  mountains: { northZ: number; westX: number };
-  islands: { x: number; z: number; radius: number }[];
+  mountains: MountainRangeDef[];
+  volcanoes: VolcanoDef[];
+  islands: { x: number; z: number; radius: number; height: number }[];
+  snowline: number;
   buildings: BuildingDef[];
   ruins: RuinDef[];
-  caves: CaveDef[];
+  shipwrecks: ShipwreckDef[];
+  caves: CaveSystemDef[];
   npcs: NpcDef[];
   interactables: InteractableDef[];
   areas: AreaDef[];

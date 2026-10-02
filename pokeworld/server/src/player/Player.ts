@@ -49,6 +49,11 @@ export class Player {
   get z(): number {
     return this.save.z;
   }
+  get y(): number {
+    return this.save.y;
+  }
+  /** Last time a Poké Ball was thrown (flood control). */
+  lastThrowAt = 0;
 
   count(item: string): number {
     return this.save.inventory[item] ?? 0;
@@ -71,6 +76,7 @@ export class Player {
     const s = this.save;
     return {
       party: s.party,
+      box: s.box,
       boxCount: s.box.length,
       inventory: s.inventory,
       money: s.money,

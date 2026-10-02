@@ -19,9 +19,9 @@ export function grantExp(db: ContentDB, c: CreatureInstance, amount: number): Ba
 
   while (c.level < MAX_LEVEL && c.exp >= expForLevel(c.level + 1)) {
     const species = db.speciesOf(c);
-    const before = computeStats(species, c.level, c.ivs).hp;
+    const before = computeStats(species, c.level, c.ivs, c.nature).hp;
     c.level++;
-    const after = computeStats(species, c.level, c.ivs).hp;
+    const after = computeStats(species, c.level, c.ivs, c.nature).hp;
     if (c.hp > 0) c.hp = Math.min(after, c.hp + (after - before));
     events.push({ t: "level", uid: c.uid, name, level: c.level });
 
@@ -54,8 +54,8 @@ export function evolveIfReady(db: ContentDB, c: CreatureInstance): BattleEvent |
   const target = db.species.get(species.evolution.to);
   if (!target) return null;
 
-  const before = computeStats(species, c.level, c.ivs).hp;
-  const after = computeStats(target, c.level, c.ivs).hp;
+  const before = computeStats(species, c.level, c.ivs, c.nature).hp;
+  const after = computeStats(target, c.level, c.ivs, c.nature).hp;
   c.species = target.id;
   if (c.hp > 0) c.hp = Math.min(after, c.hp + (after - before));
 

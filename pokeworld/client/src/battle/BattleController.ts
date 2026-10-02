@@ -1,16 +1,18 @@
 import { Vector3 } from "@babylonjs/core/Maths/math.vector";
 import type { ContentDB } from "@shared/data/contentDb";
-import { computeStats, creatureName, expForLevel } from "@shared/data/stats";
+import { creatureName, expForLevel, statsOf } from "@shared/data/stats";
 import type { ServerMessageOf } from "@shared/protocol/messages";
 import type { BattleAction, BattleCreatureView, BattleEvent, BattleView } from "@shared/types/battle";
 import type { CreatureInstance, PlayerPrivateState } from "@shared/types/game";
+import type { VoxelWorld } from "@shared/world/voxelWorld";
 import type { CameraRig } from "../engine/CameraRig";
 import type { Effects } from "../engine/Effects";
-import type { CreatureLibrary, CreatureView } from "../pokemon/CreatureLibrary";
-import type { CreatureManager } from "../pokemon/CreatureManager";
+import type { SoundEvent } from "../engine/Audio";
+import type { PokemonLibrary } from "../pokemon/PokemonLibrary";
+import type { PokemonView } from "../pokemon/PokemonView";
+import type { WildManager } from "../pokemon/WildManager";
 import type { BattleUI } from "../ui/BattleUI";
 import type { Panels } from "../ui/panels";
-import type { ClientTerrain } from "../world/ClientTerrain";
 
 const wait = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
 
@@ -20,36 +22,39 @@ export interface BattleHost {
   panels: Panels;
   camera: CameraRig;
   effects: Effects;
-  lib: CreatureLibrary;
-  creatures: CreatureManager;
-  terrain: ClientTerrain;
-  zone(): string;
+  lib: PokemonLibrary;
+  creatures: WildManager;
+  world: VoxelWorld;
   playerPos(): Vector3;
   playerRot(): number;
   state(): PlayerPrivateState | null;
-  preferredOrb(): string;
   send(battleId: string, action: BattleAction): void;
   onStart(): void;
   onEnd(outcome: string | undefined): void;
   setFollowerHidden(on: boolean): void;
-  sfx(name: "hit" | "super" | "faint" | "capture" | "level"): void;
+  sfx(name: SoundEvent): void;
+  /** Battle "포획": choose a ball, then aim and throw it for real. */
+  startCatch(foeId: string, onThrown: () => void, onCancel: () => void): void;
 }
 
 /**
  * Presents a server-run battle in the open world: the partner steps out next
- * to the trainer, the camera frames both creatures, and server events are
- * played back in order (attack, damage, faint, capture shakes, exp, level up,
- * evolution). The client never computes outcomes.
+ * to the trainer, the camera frames both Pokémon (the same models used in the
+ * field), and server events are played back in order. Capturing is a real
+ * throw: the menu hands control to the aim mode, the server simulates the
+ * ball, and the battle continues with the result.
  */
 export class BattleController {
   view: BattleView | null = null;
-  private mine: CreatureView | null = null;
-  private foe: CreatureView | null = null;
+  private mine: PokemonView | null = null;
+  private foe: PokemonView | null = null;
   private ownsFoeView = false;
   private queue: Promise<void> = Promise.resolve();
   private awaitingServer = false;
   private minePos = new Vector3();
   private foePos = new Vector3();
+  /** True while the player aims/throws a ball (menu hidden). */
+  aiming = false;
 
   constructor(private readonly host: BattleHost) {}
 
@@ -66,10 +71,8 @@ export class BattleController {
     this.queue = this.queue.then(() => this.doResult(msg)).catch((e) => console.error(e));
   }
 
-  private groundAt(x: number, z: number): number {
-    const zone = this.host.zone();
-    const level = this.host.terrain.waterLevel(zone);
-    return Math.max(this.host.terrain.ground(zone, x, z, 0.3), level !== null ? level - 0.45 : -Infinity);
+  private groundAt(x: number, y: number, z: number): number {
+    return this.host.world.floorNear(x, y + 2, z, 1, 3, 8) ?? y;
   }
 
   private async doStart(view: BattleView): Promise<void> {
@@ -81,7 +84,7 @@ export class BattleController {
     const player = this.host.playerPos();
     const entity = view.entityId ? this.host.creatures.get(view.entityId) : undefined;
 
-    // Foe position: the wild creature where it stands, otherwise in front of the trainer
+    // Foe: the wild Pokémon where it stands, otherwise in front of the trainer
     if (entity) {
       entity.pinned = true;
       this.foe = entity.view;
@@ -89,11 +92,11 @@ export class BattleController {
       this.foePos.copyFrom(entity.view.root.position);
     } else {
       const r = this.host.playerRot();
-      const fx = player.x + Math.sin(r) * 6;
-      const fz = player.z + Math.cos(r) * 6;
-      this.foe = this.host.lib.acquire(view.foe.species);
+      const fx = player.x + Math.sin(r) * 7;
+      const fz = player.z + Math.cos(r) * 7;
+      this.foe = this.host.lib.acquire(view.foe.species, { size: view.foe.size, alpha: view.foe.alpha });
       this.ownsFoeView = true;
-      this.foePos.set(fx, this.groundAt(fx, fz), fz);
+      this.foePos.set(fx, this.groundAt(fx, player.y, fz), fz);
       this.foe.root.position.copyFrom(this.foePos);
     }
 
@@ -102,9 +105,9 @@ export class BattleController {
     const dist = Math.max(3, toFoe.length());
     toFoe.normalize();
     const side = new Vector3(toFoe.z, 0, -toFoe.x);
-    const mx = player.x + toFoe.x * Math.min(2.4, dist * 0.4) + side.x * 1.1;
-    const mz = player.z + toFoe.z * Math.min(2.4, dist * 0.4) + side.z * 1.1;
-    this.minePos.set(mx, this.groundAt(mx, mz), mz);
+    const mx = player.x + toFoe.x * Math.min(2.6, dist * 0.4) + side.x * 1.2;
+    const mz = player.z + toFoe.z * Math.min(2.6, dist * 0.4) + side.z * 1.2;
+    this.minePos.set(mx, this.groundAt(mx, player.y, mz), mz);
     this.spawnMine(view.party[view.activeIndex]);
 
     this.faceEachOther();
@@ -122,8 +125,8 @@ export class BattleController {
         : view.kind === "guardian"
           ? `${view.foe.name}이(가) 길을 막아섰다!`
           : view.kind === "legendary"
-            ? `전설의 ${view.foe.name}이(가) 모습을 드러냈다!`
-            : `야생 ${view.foe.name}이(가) 나타났다!`;
+            ? `전설의 포켓몬 ${view.foe.name}이(가) 모습을 드러냈다!`
+            : `야생 ${view.foe.name}${view.foe.alpha ? "(알파)" : ""}이(가) 나타났다!`;
     ui.say(intro);
     await ui.waitTap(1300);
     const me = view.party[view.activeIndex];
@@ -135,7 +138,7 @@ export class BattleController {
 
   private spawnMine(c: CreatureInstance): void {
     if (this.mine) this.host.lib.release(this.mine);
-    this.mine = this.host.lib.acquire(c.species);
+    this.mine = this.host.lib.acquire(c.species, { size: c.size, alpha: c.alpha });
     this.mine.root.position.copyFrom(this.minePos);
     this.mine.anim = "battle";
   }
@@ -152,15 +155,25 @@ export class BattleController {
     const v = this.view;
     if (!v) return;
     const c = v.party[v.activeIndex];
-    const species = this.host.db.speciesOf(c);
-    const max = computeStats(species, c.level, c.ivs).hp;
+    const max = statsOf(this.host.db, c).hp;
     const from = expForLevel(c.level);
     const to = expForLevel(c.level + 1);
-    const plate: BattleCreatureView = { uid: c.uid, species: c.species, name: creatureName(this.host.db, c), level: c.level, hp: c.hp, maxHp: max };
+    const plate: BattleCreatureView = {
+      uid: c.uid,
+      species: c.species,
+      name: creatureName(this.host.db, c),
+      level: c.level,
+      hp: c.hp,
+      maxHp: max,
+      gender: c.gender,
+      status: c.status,
+      alpha: c.alpha,
+      size: c.size,
+    };
     this.host.ui.setMine(plate, (c.exp - from) / Math.max(1, to - from));
   }
 
-  private orbCount(): number {
+  private ballCount(): number {
     const st = this.host.state();
     if (!st) return 0;
     return Object.entries(st.inventory).reduce((n, [id, k]) => n + (this.host.db.items.get(id)?.kind === "capture" ? k : 0), 0);
@@ -171,7 +184,7 @@ export class BattleController {
     if (!v) return;
     const { ui, panels, db } = this.host;
     if (v.awaiting === "switch") {
-      ui.say("다음으로 내보낼 크리처를 고르자!");
+      ui.say("다음으로 내보낼 포켓몬을 고르자!");
       ui.hideMenu();
       this.forceSwitch();
       return;
@@ -181,57 +194,78 @@ export class BattleController {
     ui.rootMenu(
       {
         fight: (i) => this.act({ kind: "move", index: i }),
-        capture: () => {
-          const st = this.host.state();
-          const pref = this.host.preferredOrb();
-          const orb = st && (st.inventory[pref] ?? 0) > 0 ? pref : Object.keys(st?.inventory ?? {}).find((id) => db.items.get(id)?.kind === "capture" && (st!.inventory[id] ?? 0) > 0);
-          if (orb) this.act({ kind: "capture", item: orb });
-        },
+        capture: () => this.beginCatch(),
         bag: () =>
           panels.bag({
             inBattle: true,
             onHeal: (item) => panels.party({ title: "누구에게 쓸까?", pickLabel: "사용", pick: (i) => this.act({ kind: "item", item, target: i }) }),
-            onCapture: v.canCapture ? (item) => this.act({ kind: "capture", item }) : undefined,
           }),
         party: () =>
           panels.party({
-            title: "교체할 크리처",
+            title: "교체할 포켓몬",
             pickLabel: "교체",
             canPick: (c, i) => c.hp > 0 && i !== v.activeIndex,
             pick: (i) => this.act({ kind: "switch", index: i }),
           }),
         run: () => this.act({ kind: "run" }),
       },
-      { canCapture: v.canCapture, canRun: v.canRun, moves: me.moves, orbs: this.orbCount() },
+      { canCapture: v.canCapture, canRun: v.canRun, moves: me.moves, orbs: this.ballCount() },
+    );
+  }
+
+  /** Catch: choose a ball, aim at the opponent and throw it (the menu returns if cancelled). */
+  private beginCatch(): void {
+    const v = this.view;
+    if (!v?.entityId || this.awaitingServer) return;
+    this.aiming = true;
+    this.host.ui.hideMenu();
+    this.host.ui.setAiming(true);
+    this.host.ui.say("볼을 골라 상대를 조준해서 던지자!");
+    this.host.startCatch(
+      v.entityId,
+      () => {
+        // Thrown: the turn resolves when the server finishes the capture (or the ball lands)
+        this.aiming = false;
+        this.awaitingServer = true;
+        this.host.ui.setAiming(false);
+        this.host.ui.say("…");
+      },
+      () => {
+        this.aiming = false;
+        this.host.ui.setAiming(false);
+        this.showMenu();
+      },
     );
   }
 
   private forceSwitch(): void {
     const v = this.view;
     if (!v) return;
-    this.host.panels.custom("다음 크리처를 고르세요", (body) => {
-      const st = this.host.state();
-      const party = st?.party ?? v.party;
-      body.append(
-        ...party.map((c, i) => {
-          const b = document.createElement("button");
-          b.className = "btn";
-          b.style.width = "100%";
-          b.style.marginBottom = "6px";
-          b.disabled = c.hp <= 0;
-          b.textContent = `${creatureName(this.host.db, c)} Lv.${c.level} (HP ${c.hp})`;
-          b.onclick = () => {
-            // act() first so closing the panel doesn't re-open the forced choice
-            this.act({ kind: "switch", index: i });
-            this.host.panels.closeAll();
-          };
-          return b;
-        }),
-      );
-    }, () => {
-      // Cannot dismiss a forced switch
-      if (this.view?.awaiting === "switch" && !this.awaitingServer) setTimeout(() => this.forceSwitch(), 50);
-    });
+    this.host.panels.custom(
+      "다음 포켓몬을 고르세요",
+      (body) => {
+        const st = this.host.state();
+        const party = st?.party ?? v.party;
+        body.append(
+          ...party.map((c, i) => {
+            const b = document.createElement("button");
+            b.className = "btn";
+            b.style.width = "100%";
+            b.style.marginBottom = "6px";
+            b.disabled = c.hp <= 0;
+            b.textContent = `${creatureName(this.host.db, c)} Lv.${c.level} (HP ${c.hp})`;
+            b.onclick = () => {
+              this.act({ kind: "switch", index: i });
+              this.host.panels.closeAll();
+            };
+            return b;
+          }),
+        );
+      },
+      () => {
+        if (this.view?.awaiting === "switch" && !this.awaitingServer) setTimeout(() => this.forceSwitch(), 50);
+      },
+    );
   }
 
   private act(action: BattleAction): void {
@@ -243,25 +277,26 @@ export class BattleController {
     this.host.send(v.id, action);
     // Server rejects (e.g. no PP) arrive as toasts; re-open the menu after a beat
     setTimeout(() => {
-      if (this.awaitingServer && this.view === v) {
+      if (this.awaitingServer && this.view === v && !this.aiming) {
         this.awaitingServer = false;
         this.showMenu();
       }
     }, 4000);
   }
 
-  private viewOf(side: "player" | "foe"): CreatureView | null {
+  private viewOf(side: "player" | "foe"): PokemonView | null {
     return side === "player" ? this.mine : this.foe;
   }
 
   private posOf(side: "player" | "foe"): Vector3 {
-    return (side === "player" ? this.minePos : this.foePos).add(new Vector3(0, 0.7, 0));
+    const v = this.viewOf(side);
+    return (side === "player" ? this.minePos : this.foePos).add(new Vector3(0, Math.max(0.5, (v?.height ?? 1) * 0.55), 0));
   }
 
   private async doResult(msg: ServerMessageOf<"BATTLE_RESULT">): Promise<void> {
     if (!this.view || msg.battle.id !== this.view.id) return;
     this.awaitingServer = false;
-    const { ui, db, effects } = this.host;
+    const { ui } = this.host;
 
     for (const ev of msg.events) await this.play(ev, msg.battle);
 
@@ -272,8 +307,6 @@ export class BattleController {
     }
     ui.setFoe(msg.battle.foe, msg.battle.kind === "wild" || msg.battle.kind === "legendary");
     this.refreshMine();
-    void db;
-    void effects;
     this.showMenu();
   }
 
@@ -288,7 +321,7 @@ export class BattleController {
         const attacker = this.viewOf(ev.side);
         const target = ev.side === "player" ? "foe" : "player";
         const color = db.typeColor(ev.type);
-        attacker?.playAttack();
+        attacker?.playAttack(ev.fx === "projectile");
         if (ev.fx === "projectile") await effects.projectile(this.posOf(ev.side), this.posOf(target), color);
         else if (ev.fx === "aura") await effects.aura(this.posOf(ev.side).add(new Vector3(0, -0.5, 0)), color);
         else {
@@ -311,6 +344,10 @@ export class BattleController {
         effects.sparks(this.posOf(ev.side), "#5fd38a", 20);
         await wait(350);
         break;
+      case "status":
+        ui.setStatus(ev.side, ev.status);
+        if (ev.status) await effects.aura(this.posOf(ev.side).add(new Vector3(0, -0.5, 0)), statusColor(ev.status));
+        break;
       case "miss":
         await wait(200);
         break;
@@ -320,7 +357,7 @@ export class BattleController {
       case "faint":
         this.viewOf(ev.side)?.playFaint();
         this.host.sfx("faint");
-        await wait(800);
+        await wait(900);
         break;
       case "switch":
         if (ev.side === "player") {
@@ -336,7 +373,7 @@ export class BattleController {
           }
         } else {
           if (this.ownsFoeView && this.foe) this.host.lib.release(this.foe);
-          this.foe = this.host.lib.acquire(ev.creature.species);
+          this.foe = this.host.lib.acquire(ev.creature.species, { size: ev.creature.size, alpha: ev.creature.alpha });
           this.ownsFoeView = true;
           this.foe.root.position.copyFrom(this.foePos);
           this.foe.anim = "battle";
@@ -345,24 +382,8 @@ export class BattleController {
           await wait(500);
         }
         break;
-      case "capture": {
-        const item = db.items.get(ev.item);
-        const from = this.minePos.add(new Vector3(0, 1.4, 0));
-        const to = this.posOf("foe");
-        await effects.throwOrb(from, to, item?.color ?? "#e04848");
-        this.foe?.setVisible(false);
-        await effects.shakeOrb(new Vector3(this.foePos.x, this.foePos.y + 0.16, this.foePos.z), ev.shakes);
-        effects.hideOrb(ev.success);
-        if (ev.success) {
-          this.host.sfx("capture");
-          ui.say("잡았다!");
-        } else {
-          this.foe?.setVisible(true);
-          ui.say(ev.shakes === 0 ? "앗, 바로 튀어나왔다!" : "아깝다! 조금만 더 하면 잡을 수 있었는데!");
-        }
-        await ui.waitTap(1000);
+      case "capture":
         break;
-      }
       case "exp":
         ui.say(`${ev.name}은(는) 경험치 ${ev.amount}을(를) 얻었다!`);
         await ui.waitTap(900);
@@ -405,11 +426,13 @@ export class BattleController {
     this.host.onEnd(outcome);
   }
 
-  /** Ends presentation immediately (disconnect, zone change). */
+  /** Ends presentation immediately (disconnect, teleport). */
   cleanup(): void {
     const v = this.view;
     this.view = null;
     this.awaitingServer = false;
+    this.aiming = false;
+    this.host.ui.setAiming(false);
     if (this.mine) this.host.lib.release(this.mine);
     this.mine = null;
     if (this.foe) {
@@ -432,9 +455,9 @@ export class BattleController {
     if (!this.view) return;
     if (this.mine) {
       this.mine.root.position.copyFrom(this.minePos);
-      this.mine.update(dt, this.minePos.y);
+      this.mine.update(dt);
     }
-    if (this.foe && this.ownsFoeView) this.foe.update(dt, this.foePos.y);
+    if (this.foe && this.ownsFoeView) this.foe.update(dt);
   }
 
   private popNumber(side: "player" | "foe", amount: number, big: boolean): void {
@@ -453,4 +476,8 @@ export class BattleController {
     document.getElementById("ui")!.appendChild(el);
     setTimeout(() => el.remove(), 520);
   }
+}
+
+export function statusColor(s: string): string {
+  return ({ sleep: "#8a8aa8", freeze: "#8ad8f0", paralysis: "#f2d040", poison: "#a040a0", burn: "#f07030" } as Record<string, string>)[s] ?? "#ffffff";
 }

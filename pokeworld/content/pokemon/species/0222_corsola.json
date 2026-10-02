@@ -1,0 +1,80 @@
+{
+ "id": "corsola",
+ "dexNumber": 222,
+ "name": "Corsola",
+ "types": [
+  "water",
+  "rock"
+ ],
+ "baseStats": {
+  "hp": 65,
+  "atk": 55,
+  "def": 95,
+  "spa": 65,
+  "spd": 95,
+  "spe": 35
+ },
+ "catchRate": 60,
+ "baseExp": 144,
+ "height": 0.6,
+ "weight": 5.0,
+ "baseScale": 1.0,
+ "hitbox": {
+  "width": 0.5,
+  "height": 0.6
+ },
+ "genderRatio": 0.75,
+ "abilities": [
+  "Hustle"
+ ],
+ "modelId": "corsola",
+ "textureId": "corsola",
+ "movement": {
+  "land": false,
+  "water": true,
+  "underwater": true,
+  "air": false
+ },
+ "animations": {
+  "idle": "ground_idle",
+  "walk": "ground_walk",
+  "run": "ground_run",
+  "swim": "water_swim",
+  "fly": "air_fly",
+  "battleIdle": "battle_idle",
+  "attack": "physical",
+  "recoil": "recoil",
+  "faint": "faint",
+  "capture": "capture"
+ },
+ "behavior": {
+  "temperament": "neutral",
+  "speed": 0.6
+ },
+ "learnset": [
+  {
+   "level": 1,
+   "move": "tackle"
+  },
+  {
+   "level": 1,
+   "move": "harden"
+  },
+  {
+   "level": 4,
+   "move": "bubble"
+  },
+  {
+   "level": 10,
+   "move": "rock_throw"
+  },
+  {
+   "level": 16,
+   "move": "bubble_beam"
+  },
+  {
+   "level": 22,
+   "move": "ancient_power"
+  }
+ ]
+}

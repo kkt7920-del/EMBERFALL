@@ -1,0 +1,80 @@
+{
+ "id": "carbink",
+ "dexNumber": 703,
+ "name": "Carbink",
+ "types": [
+  "rock",
+  "fairy"
+ ],
+ "baseStats": {
+  "hp": 50,
+  "atk": 50,
+  "def": 150,
+  "spa": 50,
+  "spd": 150,
+  "spe": 50
+ },
+ "catchRate": 60,
+ "baseExp": 100,
+ "height": 0.3,
+ "weight": 5.7,
+ "baseScale": 1.0,
+ "hitbox": {
+  "width": 0.5,
+  "height": 0.5
+ },
+ "genderRatio": -1,
+ "abilities": [
+  "Clear Body"
+ ],
+ "modelId": "carbink",
+ "textureId": "carbink",
+ "movement": {
+  "land": true,
+  "water": false,
+  "underwater": false,
+  "air": false
+ },
+ "animations": {
+  "idle": "ground_idle",
+  "walk": "ground_walk",
+  "run": "ground_run",
+  "swim": "water_swim",
+  "fly": "air_fly",
+  "battleIdle": "battle_idle",
+  "attack": "physical",
+  "recoil": "recoil",
+  "faint": "faint",
+  "capture": "capture"
+ },
+ "behavior": {
+  "temperament": "neutral",
+  "speed": 0.6
+ },
+ "learnset": [
+  {
+   "level": 1,
+   "move": "tackle"
+  },
+  {
+   "level": 1,
+   "move": "harden"
+  },
+  {
+   "level": 5,
+   "move": "rock_throw"
+  },
+  {
+   "level": 12,
+   "move": "fairy_wind"
+  },
+  {
+   "level": 18,
+   "move": "ancient_power"
+  },
+  {
+   "level": 27,
+   "move": "moonblast"
+  }
+ ]
+}

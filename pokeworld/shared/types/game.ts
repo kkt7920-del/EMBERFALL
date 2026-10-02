@@ -1,11 +1,13 @@
-import type { Stats, TimePeriod, Weather } from "./content";
+import type { StatusCondition, Stats, TimePeriod, Weather } from "./content";
 
 export interface MoveSlot {
   id: string;
   pp: number;
 }
 
-/** A creature owned by a player or present in the wild. Stats derive from species + level + ivs. */
+export type Gender = "male" | "female" | "genderless";
+
+/** A Pokémon owned by a player or present in the wild. Stats derive from species + level + ivs + nature. */
 export interface CreatureInstance {
   uid: string;
   species: string;
@@ -16,7 +18,21 @@ export interface CreatureInstance {
   hp: number;
   ivs: Stats;
   moves: MoveSlot[];
+  gender: Gender;
+  nature: string;
+  ability: string;
+  /** Individual size multiplier (about 0.95..1.05; Alphas are much larger). */
+  size: number;
+  alpha?: boolean;
+  status?: StatusCondition;
+  /** Sleep turns left. */
+  statusTurns?: number;
+  /** Ball it was caught in. */
+  ball?: string;
   caughtAt?: number;
+  /** Where it was met (area name or biome). */
+  origin?: string;
+  metLevel?: number;
 }
 
 export type QuestProgress = Record<string, number>;
@@ -42,6 +58,8 @@ export interface PlayerFlags {
 /** Private state only the owning player receives. */
 export interface PlayerPrivateState {
   party: CreatureInstance[];
+  /** PC storage (Pokémon caught while the party is full). */
+  box: CreatureInstance[];
   boxCount: number;
   inventory: Record<string, number>;
   money: number;
@@ -53,7 +71,7 @@ export interface PlayerPrivateState {
   mounted: boolean;
 }
 
-export type AnimState = "idle" | "walk" | "run" | "swim" | "fly" | "jump";
+export type AnimState = "idle" | "walk" | "run" | "swim" | "dive" | "fly" | "jump";
 
 export interface PlayerSnapshot {
   id: string;
@@ -71,7 +89,10 @@ export interface PlayerSnapshot {
   inBattle: boolean;
 }
 
-export type CreatureAnim = "idle" | "walk" | "run" | "swim" | "fly" | "battle" | "attack" | "faint" | "sleep";
+export type CreatureAnim = "idle" | "walk" | "run" | "swim" | "fly" | "battle" | "attack" | "faint" | "sleep" | "recoil";
+
+/** How a wild Pokémon is currently moving. */
+export type WildMode = "walk" | "swim" | "dive" | "fly";
 
 export interface WildSnapshot {
   id: string;
@@ -83,7 +104,14 @@ export interface WildSnapshot {
   z: number;
   rotY: number;
   anim: CreatureAnim;
-  /** Shiny-style colour variant or a quest-only creature. */
+  mode: WildMode;
+  size: number;
+  alpha: boolean;
+  gender: Gender;
+  hp: number;
+  maxHp: number;
+  status?: StatusCondition;
+  /** Story Pokémon (ruin guardian, legendary). */
   special?: "guardian" | "legendary";
 }
 

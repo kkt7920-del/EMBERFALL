@@ -1,5 +1,6 @@
 import { PROTOCOL_VERSION, TICK_RATE } from "@shared/config/constants";
 import type { ContentDB } from "@shared/data/contentDb";
+import type { VoxelWorld } from "@shared/world/voxelWorld";
 import type { ClientMessage, ServerMessage } from "@shared/protocol/messages";
 import { Simulation } from "@server/sim/Simulation";
 import { IndexedDbStore } from "../save/IndexedDbStore";
@@ -20,12 +21,18 @@ export class LocalConnection implements GameConnection {
   private timer: number | null = null;
   private playerId = "local";
   private closed = false;
+  private voxels: VoxelWorld | undefined;
 
   constructor(private readonly db: ContentDB) {}
 
+  /** Shares the renderer's voxel store with the simulation (no duplicate world generation). */
+  setVoxels(v: VoxelWorld): void {
+    this.voxels = v;
+  }
+
   async connect(name: string): Promise<void> {
     this.onStatus("connecting");
-    const sim = new Simulation({ db: this.db, store: this.store, multiplayer: false, log: (m) => console.debug("[local]", m) });
+    const sim = new Simulation({ db: this.db, store: this.store, multiplayer: false, voxels: this.voxels, log: (m) => console.debug("[local]", m) });
     await sim.init();
     this.sim = sim;
     const player = await sim.join(

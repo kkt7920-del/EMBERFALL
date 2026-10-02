@@ -1,0 +1,80 @@
+{
+ "id": "spearow",
+ "dexNumber": 21,
+ "name": "Spearow",
+ "types": [
+  "normal",
+  "flying"
+ ],
+ "baseStats": {
+  "hp": 40,
+  "atk": 60,
+  "def": 30,
+  "spa": 31,
+  "spd": 31,
+  "spe": 70
+ },
+ "catchRate": 255,
+ "baseExp": 52,
+ "height": 0.3,
+ "weight": 2.0,
+ "baseScale": 1.0,
+ "hitbox": {
+  "width": 0.5,
+  "height": 0.5
+ },
+ "genderRatio": 0.5,
+ "abilities": [
+  "Keen Eye"
+ ],
+ "modelId": "spearow",
+ "textureId": "spearow",
+ "movement": {
+  "land": true,
+  "water": false,
+  "underwater": false,
+  "air": true
+ },
+ "animations": {
+  "idle": "ground_idle",
+  "walk": "ground_walk",
+  "run": "ground_run",
+  "swim": "water_swim",
+  "fly": "air_fly",
+  "battleIdle": "battle_idle",
+  "attack": "physical",
+  "recoil": "recoil",
+  "faint": "faint",
+  "capture": "capture"
+ },
+ "behavior": {
+  "temperament": "aggressive",
+  "speed": 1.2
+ },
+ "learnset": [
+  {
+   "level": 1,
+   "move": "peck"
+  },
+  {
+   "level": 1,
+   "move": "growl"
+  },
+  {
+   "level": 4,
+   "move": "leer"
+  },
+  {
+   "level": 11,
+   "move": "aerial_ace"
+  },
+  {
+   "level": 15,
+   "move": "wing_attack"
+  }
+ ],
+ "evolution": {
+  "to": "fearow",
+  "level": 20
+ }
+}

@@ -1,0 +1,309 @@
+[
+ {
+  "id": "hi_mankey",
+  "species": "mankey",
+  "biomes": [
+   "hills",
+   "mountain"
+  ],
+  "level": {
+   "min": 8,
+   "max": 13
+  },
+  "weight": 8,
+  "rarity": "common",
+  "alphaChance": 0.012
+ },
+ {
+  "id": "hi_geodude",
+  "species": "geodude",
+  "biomes": [
+   "hills",
+   "mountain"
+  ],
+  "level": {
+   "min": 8,
+   "max": 14
+  },
+  "weight": 8,
+  "rarity": "common",
+  "alphaChance": 0.012
+ },
+ {
+  "id": "hi_sandshrew",
+  "species": "sandshrew",
+  "biomes": [
+   "hills",
+   "beach"
+  ],
+  "level": {
+   "min": 6,
+   "max": 11
+  },
+  "weight": 6,
+  "rarity": "common",
+  "alphaChance": 0.012
+ },
+ {
+  "id": "hi_machop",
+  "species": "machop",
+  "biomes": [
+   "hills",
+   "mountain"
+  ],
+  "level": {
+   "min": 10,
+   "max": 15
+  },
+  "weight": 5,
+  "rarity": "common",
+  "alphaChance": 0.012
+ },
+ {
+  "id": "hi_cubone",
+  "species": "cubone",
+  "biomes": [
+   "hills",
+   "ruins"
+  ],
+  "level": {
+   "min": 8,
+   "max": 12
+  },
+  "weight": 3,
+  "rarity": "uncommon",
+  "alphaChance": 0.012
+ },
+ {
+  "id": "hi_clefairy",
+  "species": "clefairy",
+  "biomes": [
+   "hills",
+   "mountain"
+  ],
+  "level": {
+   "min": 10,
+   "max": 14
+  },
+  "weight": 2.5,
+  "rarity": "uncommon",
+  "alphaChance": 0.012,
+  "time": [
+   "night"
+  ]
+ },
+ {
+  "id": "mo_graveler",
+  "species": "graveler",
+  "biomes": [
+   "mountain"
+  ],
+  "level": {
+   "min": 20,
+   "max": 26
+  },
+  "weight": 4,
+  "rarity": "uncommon",
+  "alphaChance": 0.012
+ },
+ {
+  "id": "mo_onix",
+  "species": "onix",
+  "biomes": [
+   "mountain",
+   "cave",
+   "mine"
+  ],
+  "level": {
+   "min": 14,
+   "max": 20
+  },
+  "weight": 2,
+  "rarity": "uncommon",
+  "alphaChance": 0.012
+ },
+ {
+  "id": "mo_pidgeotto",
+  "species": "pidgeotto",
+  "biomes": [
+   "mountain",
+   "hills"
+  ],
+  "level": {
+   "min": 16,
+   "max": 22
+  },
+  "weight": 4,
+  "rarity": "common",
+  "alphaChance": 0.012,
+  "layer": "air"
+ },
+ {
+  "id": "mo_fearow",
+  "species": "fearow",
+  "biomes": [
+   "mountain"
+  ],
+  "level": {
+   "min": 20,
+   "max": 26
+  },
+  "weight": 3,
+  "rarity": "uncommon",
+  "alphaChance": 0.012,
+  "layer": "air"
+ },
+ {
+  "id": "mo_gible",
+  "species": "gible",
+  "biomes": [
+   "mountain",
+   "deep_cave"
+  ],
+  "level": {
+   "min": 18,
+   "max": 24
+  },
+  "weight": 0.5,
+  "rarity": "very_rare"
+ },
+ {
+  "id": "sn_swinub",
+  "species": "swinub",
+  "biomes": [
+   "snow_mountain"
+  ],
+  "level": {
+   "min": 20,
+   "max": 26
+  },
+  "weight": 10,
+  "rarity": "common",
+  "alphaChance": 0.012
+ },
+ {
+  "id": "sn_sneasel",
+  "species": "sneasel",
+  "biomes": [
+   "snow_mountain"
+  ],
+  "level": {
+   "min": 22,
+   "max": 28
+  },
+  "weight": 4,
+  "rarity": "uncommon",
+  "alphaChance": 0.012,
+  "time": [
+   "dusk",
+   "night"
+  ]
+ },
+ {
+  "id": "sn_articuno",
+  "species": "articuno",
+  "biomes": [
+   "snow_mountain"
+  ],
+  "level": {
+   "min": 45,
+   "max": 45
+  },
+  "weight": 0.12,
+  "rarity": "very_rare",
+  "layer": "air",
+  "altitude": {
+   "min": 175,
+   "max": 256
+  },
+  "weather": [
+   "fog",
+   "rain"
+  ]
+ },
+ {
+  "id": "vo_slugma",
+  "species": "slugma",
+  "biomes": [
+   "volcano"
+  ],
+  "level": {
+   "min": 18,
+   "max": 24
+  },
+  "weight": 10,
+  "rarity": "common",
+  "alphaChance": 0.012
+ },
+ {
+  "id": "vo_vulpix",
+  "species": "vulpix",
+  "biomes": [
+   "volcano"
+  ],
+  "level": {
+   "min": 16,
+   "max": 22
+  },
+  "weight": 6,
+  "rarity": "common",
+  "alphaChance": 0.012
+ },
+ {
+  "id": "vo_ponyta",
+  "species": "ponyta",
+  "biomes": [
+   "volcano"
+  ],
+  "level": {
+   "min": 18,
+   "max": 24
+  },
+  "weight": 5,
+  "rarity": "common",
+  "alphaChance": 0.012
+ },
+ {
+  "id": "vo_growlithe",
+  "species": "growlithe",
+  "biomes": [
+   "volcano"
+  ],
+  "level": {
+   "min": 18,
+   "max": 24
+  },
+  "weight": 4,
+  "rarity": "common",
+  "alphaChance": 0.012
+ },
+ {
+  "id": "vo_magmar",
+  "species": "magmar",
+  "biomes": [
+   "volcano"
+  ],
+  "level": {
+   "min": 24,
+   "max": 30
+  },
+  "weight": 1.5,
+  "rarity": "rare",
+  "subBiomes": [
+   "crater"
+  ]
+ },
+ {
+  "id": "vo_ninetales",
+  "species": "ninetales",
+  "biomes": [
+   "volcano"
+  ],
+  "level": {
+   "min": 28,
+   "max": 32
+  },
+  "weight": 0.4,
+  "rarity": "very_rare"
+ }
+]

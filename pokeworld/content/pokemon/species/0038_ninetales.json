@@ -1,0 +1,71 @@
+{
+ "id": "ninetales",
+ "dexNumber": 38,
+ "name": "Ninetales",
+ "types": [
+  "fire"
+ ],
+ "baseStats": {
+  "hp": 73,
+  "atk": 76,
+  "def": 75,
+  "spa": 81,
+  "spd": 100,
+  "spe": 100
+ },
+ "catchRate": 75,
+ "baseExp": 177,
+ "height": 1.1,
+ "weight": 19.9,
+ "baseScale": 1.0,
+ "hitbox": {
+  "width": 1.0,
+  "height": 1.1
+ },
+ "genderRatio": 0.75,
+ "abilities": [
+  "Flash Fire"
+ ],
+ "modelId": "ninetales",
+ "textureId": "ninetales",
+ "movement": {
+  "land": true,
+  "water": false,
+  "underwater": false,
+  "air": false
+ },
+ "animations": {
+  "idle": "ground_idle",
+  "walk": "ground_walk",
+  "run": "ground_run",
+  "swim": "water_swim",
+  "fly": "air_fly",
+  "battleIdle": "battle_idle",
+  "attack": "physical",
+  "recoil": "recoil",
+  "faint": "faint",
+  "capture": "capture"
+ },
+ "behavior": {
+  "temperament": "neutral",
+  "speed": 1.2
+ },
+ "learnset": [
+  {
+   "level": 1,
+   "move": "ember"
+  },
+  {
+   "level": 1,
+   "move": "quick_attack"
+  },
+  {
+   "level": 1,
+   "move": "flamethrower"
+  },
+  {
+   "level": 1,
+   "move": "psybeam"
+  }
+ ]
+}

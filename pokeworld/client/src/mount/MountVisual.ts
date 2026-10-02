@@ -1,66 +1,72 @@
 import { Vector3 } from "@babylonjs/core/Maths/math.vector";
 import { lerpAngle } from "@shared/math/vec";
 import type { AnimState, CreatureAnim } from "@shared/types/game";
-import type { CreatureLibrary, CreatureView } from "../pokemon/CreatureLibrary";
-import type { ClientTerrain } from "../world/ClientTerrain";
+import { Block } from "@shared/world/blocks";
+import type { VoxelWorld } from "@shared/world/voxelWorld";
+import type { PokemonLibrary } from "../pokemon/PokemonLibrary";
+import type { PokemonView } from "../pokemon/PokemonView";
 
-const ANIM: Record<AnimState, CreatureAnim> = { idle: "idle", walk: "walk", run: "run", swim: "swim", fly: "fly", jump: "run" };
+const ANIM: Record<AnimState, CreatureAnim> = { idle: "idle", walk: "walk", run: "run", swim: "swim", dive: "swim", fly: "fly", jump: "run" };
 
 /**
- * Riding and following. The ridden creature is drawn under the trainer; the
- * lead creature otherwise trots behind them ("travel with your partner").
+ * Riding and following. The ridden Pokémon is drawn under the trainer;
+ * otherwise the lead Pokémon walks behind them in the world.
  */
 export class Companion {
-  private view: CreatureView | null = null;
+  private view: PokemonView | null = null;
   private species: string | null = null;
   private mode: "follow" | "mount" = "follow";
+  private size = 1;
 
   constructor(
-    private readonly lib: CreatureLibrary,
-    private readonly terrain: ClientTerrain,
+    private readonly lib: PokemonLibrary,
+    private readonly world: VoxelWorld,
   ) {}
 
   /** Seat height for the rider above the ground. */
   get seat(): number {
-    return this.mode === "mount" && this.view ? 0.62 * this.view.scale : 0;
+    return this.mode === "mount" && this.view ? Math.max(0.5, this.view.height * 0.62) : 0;
   }
 
-  set(species: string | null, mode: "follow" | "mount"): void {
-    if (species === this.species && mode === this.mode) return;
-    if (this.view && species !== this.species) {
+  set(species: string | null, mode: "follow" | "mount", size = 1): void {
+    if (species === this.species && mode === this.mode && size === this.size) return;
+    if (this.view && (species !== this.species || size !== this.size)) {
       this.lib.release(this.view);
       this.view = null;
     }
     this.species = species;
     this.mode = mode;
-    if (species && !this.view) this.view = this.lib.acquire(species);
+    this.size = size;
+    if (species && !this.view) this.view = this.lib.acquire(species, { size });
   }
 
   hide(on: boolean): void {
     this.view?.setVisible(!on);
   }
 
-  get current(): CreatureView | null {
+  get current(): PokemonView | null {
     return this.view;
   }
 
-  update(dt: number, zone: string, player: Vector3, rotY: number, anim: AnimState): void {
+  update(dt: number, player: Vector3, rotY: number, anim: AnimState): void {
     const v = this.view;
     if (!v) return;
-    const level = this.terrain.waterLevel(zone);
     if (this.mode === "mount") {
       v.root.position.copyFrom(player);
       v.root.rotation.y = rotY;
       v.anim = ANIM[anim];
-      v.update(dt, Math.max(this.terrain.height(zone, player.x, player.z), level ?? -Infinity));
+      v.mode = anim === "fly" ? "fly" : anim === "swim" ? "swim" : "walk";
+      v.update(dt);
       return;
     }
 
-    const flyer = v.species.behavior.movement.includes("fly") && !v.species.behavior.movement.includes("walk");
-    const behind = new Vector3(player.x - Math.sin(rotY) * 2 + Math.cos(rotY) * 0.9, 0, player.z - Math.cos(rotY) * 2 - Math.sin(rotY) * 0.9);
+    const sp = v.species.movement;
+    const flyer = sp.air && !sp.land;
+    const back = 1.4 + v.width;
+    const behind = new Vector3(player.x - Math.sin(rotY) * back + Math.cos(rotY) * 0.9, 0, player.z - Math.cos(rotY) * back - Math.sin(rotY) * 0.9);
     const pos = v.root.position;
-    const d = Vector3.Distance(new Vector3(pos.x, 0, pos.z), new Vector3(behind.x, 0, behind.z));
-    if (d > 25 || pos.lengthSquared() === 0) pos.set(behind.x, player.y, behind.z);
+    const d = Math.hypot(pos.x - behind.x, pos.z - behind.z);
+    if (d > 24 || pos.lengthSquared() === 0 || Math.abs(pos.y - player.y) > 12) pos.set(behind.x, player.y, behind.z);
 
     let moving = false;
     if (d > 0.6) {
@@ -76,19 +82,24 @@ export class Companion {
       v.root.rotation.y = lerpAngle(v.root.rotation.y, rotY, Math.min(1, dt * 3));
     }
 
-    const ground = this.terrain.ground(zone, pos.x, pos.z, 0.3);
-    const water = level !== null && level - this.terrain.height(zone, pos.x, pos.z) > 0.8;
+    const floor = this.world.floorNear(pos.x, Math.max(pos.y, player.y) + 1, pos.z, 1, 2, 10) ?? player.y;
+    const water = this.world.block(pos.x, floor + 0.2, pos.z) === Block.WATER;
     if (flyer) {
-      pos.y += (Math.max(ground, level ?? ground) + 1.6 - pos.y) * Math.min(1, dt * 5);
+      pos.y += (floor + 1.6 - pos.y) * Math.min(1, dt * 5);
       v.anim = "fly";
-    } else if (water) {
-      pos.y += (level! - 0.45 - pos.y) * Math.min(1, dt * 6);
-      v.anim = "swim";
+      v.mode = "fly";
+    } else if (water && sp.water) {
+      let surface = floor;
+      while (this.world.block(pos.x, surface + 1, pos.z) === Block.WATER) surface++;
+      pos.y += (surface + 0.5 - pos.y) * Math.min(1, dt * 6);
+      v.anim = moving ? "swim" : "idle";
+      v.mode = "swim";
     } else {
-      pos.y += (ground - pos.y) * Math.min(1, dt * 12);
+      pos.y += (floor - pos.y) * Math.min(1, dt * 12);
       v.anim = moving ? (d > 3 ? "run" : "walk") : "idle";
+      v.mode = "walk";
     }
-    v.update(dt, Math.max(ground, level ?? -Infinity));
+    v.update(dt);
   }
 
   dispose(): void {

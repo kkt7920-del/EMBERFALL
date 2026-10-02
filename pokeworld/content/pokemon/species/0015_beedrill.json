@@ -1,0 +1,76 @@
+{
+ "id": "beedrill",
+ "dexNumber": 15,
+ "name": "Beedrill",
+ "types": [
+  "bug",
+  "poison"
+ ],
+ "baseStats": {
+  "hp": 65,
+  "atk": 90,
+  "def": 40,
+  "spa": 45,
+  "spd": 80,
+  "spe": 75
+ },
+ "catchRate": 45,
+ "baseExp": 178,
+ "height": 1.0,
+ "weight": 29.5,
+ "baseScale": 1.0,
+ "hitbox": {
+  "width": 0.8,
+  "height": 1.0
+ },
+ "genderRatio": 0.5,
+ "abilities": [
+  "Swarm"
+ ],
+ "modelId": "beedrill",
+ "textureId": "beedrill",
+ "movement": {
+  "land": false,
+  "water": false,
+  "underwater": false,
+  "air": true
+ },
+ "animations": {
+  "idle": "ground_idle",
+  "walk": "ground_walk",
+  "run": "ground_run",
+  "swim": "water_swim",
+  "fly": "air_fly",
+  "battleIdle": "battle_idle",
+  "attack": "physical",
+  "recoil": "recoil",
+  "faint": "faint",
+  "capture": "capture"
+ },
+ "behavior": {
+  "temperament": "aggressive",
+  "speed": 1.3
+ },
+ "learnset": [
+  {
+   "level": 1,
+   "move": "fury_cutter"
+  },
+  {
+   "level": 1,
+   "move": "poison_sting"
+  },
+  {
+   "level": 13,
+   "move": "bug_bite"
+  },
+  {
+   "level": 20,
+   "move": "sludge"
+  },
+  {
+   "level": 26,
+   "move": "leech_life"
+  }
+ ]
+}

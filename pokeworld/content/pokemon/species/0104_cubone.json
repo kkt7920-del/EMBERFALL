@@ -1,0 +1,79 @@
+{
+ "id": "cubone",
+ "dexNumber": 104,
+ "name": "Cubone",
+ "types": [
+  "ground"
+ ],
+ "baseStats": {
+  "hp": 50,
+  "atk": 50,
+  "def": 95,
+  "spa": 40,
+  "spd": 50,
+  "spe": 35
+ },
+ "catchRate": 190,
+ "baseExp": 64,
+ "height": 0.4,
+ "weight": 6.5,
+ "baseScale": 1.0,
+ "hitbox": {
+  "width": 0.5,
+  "height": 0.5
+ },
+ "genderRatio": 0.5,
+ "abilities": [
+  "Rock Head"
+ ],
+ "modelId": "cubone",
+ "textureId": "cubone",
+ "movement": {
+  "land": true,
+  "water": false,
+  "underwater": false,
+  "air": false
+ },
+ "animations": {
+  "idle": "ground_idle",
+  "walk": "ground_walk",
+  "run": "ground_run",
+  "swim": "water_swim",
+  "fly": "air_fly",
+  "battleIdle": "battle_idle",
+  "attack": "physical",
+  "recoil": "recoil",
+  "faint": "faint",
+  "capture": "capture"
+ },
+ "behavior": {
+  "temperament": "timid",
+  "speed": 0.9
+ },
+ "learnset": [
+  {
+   "level": 1,
+   "move": "growl"
+  },
+  {
+   "level": 1,
+   "move": "mud_slap"
+  },
+  {
+   "level": 7,
+   "move": "tail_whip"
+  },
+  {
+   "level": 11,
+   "move": "headbutt"
+  },
+  {
+   "level": 17,
+   "move": "bulldoze"
+  },
+  {
+   "level": 23,
+   "move": "dig"
+  }
+ ]
+}

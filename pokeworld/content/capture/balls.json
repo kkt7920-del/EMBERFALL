@@ -1,0 +1,80 @@
+{
+ "poke_ball": {
+  "baseMultiplier": 1.0
+ },
+ "great_ball": {
+  "baseMultiplier": 1.5
+ },
+ "ultra_ball": {
+  "baseMultiplier": 2.0
+ },
+ "quick_ball": {
+  "baseMultiplier": 1.0,
+  "conditions": [
+   {
+    "when": "firstTurn",
+    "maxTurn": 1,
+    "multiplier": 5.0
+   }
+  ]
+ },
+ "dive_ball": {
+  "baseMultiplier": 1.0,
+  "conditions": [
+   {
+    "when": "water",
+    "multiplier": 3.5
+   }
+  ]
+ },
+ "dusk_ball": {
+  "baseMultiplier": 1.0,
+  "conditions": [
+   {
+    "when": "night",
+    "multiplier": 3.0
+   },
+   {
+    "when": "dark",
+    "maxLight": 7,
+    "multiplier": 3.0
+   },
+   {
+    "when": "cave",
+    "multiplier": 3.0
+   }
+  ]
+ },
+ "net_ball": {
+  "baseMultiplier": 1.0,
+  "conditions": [
+   {
+    "when": "targetType",
+    "types": [
+     "water",
+     "bug"
+    ],
+    "multiplier": 3.5
+   }
+  ]
+ },
+ "timer_ball": {
+  "baseMultiplier": 1.0,
+  "conditions": [
+   {
+    "when": "turnScaling",
+    "perTurn": 0.3,
+    "max": 4.0
+   }
+  ]
+ },
+ "repeat_ball": {
+  "baseMultiplier": 1.0,
+  "conditions": [
+   {
+    "when": "previouslyCaught",
+    "multiplier": 3.5
+   }
+  ]
+ }
+}

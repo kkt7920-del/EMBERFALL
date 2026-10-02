@@ -34,7 +34,8 @@ export default defineConfig({
     chunkSizeWarningLimit: 4000,
     rollupOptions: {
       output: {
-        manualChunks: (id) => (id.includes("@babylonjs") ? "babylon" : undefined),
+        // Rollup splits on its own: core code the game needs stays in the main chunk, the lazily
+        // loaded glTF loader (and the core parts only it uses) become a separate chunk
       },
     },
   },

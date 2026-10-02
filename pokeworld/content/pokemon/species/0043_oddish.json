@@ -1,0 +1,88 @@
+{
+ "id": "oddish",
+ "dexNumber": 43,
+ "name": "Oddish",
+ "types": [
+  "grass",
+  "poison"
+ ],
+ "baseStats": {
+  "hp": 45,
+  "atk": 50,
+  "def": 55,
+  "spa": 75,
+  "spd": 65,
+  "spe": 30
+ },
+ "catchRate": 255,
+ "baseExp": 64,
+ "height": 0.5,
+ "weight": 5.4,
+ "baseScale": 1.0,
+ "hitbox": {
+  "width": 0.5,
+  "height": 0.5
+ },
+ "genderRatio": 0.5,
+ "abilities": [
+  "Chlorophyll"
+ ],
+ "modelId": "oddish",
+ "textureId": "oddish",
+ "movement": {
+  "land": true,
+  "water": false,
+  "underwater": false,
+  "air": false
+ },
+ "animations": {
+  "idle": "ground_idle",
+  "walk": "ground_walk",
+  "run": "ground_run",
+  "swim": "water_swim",
+  "fly": "air_fly",
+  "battleIdle": "battle_idle",
+  "attack": "physical",
+  "recoil": "recoil",
+  "faint": "faint",
+  "capture": "capture"
+ },
+ "behavior": {
+  "temperament": "timid",
+  "speed": 0.7
+ },
+ "learnset": [
+  {
+   "level": 1,
+   "move": "absorb"
+  },
+  {
+   "level": 1,
+   "move": "growl"
+  },
+  {
+   "level": 4,
+   "move": "acid"
+  },
+  {
+   "level": 8,
+   "move": "sleep_powder"
+  },
+  {
+   "level": 8,
+   "move": "poison_powder"
+  },
+  {
+   "level": 14,
+   "move": "mega_drain"
+  },
+  {
+   "level": 20,
+   "move": "moonblast"
+  }
+ ],
+ "evolution": {
+  "to": "gloom",
+  "level": 21
+ }
+}

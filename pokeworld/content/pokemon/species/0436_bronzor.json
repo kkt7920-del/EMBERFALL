@@ -1,0 +1,76 @@
+{
+ "id": "bronzor",
+ "dexNumber": 436,
+ "name": "Bronzor",
+ "types": [
+  "steel",
+  "psychic"
+ ],
+ "baseStats": {
+  "hp": 57,
+  "atk": 24,
+  "def": 86,
+  "spa": 24,
+  "spd": 86,
+  "spe": 23
+ },
+ "catchRate": 255,
+ "baseExp": 60,
+ "height": 0.5,
+ "weight": 60.5,
+ "baseScale": 1.0,
+ "hitbox": {
+  "width": 0.5,
+  "height": 0.5
+ },
+ "genderRatio": -1,
+ "abilities": [
+  "Levitate"
+ ],
+ "modelId": "bronzor",
+ "textureId": "bronzor",
+ "movement": {
+  "land": false,
+  "water": false,
+  "underwater": false,
+  "air": true
+ },
+ "animations": {
+  "idle": "ground_idle",
+  "walk": "ground_walk",
+  "run": "ground_run",
+  "swim": "water_swim",
+  "fly": "air_fly",
+  "battleIdle": "battle_idle",
+  "attack": "physical",
+  "recoil": "recoil",
+  "faint": "faint",
+  "capture": "capture"
+ },
+ "behavior": {
+  "temperament": "neutral",
+  "speed": 0.6
+ },
+ "learnset": [
+  {
+   "level": 1,
+   "move": "tackle"
+  },
+  {
+   "level": 1,
+   "move": "confusion"
+  },
+  {
+   "level": 5,
+   "move": "iron_defense"
+  },
+  {
+   "level": 11,
+   "move": "psybeam"
+  },
+  {
+   "level": 19,
+   "move": "ancient_power"
+  }
+ ]
+}

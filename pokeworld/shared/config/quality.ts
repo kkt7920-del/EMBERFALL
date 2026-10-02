@@ -6,8 +6,10 @@ export interface QualitySettings {
   preset: QualityPresetId | "custom";
   /** Fraction of native resolution actually rendered. */
   renderScale: number;
-  /** Chunks loaded around the player: 1 => 3x3, 2 => 5x5, 3 => 7x7. */
-  chunkRadius: 1 | 2 | 3;
+  /** Full voxel chunks (32 m) around the player: 2 => 5x5, 3 => 7x7. */
+  chunkRadius: 2 | 3;
+  /** Far-LOD tiles (128 m) drawn around the player's tile: 1 => 3x3, 2 => 5x5, 3 => 7x7. */
+  lodTiles: 1 | 2 | 3;
   shadows: ShadowQuality;
   /** Ring (in chunks) within which grass/flowers are drawn. */
   vegetationRadius: 0 | 1 | 2;
@@ -23,7 +25,8 @@ export interface QualitySettings {
 export const QUALITY_PRESETS: Record<QualityPresetId, Omit<QualitySettings, "preset" | "showFps">> = {
   low: {
     renderScale: 0.75,
-    chunkRadius: 1,
+    chunkRadius: 2,
+    lodTiles: 1,
     shadows: "off",
     vegetationRadius: 0,
     particleBudget: 150,
@@ -33,6 +36,7 @@ export const QUALITY_PRESETS: Record<QualityPresetId, Omit<QualitySettings, "pre
   medium: {
     renderScale: 0.9,
     chunkRadius: 2,
+    lodTiles: 2,
     shadows: "low",
     vegetationRadius: 1,
     particleBudget: 400,
@@ -42,6 +46,7 @@ export const QUALITY_PRESETS: Record<QualityPresetId, Omit<QualitySettings, "pre
   high: {
     renderScale: 1,
     chunkRadius: 3,
+    lodTiles: 3,
     shadows: "medium",
     vegetationRadius: 2,
     particleBudget: 1200,

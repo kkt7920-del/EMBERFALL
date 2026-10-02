@@ -1,0 +1,80 @@
+{
+ "id": "swinub",
+ "dexNumber": 220,
+ "name": "Swinub",
+ "types": [
+  "ice",
+  "ground"
+ ],
+ "baseStats": {
+  "hp": 50,
+  "atk": 50,
+  "def": 40,
+  "spa": 30,
+  "spd": 30,
+  "spe": 50
+ },
+ "catchRate": 225,
+ "baseExp": 50,
+ "height": 0.4,
+ "weight": 6.5,
+ "baseScale": 1.0,
+ "hitbox": {
+  "width": 0.5,
+  "height": 0.5
+ },
+ "genderRatio": 0.5,
+ "abilities": [
+  "Oblivious"
+ ],
+ "modelId": "swinub",
+ "textureId": "swinub",
+ "movement": {
+  "land": true,
+  "water": false,
+  "underwater": false,
+  "air": false
+ },
+ "animations": {
+  "idle": "ground_idle",
+  "walk": "ground_walk",
+  "run": "ground_run",
+  "swim": "water_swim",
+  "fly": "air_fly",
+  "battleIdle": "battle_idle",
+  "attack": "physical",
+  "recoil": "recoil",
+  "faint": "faint",
+  "capture": "capture"
+ },
+ "behavior": {
+  "temperament": "timid",
+  "speed": 0.8
+ },
+ "learnset": [
+  {
+   "level": 1,
+   "move": "tackle"
+  },
+  {
+   "level": 1,
+   "move": "mud_slap"
+  },
+  {
+   "level": 5,
+   "move": "powder_snow"
+  },
+  {
+   "level": 11,
+   "move": "ice_shard"
+  },
+  {
+   "level": 17,
+   "move": "bulldoze"
+  },
+  {
+   "level": 25,
+   "move": "take_down"
+  }
+ ]
+}

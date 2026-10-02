@@ -1,0 +1,389 @@
+[
+ {
+  "id": "be_krabby",
+  "species": "krabby",
+  "biomes": [
+   "beach",
+   "island"
+  ],
+  "level": {
+   "min": 6,
+   "max": 11
+  },
+  "weight": 14,
+  "rarity": "common",
+  "alphaChance": 0.012
+ },
+ {
+  "id": "be_shellder",
+  "species": "shellder",
+  "biomes": [
+   "beach",
+   "coast"
+  ],
+  "level": {
+   "min": 6,
+   "max": 11
+  },
+  "weight": 6,
+  "rarity": "common",
+  "alphaChance": 0.012
+ },
+ {
+  "id": "be_staryu",
+  "species": "staryu",
+  "biomes": [
+   "beach",
+   "coast"
+  ],
+  "level": {
+   "min": 8,
+   "max": 12
+  },
+  "weight": 8,
+  "rarity": "common",
+  "alphaChance": 0.012,
+  "time": [
+   "dusk",
+   "night"
+  ]
+ },
+ {
+  "id": "be_wingull",
+  "species": "wingull",
+  "biomes": [
+   "beach",
+   "coast",
+   "island",
+   "shallow_sea"
+  ],
+  "level": {
+   "min": 6,
+   "max": 11
+  },
+  "weight": 12,
+  "rarity": "common",
+  "alphaChance": 0.012,
+  "layer": "air"
+ },
+ {
+  "id": "co_tentacool",
+  "species": "tentacool",
+  "biomes": [
+   "coast",
+   "shallow_sea",
+   "open_ocean"
+  ],
+  "level": {
+   "min": 8,
+   "max": 16
+  },
+  "weight": 12,
+  "rarity": "common",
+  "alphaChance": 0.012,
+  "layer": "water_surface"
+ },
+ {
+  "id": "co_horsea",
+  "species": "horsea",
+  "biomes": [
+   "coast",
+   "shallow_sea"
+  ],
+  "level": {
+   "min": 8,
+   "max": 14
+  },
+  "weight": 8,
+  "rarity": "common",
+  "alphaChance": 0.012,
+  "layer": "underwater"
+ },
+ {
+  "id": "co_magikarp",
+  "species": "magikarp",
+  "biomes": [
+   "coast",
+   "shallow_sea"
+  ],
+  "level": {
+   "min": 5,
+   "max": 12
+  },
+  "weight": 7,
+  "rarity": "common",
+  "alphaChance": 0.012,
+  "layer": "water_surface"
+ },
+ {
+  "id": "ss_corsola",
+  "species": "corsola",
+  "biomes": [
+   "shallow_sea"
+  ],
+  "level": {
+   "min": 12,
+   "max": 18
+  },
+  "weight": 6,
+  "rarity": "common",
+  "alphaChance": 0.012,
+  "layer": "underwater",
+  "subBiomes": [
+   "reef"
+  ]
+ },
+ {
+  "id": "ss_staryu",
+  "species": "staryu",
+  "biomes": [
+   "shallow_sea"
+  ],
+  "level": {
+   "min": 12,
+   "max": 18
+  },
+  "weight": 5,
+  "rarity": "common",
+  "alphaChance": 0.012,
+  "layer": "underwater"
+ },
+ {
+  "id": "ss_shellder",
+  "species": "shellder",
+  "biomes": [
+   "shallow_sea",
+   "cold_ocean"
+  ],
+  "level": {
+   "min": 12,
+   "max": 18
+  },
+  "weight": 5,
+  "rarity": "common",
+  "alphaChance": 0.012,
+  "layer": "underwater"
+ },
+ {
+  "id": "ss_mantine",
+  "species": "mantine",
+  "biomes": [
+   "shallow_sea",
+   "open_ocean"
+  ],
+  "level": {
+   "min": 18,
+   "max": 24
+  },
+  "weight": 1,
+  "rarity": "rare",
+  "layer": "water_surface"
+ },
+ {
+  "id": "oo_tentacruel",
+  "species": "tentacruel",
+  "biomes": [
+   "open_ocean",
+   "deep_ocean"
+  ],
+  "level": {
+   "min": 22,
+   "max": 30
+  },
+  "weight": 5,
+  "rarity": "common",
+  "alphaChance": 0.012,
+  "layer": "water_surface"
+ },
+ {
+  "id": "oo_wailmer",
+  "species": "wailmer",
+  "biomes": [
+   "open_ocean",
+   "cold_ocean",
+   "deep_ocean"
+  ],
+  "level": {
+   "min": 18,
+   "max": 26
+  },
+  "weight": 5,
+  "rarity": "common",
+  "alphaChance": 0.012,
+  "layer": "water_surface"
+ },
+ {
+  "id": "oo_gyarados",
+  "species": "gyarados",
+  "biomes": [
+   "open_ocean",
+   "deep_ocean"
+  ],
+  "level": {
+   "min": 24,
+   "max": 30
+  },
+  "weight": 0.8,
+  "rarity": "rare",
+  "layer": "water_surface"
+ },
+ {
+  "id": "oo_lapras",
+  "species": "lapras",
+  "biomes": [
+   "open_ocean",
+   "cold_ocean"
+  ],
+  "level": {
+   "min": 25,
+   "max": 30
+  },
+  "weight": 0.35,
+  "rarity": "very_rare",
+  "layer": "water_surface"
+ },
+ {
+  "id": "oo_chinchou",
+  "species": "chinchou",
+  "biomes": [
+   "open_ocean",
+   "deep_ocean",
+   "abyss"
+  ],
+  "level": {
+   "min": 18,
+   "max": 26
+  },
+  "weight": 5,
+  "rarity": "common",
+  "alphaChance": 0.012,
+  "layer": "underwater"
+ },
+ {
+  "id": "co_seel",
+  "species": "seel",
+  "biomes": [
+   "cold_ocean"
+  ],
+  "level": {
+   "min": 18,
+   "max": 24
+  },
+  "weight": 10,
+  "rarity": "common",
+  "alphaChance": 0.012,
+  "layer": "water_surface"
+ },
+ {
+  "id": "co_dewgong",
+  "species": "dewgong",
+  "biomes": [
+   "cold_ocean"
+  ],
+  "level": {
+   "min": 30,
+   "max": 34
+  },
+  "weight": 2,
+  "rarity": "uncommon",
+  "alphaChance": 0.012,
+  "layer": "water_surface"
+ },
+ {
+  "id": "co_lapras",
+  "species": "lapras",
+  "biomes": [
+   "cold_ocean"
+  ],
+  "level": {
+   "min": 25,
+   "max": 30
+  },
+  "weight": 1,
+  "rarity": "rare",
+  "layer": "water_surface"
+ },
+ {
+  "id": "dp_relicanth",
+  "species": "relicanth",
+  "biomes": [
+   "deep_ocean",
+   "abyss"
+  ],
+  "level": {
+   "min": 26,
+   "max": 32
+  },
+  "weight": 1.2,
+  "rarity": "rare",
+  "layer": "underwater"
+ },
+ {
+  "id": "dp_chinchou",
+  "species": "chinchou",
+  "biomes": [
+   "abyss"
+  ],
+  "level": {
+   "min": 28,
+   "max": 34
+  },
+  "weight": 8,
+  "rarity": "common",
+  "alphaChance": 0.012,
+  "layer": "underwater"
+ },
+ {
+  "id": "ship_shellder",
+  "species": "shellder",
+  "biomes": [
+   "open_ocean"
+  ],
+  "level": {
+   "min": 16,
+   "max": 22
+  },
+  "weight": 6,
+  "rarity": "common",
+  "alphaChance": 0.012,
+  "layer": "underwater",
+  "structure": {
+   "id": "old_wreck",
+   "radius": 30
+  }
+ },
+ {
+  "id": "sunken_relicanth",
+  "species": "relicanth",
+  "biomes": [
+   "deep_ocean",
+   "abyss"
+  ],
+  "level": {
+   "min": 28,
+   "max": 34
+  },
+  "weight": 4,
+  "rarity": "uncommon",
+  "alphaChance": 0.012,
+  "layer": "underwater",
+  "structure": {
+   "id": "sunken_ruins",
+   "radius": 40
+  }
+ },
+ {
+  "id": "is_rattata",
+  "species": "rattata",
+  "biomes": [
+   "island"
+  ],
+  "level": {
+   "min": 10,
+   "max": 14
+  },
+  "weight": 6,
+  "rarity": "common",
+  "alphaChance": 0.012
+ }
+]

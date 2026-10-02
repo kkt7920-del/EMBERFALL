@@ -1,0 +1,5 @@
+{
+ "format": 1,
+ "description": "Pokémon model bindings. Map a species modelId to files under content/pokemon/. Species without an entry show MISSING_POKEMON_ASSET. Only add files you are allowed to use.",
+ "models": {}
+}

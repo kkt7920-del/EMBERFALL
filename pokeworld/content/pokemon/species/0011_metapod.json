@@ -1,0 +1,71 @@
+{
+ "id": "metapod",
+ "dexNumber": 11,
+ "name": "Metapod",
+ "types": [
+  "bug"
+ ],
+ "baseStats": {
+  "hp": 50,
+  "atk": 20,
+  "def": 55,
+  "spa": 25,
+  "spd": 25,
+  "spe": 30
+ },
+ "catchRate": 120,
+ "baseExp": 72,
+ "height": 0.7,
+ "weight": 9.9,
+ "baseScale": 1.0,
+ "hitbox": {
+  "width": 0.56,
+  "height": 0.7
+ },
+ "genderRatio": 0.5,
+ "abilities": [
+  "Shed Skin"
+ ],
+ "modelId": "metapod",
+ "textureId": "metapod",
+ "movement": {
+  "land": true,
+  "water": false,
+  "underwater": false,
+  "air": false
+ },
+ "animations": {
+  "idle": "ground_idle",
+  "walk": "ground_walk",
+  "run": "ground_run",
+  "swim": "water_swim",
+  "fly": "air_fly",
+  "battleIdle": "battle_idle",
+  "attack": "physical",
+  "recoil": "recoil",
+  "faint": "faint",
+  "capture": "capture"
+ },
+ "behavior": {
+  "temperament": "neutral",
+  "speed": 0.15
+ },
+ "learnset": [
+  {
+   "level": 1,
+   "move": "harden"
+  },
+  {
+   "level": 1,
+   "move": "tackle"
+  },
+  {
+   "level": 7,
+   "move": "bug_bite"
+  }
+ ],
+ "evolution": {
+  "to": "butterfree",
+  "level": 10
+ }
+}

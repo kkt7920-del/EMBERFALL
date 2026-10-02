@@ -85,3 +85,38 @@ export function summary() {
   console.log(`\n${results.length - failed.length}/${results.length} checks passed`);
   return failed.length === 0;
 }
+
+/** Turns the camera so the crosshair sits on a wild Pokémon; resolves when the reticle locks on. */
+export async function aimAt(page, id, tries = 30) {
+  for (let i = 0; i < tries; i++) {
+    const ok = await pw(page, (id) => {
+      const w = window.__pokeworld;
+      const c = w.creatures().find((c) => c.id === id);
+      if (!c) return false;
+      const cam = w.game.cam.camera.position;
+      const dx = c.x - cam.x;
+      const dy = c.y + c.height / 2 - cam.y;
+      const dz = c.z - cam.z;
+      w.yaw = Math.atan2(dx, dz);
+      w.pitch = -Math.atan2(dy, Math.hypot(dx, dz));
+      return w.aim.target === id;
+    }, id);
+    if (ok) return true;
+    await page.waitForTimeout(150);
+  }
+  return false;
+}
+
+/** Sound events played since index `from`. */
+export const soundsSince = (page, from) => pw(page, (n) => window.__pokeworld.sounds.slice(n).map((s) => s.name ?? s), from);
+
+/** Waits until one of `names` has played since `from`; returns the sound list. */
+export async function waitSound(page, from, names, timeout = 60000) {
+  const end = Date.now() + timeout;
+  while (Date.now() < end) {
+    const s = await soundsSince(page, from);
+    if (names.some((n) => s.includes(n))) return s;
+    await page.waitForTimeout(100);
+  }
+  return soundsSince(page, from);
+}

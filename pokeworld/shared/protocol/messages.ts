@@ -34,8 +34,33 @@ export type ClientMessage =
   | { type: "PLAYER_ROTATE"; rotY: number }
   | { type: "PLAYER_ACTION"; action: PlayerAction }
   | { type: "BATTLE_ACTION"; battleId: string; action: BattleAction }
-  | { type: "CAPTURE_THROW"; targetId: string; item: string }
+  /** A Poké Ball leaves the player's hand: origin and launch velocity (the server simulates the flight). */
+  | { type: "BALL_THROW"; seq: number; ball: string; x: number; y: number; z: number; vx: number; vy: number; vz: number }
   | { type: "PING"; t: number };
+
+/** A thrown ball in the world (flying, rolling or lying on the ground). */
+export interface BallSnapshot {
+  id: string;
+  owner: string;
+  /** Owner's throw sequence number, so the thrower can match its predicted ball. */
+  seq: number;
+  ball: string;
+  x: number;
+  y: number;
+  z: number;
+  vx: number;
+  vy: number;
+  vz: number;
+  /** Ball time already simulated (s). */
+  t: number;
+  resting: boolean;
+}
+
+export interface Vec3Msg {
+  x: number;
+  y: number;
+  z: number;
+}
 
 export interface RemotePlayerMove {
   id: string;
@@ -90,15 +115,33 @@ export type ServerMessage =
   | { type: "POKEMON_MOVE"; creatures: CreatureMove[] }
   | { type: "BATTLE_START"; battle: BattleView }
   | { type: "BATTLE_RESULT"; battle: BattleView; events: BattleEvent[]; outcome?: BattleOutcome }
+  | { type: "BALL_SPAWN"; ball: BallSnapshot }
+  | { type: "BALL_UPDATE"; id: string; kind: "rest" | "pickup" | "remove" | "deflect"; x: number; y: number; z: number; vx?: number; vy?: number; vz?: number; text?: string }
   | {
-      type: "CAPTURE_RESULT";
+      /** Played by every client that sees it: hit, absorb, drop, shakes, result. */
+      type: "CAPTURE_SEQUENCE";
+      ballId: string;
+      ball: string;
       targetId: string;
-      item: string;
+      species: string;
+      hit: Vec3Msg;
+      rest: Vec3Msg;
+      critical: boolean;
       shakes: number;
+      success: boolean;
+      /** Seconds until the server applies the result. */
+      duration: number;
+    }
+  | {
+      /** Sent to the thrower when the sequence ends. */
+      type: "CAPTURE_RESULT";
+      ballId: string;
+      targetId: string;
       success: boolean;
       creature?: CreatureInstance;
       sentTo?: "party" | "box";
-      startedBattle?: boolean;
+      newSpecies?: boolean;
+      reaction?: "flee" | "battle" | "watch";
     }
   | { type: "QUEST_UPDATE"; quests: QuestState; started: string[]; completed: string[] }
   | { type: "WORLD_EVENT"; event: WorldEvent }
@@ -130,8 +173,8 @@ export function parseClientMessage(raw: unknown): ClientMessage | null {
         : null;
     case "BATTLE_ACTION":
       return str(m.battleId) && typeof m.action === "object" && m.action !== null ? (m as ClientMessage) : null;
-    case "CAPTURE_THROW":
-      return str(m.targetId) && str(m.item) ? (m as ClientMessage) : null;
+    case "BALL_THROW":
+      return num(m.seq) && str(m.ball) && num(m.x) && num(m.y) && num(m.z) && num(m.vx) && num(m.vy) && num(m.vz) ? (m as ClientMessage) : null;
     case "PING":
       return num(m.t) ? (m as ClientMessage) : null;
     default:

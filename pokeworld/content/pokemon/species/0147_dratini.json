@@ -1,0 +1,83 @@
+{
+ "id": "dratini",
+ "dexNumber": 147,
+ "name": "Dratini",
+ "types": [
+  "dragon"
+ ],
+ "baseStats": {
+  "hp": 41,
+  "atk": 64,
+  "def": 45,
+  "spa": 50,
+  "spd": 50,
+  "spe": 50
+ },
+ "catchRate": 45,
+ "baseExp": 60,
+ "height": 1.8,
+ "weight": 3.3,
+ "baseScale": 1.0,
+ "hitbox": {
+  "width": 0.8,
+  "height": 0.6
+ },
+ "genderRatio": 0.5,
+ "abilities": [
+  "Shed Skin"
+ ],
+ "modelId": "dratini",
+ "textureId": "dratini",
+ "movement": {
+  "land": false,
+  "water": true,
+  "underwater": true,
+  "air": false
+ },
+ "animations": {
+  "idle": "ground_idle",
+  "walk": "ground_walk",
+  "run": "ground_run",
+  "swim": "water_swim",
+  "fly": "air_fly",
+  "battleIdle": "battle_idle",
+  "attack": "physical",
+  "recoil": "recoil",
+  "faint": "faint",
+  "capture": "capture"
+ },
+ "behavior": {
+  "temperament": "timid",
+  "speed": 0.9
+ },
+ "learnset": [
+  {
+   "level": 1,
+   "move": "leer"
+  },
+  {
+   "level": 1,
+   "move": "twister"
+  },
+  {
+   "level": 5,
+   "move": "thunder_wave"
+  },
+  {
+   "level": 11,
+   "move": "dragon_breath"
+  },
+  {
+   "level": 15,
+   "move": "slam"
+  },
+  {
+   "level": 25,
+   "move": "aqua_tail"
+  }
+ ],
+ "evolution": {
+  "to": "dragonair",
+  "level": 30
+ }
+}

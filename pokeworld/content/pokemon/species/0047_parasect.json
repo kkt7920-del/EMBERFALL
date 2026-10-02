@@ -1,0 +1,76 @@
+{
+ "id": "parasect",
+ "dexNumber": 47,
+ "name": "Parasect",
+ "types": [
+  "bug",
+  "grass"
+ ],
+ "baseStats": {
+  "hp": 60,
+  "atk": 95,
+  "def": 80,
+  "spa": 60,
+  "spd": 80,
+  "spe": 30
+ },
+ "catchRate": 75,
+ "baseExp": 142,
+ "height": 1.0,
+ "weight": 29.5,
+ "baseScale": 1.0,
+ "hitbox": {
+  "width": 1.0,
+  "height": 0.9
+ },
+ "genderRatio": 0.5,
+ "abilities": [
+  "Effect Spore"
+ ],
+ "modelId": "parasect",
+ "textureId": "parasect",
+ "movement": {
+  "land": true,
+  "water": false,
+  "underwater": false,
+  "air": false
+ },
+ "animations": {
+  "idle": "ground_idle",
+  "walk": "ground_walk",
+  "run": "ground_run",
+  "swim": "water_swim",
+  "fly": "air_fly",
+  "battleIdle": "battle_idle",
+  "attack": "physical",
+  "recoil": "recoil",
+  "faint": "faint",
+  "capture": "capture"
+ },
+ "behavior": {
+  "temperament": "neutral",
+  "speed": 0.6
+ },
+ "learnset": [
+  {
+   "level": 1,
+   "move": "scratch"
+  },
+  {
+   "level": 1,
+   "move": "stun_spore"
+  },
+  {
+   "level": 1,
+   "move": "absorb"
+  },
+  {
+   "level": 1,
+   "move": "leech_life"
+  },
+  {
+   "level": 30,
+   "move": "razor_leaf"
+  }
+ ]
+}

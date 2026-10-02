@@ -1,45 +1,189 @@
 [
-  {
-    "id": "capture_orb",
-    "name": "포획구",
-    "kind": "capture",
-    "price": 200,
-    "captureBonus": 1,
-    "color": "#e04848",
-    "description": "야생 크리처를 포획하는 기본 구슬."
+ {
+  "id": "poke_ball",
+  "name": "Poké Ball",
+  "nameKo": "몬스터볼",
+  "kind": "capture",
+  "price": 200,
+  "color": "#e3350d",
+  "ball": {
+   "top": "#e3350d",
+   "bottom": "#f4f4f4",
+   "band": "#1e1e1e",
+   "button": "#f4f4f4"
   },
-  {
-    "id": "great_orb",
-    "name": "슈퍼포획구",
-    "kind": "capture",
-    "price": 600,
-    "captureBonus": 1.5,
-    "color": "#3a7ae0",
-    "description": "포획구보다 잘 잡히는 구슬."
+  "description": "야생 포켓몬에게 던져서 잡는 기본 볼."
+ },
+ {
+  "id": "great_ball",
+  "name": "Great Ball",
+  "nameKo": "슈퍼볼",
+  "kind": "capture",
+  "price": 600,
+  "color": "#2f6fd8",
+  "ball": {
+   "top": "#2f6fd8",
+   "bottom": "#f4f4f4",
+   "band": "#1e1e1e",
+   "button": "#f4f4f4",
+   "stripe": "#e3350d"
   },
-  {
-    "id": "potion",
-    "name": "상처약",
-    "kind": "heal",
-    "price": 300,
-    "heal": 20,
-    "color": "#9a5ae0",
-    "description": "HP를 20 회복한다."
+  "description": "몬스터볼보다 잘 잡히는 볼."
+ },
+ {
+  "id": "ultra_ball",
+  "name": "Ultra Ball",
+  "nameKo": "하이퍼볼",
+  "kind": "capture",
+  "price": 1200,
+  "color": "#2a2a2a",
+  "ball": {
+   "top": "#2a2a2a",
+   "bottom": "#f4f4f4",
+   "band": "#1e1e1e",
+   "button": "#f4f4f4",
+   "stripe": "#f2c230"
   },
-  {
-    "id": "super_potion",
-    "name": "좋은상처약",
-    "kind": "heal",
-    "price": 700,
-    "heal": 60,
-    "color": "#e05ab0",
-    "description": "HP를 60 회복한다."
+  "description": "슈퍼볼보다 더 잘 잡히는 고성능 볼."
+ },
+ {
+  "id": "quick_ball",
+  "name": "Quick Ball",
+  "nameKo": "퀵볼",
+  "kind": "capture",
+  "price": 1000,
+  "color": "#3aa0e8",
+  "ball": {
+   "top": "#3aa0e8",
+   "bottom": "#3aa0e8",
+   "band": "#f2d040",
+   "button": "#f4f4f4",
+   "stripe": "#f2d040"
   },
-  {
-    "id": "crystal_shard",
-    "name": "수정 조각",
-    "kind": "key",
-    "color": "#8ae0f0",
-    "description": "메아리 동굴 깊은 곳에서 빛나던 수정 조각."
-  }
+  "description": "배틀 첫 턴이나 필드에서 처음 던지면 매우 잘 잡힌다."
+ },
+ {
+  "id": "dive_ball",
+  "name": "Dive Ball",
+  "nameKo": "다이브볼",
+  "kind": "capture",
+  "price": 1000,
+  "color": "#2f8ae0",
+  "ball": {
+   "top": "#2f8ae0",
+   "bottom": "#f4f4f4",
+   "band": "#1e1e1e",
+   "button": "#f4f4f4",
+   "stripe": "#9fe0ff"
+  },
+  "description": "물 위나 물속의 포켓몬이 잘 잡힌다."
+ },
+ {
+  "id": "dusk_ball",
+  "name": "Dusk Ball",
+  "nameKo": "다크볼",
+  "kind": "capture",
+  "price": 1000,
+  "color": "#2e2e2e",
+  "ball": {
+   "top": "#2e2e2e",
+   "bottom": "#2e2e2e",
+   "band": "#3fa83f",
+   "button": "#f4f4f4",
+   "stripe": "#e3350d"
+  },
+  "description": "밤이나 동굴처럼 어두운 곳에서 잘 잡힌다."
+ },
+ {
+  "id": "net_ball",
+  "name": "Net Ball",
+  "nameKo": "넷트볼",
+  "kind": "capture",
+  "price": 1000,
+  "color": "#2aa8a8",
+  "ball": {
+   "top": "#2aa8a8",
+   "bottom": "#f4f4f4",
+   "band": "#1e1e1e",
+   "button": "#f4f4f4",
+   "stripe": "#1e1e1e"
+  },
+  "description": "물·벌레 타입 포켓몬이 잘 잡힌다."
+ },
+ {
+  "id": "timer_ball",
+  "name": "Timer Ball",
+  "nameKo": "타이마볼",
+  "kind": "capture",
+  "price": 1000,
+  "color": "#f4f4f4",
+  "ball": {
+   "top": "#f4f4f4",
+   "bottom": "#f4f4f4",
+   "band": "#1e1e1e",
+   "button": "#f4f4f4",
+   "stripe": "#e3350d"
+  },
+  "description": "배틀 턴이 지날수록 잘 잡힌다."
+ },
+ {
+  "id": "repeat_ball",
+  "name": "Repeat Ball",
+  "nameKo": "리피트볼",
+  "kind": "capture",
+  "price": 1000,
+  "color": "#e86a2a",
+  "ball": {
+   "top": "#e86a2a",
+   "bottom": "#f4f4f4",
+   "band": "#1e1e1e",
+   "button": "#f4f4f4",
+   "stripe": "#f2d040"
+  },
+  "description": "이미 잡아 본 적 있는 포켓몬이 잘 잡힌다."
+ },
+ {
+  "id": "potion",
+  "name": "상처약",
+  "kind": "heal",
+  "price": 300,
+  "heal": 20,
+  "color": "#9a5ae0",
+  "description": "HP를 20 회복한다."
+ },
+ {
+  "id": "super_potion",
+  "name": "좋은상처약",
+  "kind": "heal",
+  "price": 700,
+  "heal": 60,
+  "color": "#e05ab0",
+  "description": "HP를 60 회복한다."
+ },
+ {
+  "id": "hyper_potion",
+  "name": "고급상처약",
+  "kind": "heal",
+  "price": 1200,
+  "heal": 120,
+  "color": "#e0405a",
+  "description": "HP를 120 회복한다."
+ },
+ {
+  "id": "full_heal",
+  "name": "만병통치제",
+  "kind": "heal",
+  "price": 400,
+  "heal": 0,
+  "cureStatus": true,
+  "color": "#f2d040",
+  "description": "모든 상태이상을 회복한다."
+ },
+ {
+  "id": "crystal_shard",
+  "name": "수정 조각",
+  "kind": "key",
+  "color": "#8ae0f0",
+  "description": "메아리 동굴 깊은 곳에서 빛나던 수정 조각."
+ }
 ]

@@ -1,0 +1,69 @@
+{
+ "id": "default",
+ "maxShakes": 3,
+ "shakeChecks": 4,
+ "shakeExponent": 0.1875,
+ "status": {
+  "none": 1.0,
+  "sleep": 2.5,
+  "freeze": 2.5,
+  "paralysis": 1.5,
+  "poison": 1.5,
+  "burn": 1.5
+ },
+ "lowLevel": {
+  "belowLevel": 13,
+  "base": 36,
+  "perLevel": 2,
+  "divisor": 10
+ },
+ "overLevel": {
+  "perLevel": 0.04,
+  "min": 0.35
+ },
+ "alphaMultiplier": 0.45,
+ "legendaryMultiplier": 0.6,
+ "rareMultiplier": {
+  "rare": 0.85,
+  "very_rare": 0.7
+ },
+ "fieldThrow": {
+  "unawareBonus": 1.4,
+  "battleBonus": 1.0
+ },
+ "environment": {
+  "underwaterPenalty": 0.9
+ },
+ "critical": {
+  "enabled": true,
+  "caughtSteps": [
+   [
+    0,
+    0.5
+   ],
+   [
+    30,
+    1.0
+   ],
+   [
+    150,
+    1.5
+   ],
+   [
+    300,
+    2.0
+   ],
+   [
+    450,
+    2.5
+   ],
+   [
+    600,
+    3.0
+   ]
+  ],
+  "scale": 0.1667,
+  "dexSize": 101
+ },
+ "maxModifiedRate": 255
+}

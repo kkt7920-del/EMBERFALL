@@ -1,0 +1,79 @@
+{
+ "id": "charmeleon",
+ "dexNumber": 5,
+ "name": "Charmeleon",
+ "types": [
+  "fire"
+ ],
+ "baseStats": {
+  "hp": 58,
+  "atk": 64,
+  "def": 58,
+  "spa": 80,
+  "spd": 65,
+  "spe": 80
+ },
+ "catchRate": 45,
+ "baseExp": 142,
+ "height": 1.1,
+ "weight": 19.0,
+ "baseScale": 1.0,
+ "hitbox": {
+  "width": 0.88,
+  "height": 1.1
+ },
+ "genderRatio": 0.125,
+ "abilities": [
+  "Blaze"
+ ],
+ "modelId": "charmeleon",
+ "textureId": "charmeleon",
+ "movement": {
+  "land": true,
+  "water": false,
+  "underwater": false,
+  "air": false
+ },
+ "animations": {
+  "idle": "ground_idle",
+  "walk": "ground_walk",
+  "run": "ground_run",
+  "swim": "water_swim",
+  "fly": "air_fly",
+  "battleIdle": "battle_idle",
+  "attack": "physical",
+  "recoil": "recoil",
+  "faint": "faint",
+  "capture": "capture"
+ },
+ "behavior": {
+  "temperament": "neutral",
+  "speed": 1.0
+ },
+ "learnset": [
+  {
+   "level": 1,
+   "move": "scratch"
+  },
+  {
+   "level": 1,
+   "move": "ember"
+  },
+  {
+   "level": 12,
+   "move": "metal_claw"
+  },
+  {
+   "level": 17,
+   "move": "fire_fang"
+  },
+  {
+   "level": 24,
+   "move": "flamethrower"
+  }
+ ],
+ "evolution": {
+  "to": "charizard",
+  "level": 36
+ }
+}

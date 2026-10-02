@@ -1,0 +1,67 @@
+{
+ "id": "magikarp",
+ "dexNumber": 129,
+ "name": "Magikarp",
+ "types": [
+  "water"
+ ],
+ "baseStats": {
+  "hp": 20,
+  "atk": 10,
+  "def": 55,
+  "spa": 15,
+  "spd": 20,
+  "spe": 80
+ },
+ "catchRate": 255,
+ "baseExp": 40,
+ "height": 0.9,
+ "weight": 10.0,
+ "baseScale": 1.0,
+ "hitbox": {
+  "width": 0.6,
+  "height": 0.7
+ },
+ "genderRatio": 0.5,
+ "abilities": [
+  "Swift Swim"
+ ],
+ "modelId": "magikarp",
+ "textureId": "magikarp",
+ "movement": {
+  "land": false,
+  "water": true,
+  "underwater": true,
+  "air": false
+ },
+ "animations": {
+  "idle": "ground_idle",
+  "walk": "ground_walk",
+  "run": "ground_run",
+  "swim": "water_swim",
+  "fly": "air_fly",
+  "battleIdle": "battle_idle",
+  "attack": "physical",
+  "recoil": "recoil",
+  "faint": "faint",
+  "capture": "capture"
+ },
+ "behavior": {
+  "temperament": "timid",
+  "speed": 0.8
+ },
+ "learnset": [
+  {
+   "level": 1,
+   "move": "splash"
+  },
+  {
+   "level": 15,
+   "move": "tackle"
+  }
+ ],
+ "evolution": {
+  "to": "gyarados",
+  "level": 20
+ }
+}

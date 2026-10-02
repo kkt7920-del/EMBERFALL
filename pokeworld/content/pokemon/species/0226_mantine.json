@@ -1,0 +1,86 @@
+{
+ "id": "mantine",
+ "dexNumber": 226,
+ "name": "Mantine",
+ "types": [
+  "water",
+  "flying"
+ ],
+ "baseStats": {
+  "hp": 85,
+  "atk": 40,
+  "def": 70,
+  "spa": 80,
+  "spd": 140,
+  "spe": 70
+ },
+ "catchRate": 25,
+ "baseExp": 170,
+ "height": 2.1,
+ "weight": 220.0,
+ "baseScale": 1.0,
+ "hitbox": {
+  "width": 2.2,
+  "height": 1.0
+ },
+ "genderRatio": 0.5,
+ "abilities": [
+  "Swift Swim"
+ ],
+ "modelId": "mantine",
+ "textureId": "mantine",
+ "movement": {
+  "land": false,
+  "water": true,
+  "underwater": true,
+  "air": false
+ },
+ "animations": {
+  "idle": "ground_idle",
+  "walk": "ground_walk",
+  "run": "ground_run",
+  "swim": "water_swim",
+  "fly": "air_fly",
+  "battleIdle": "battle_idle",
+  "attack": "physical",
+  "recoil": "recoil",
+  "faint": "faint",
+  "capture": "capture"
+ },
+ "behavior": {
+  "temperament": "neutral",
+  "speed": 1.2
+ },
+ "learnset": [
+  {
+   "level": 1,
+   "move": "tackle"
+  },
+  {
+   "level": 1,
+   "move": "bubble"
+  },
+  {
+   "level": 10,
+   "move": "wing_attack"
+  },
+  {
+   "level": 19,
+   "move": "water_pulse"
+  },
+  {
+   "level": 28,
+   "move": "bubble_beam"
+  },
+  {
+   "level": 36,
+   "move": "air_slash"
+  }
+ ],
+ "mount": {
+  "modes": [
+   "swim"
+  ],
+  "speed": 1.35
+ }
+}

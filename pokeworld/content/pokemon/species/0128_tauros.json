@@ -1,0 +1,81 @@
+{
+ "id": "tauros",
+ "dexNumber": 128,
+ "name": "Tauros",
+ "types": [
+  "normal"
+ ],
+ "baseStats": {
+  "hp": 75,
+  "atk": 100,
+  "def": 95,
+  "spa": 40,
+  "spd": 70,
+  "spe": 110
+ },
+ "catchRate": 45,
+ "baseExp": 172,
+ "height": 1.4,
+ "weight": 88.4,
+ "baseScale": 1.0,
+ "hitbox": {
+  "width": 1.12,
+  "height": 1.4
+ },
+ "genderRatio": 0.0,
+ "abilities": [
+  "Intimidate"
+ ],
+ "modelId": "tauros",
+ "textureId": "tauros",
+ "movement": {
+  "land": true,
+  "water": false,
+  "underwater": false,
+  "air": false
+ },
+ "animations": {
+  "idle": "ground_idle",
+  "walk": "ground_walk",
+  "run": "ground_run",
+  "swim": "water_swim",
+  "fly": "air_fly",
+  "battleIdle": "battle_idle",
+  "attack": "physical",
+  "recoil": "recoil",
+  "faint": "faint",
+  "capture": "capture"
+ },
+ "behavior": {
+  "temperament": "aggressive",
+  "speed": 1.4
+ },
+ "learnset": [
+  {
+   "level": 1,
+   "move": "tackle"
+  },
+  {
+   "level": 1,
+   "move": "tail_whip"
+  },
+  {
+   "level": 5,
+   "move": "headbutt"
+  },
+  {
+   "level": 15,
+   "move": "take_down"
+  },
+  {
+   "level": 25,
+   "move": "body_slam"
+  }
+ ],
+ "mount": {
+  "modes": [
+   "land"
+  ],
+  "speed": 1.3
+ }
+}

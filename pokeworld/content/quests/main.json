@@ -1,76 +1,76 @@
 [
-  {
-    "id": "q_first_partner",
-    "title": "첫 번째 파트너",
-    "description": "새싹마을 북쪽 연구소의 레아 박사를 찾아가 파트너를 받자.",
-    "type": "main",
-    "requires": [],
-    "objectives": [
-      {
-        "id": "partner",
-        "kind": "obtain_partner",
-        "text": "레아 박사에게서 파트너 받기"
-      }
-    ],
-    "rewards": {
-      "items": [
-        {
-          "id": "potion",
-          "count": 2
-        }
-      ]
+ {
+  "id": "q_first_partner",
+  "title": "첫 번째 파트너",
+  "description": "새싹마을 북쪽 연구소의 레아 박사를 찾아가 파트너 포켓몬을 받자.",
+  "type": "main",
+  "requires": [],
+  "objectives": [
+   {
+    "id": "partner",
+    "kind": "obtain_partner",
+    "text": "레아 박사에게서 파트너 받기"
+   }
+  ],
+  "rewards": {
+   "items": [
+    {
+     "id": "potion",
+     "count": 2
     }
-  },
-  {
-    "id": "q_first_catch",
-    "title": "첫 포획",
-    "description": "야생 크리처를 약하게 만든 뒤 포획구를 던져 동료로 만들자.",
-    "type": "main",
-    "requires": [
-      "q_first_partner"
-    ],
-    "objectives": [
-      {
-        "id": "catch",
-        "kind": "catch",
-        "count": 1,
-        "text": "야생 크리처 1마리 포획"
-      }
-    ],
-    "rewards": {
-      "money": 300,
-      "items": [
-        {
-          "id": "capture_orb",
-          "count": 5
-        }
-      ]
-    }
-  },
-  {
-    "id": "q_catch_three",
-    "title": "도감 채우기",
-    "description": "여러 곳을 탐험하며 크리처를 더 모아 보자.",
-    "type": "main",
-    "requires": [
-      "q_first_catch"
-    ],
-    "objectives": [
-      {
-        "id": "catch",
-        "kind": "catch",
-        "count": 3,
-        "text": "크리처 3마리 더 포획"
-      }
-    ],
-    "rewards": {
-      "money": 500,
-      "items": [
-        {
-          "id": "great_orb",
-          "count": 3
-        }
-      ]
-    }
+   ]
   }
+ },
+ {
+  "id": "q_first_catch",
+  "title": "첫 포획",
+  "description": "몬스터볼을 들고 조준해서 야생 포켓몬에게 직접 던져 보자. HP를 줄이면 더 잘 잡힌다.",
+  "type": "main",
+  "requires": [
+   "q_first_partner"
+  ],
+  "objectives": [
+   {
+    "id": "catch",
+    "kind": "catch",
+    "count": 1,
+    "text": "야생 포켓몬 1마리 포획"
+   }
+  ],
+  "rewards": {
+   "money": 300,
+   "items": [
+    {
+     "id": "poke_ball",
+     "count": 5
+    }
+   ]
+  }
+ },
+ {
+  "id": "q_catch_three",
+  "title": "도감 채우기",
+  "description": "초원, 숲, 물가를 돌아다니며 포켓몬을 더 모아 보자.",
+  "type": "main",
+  "requires": [
+   "q_first_catch"
+  ],
+  "objectives": [
+   {
+    "id": "catch",
+    "kind": "catch",
+    "count": 3,
+    "text": "포켓몬 3마리 더 포획"
+   }
+  ],
+  "rewards": {
+   "money": 500,
+   "items": [
+    {
+     "id": "great_ball",
+     "count": 3
+    }
+   ]
+  }
+ }
 ]

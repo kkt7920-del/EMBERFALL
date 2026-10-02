@@ -1,0 +1,83 @@
+{
+ "id": "eevee",
+ "dexNumber": 133,
+ "name": "Eevee",
+ "types": [
+  "normal"
+ ],
+ "baseStats": {
+  "hp": 55,
+  "atk": 55,
+  "def": 50,
+  "spa": 45,
+  "spd": 65,
+  "spe": 55
+ },
+ "catchRate": 45,
+ "baseExp": 65,
+ "height": 0.3,
+ "weight": 6.5,
+ "baseScale": 1.0,
+ "hitbox": {
+  "width": 0.5,
+  "height": 0.5
+ },
+ "genderRatio": 0.125,
+ "abilities": [
+  "Run Away"
+ ],
+ "modelId": "eevee",
+ "textureId": "eevee",
+ "movement": {
+  "land": true,
+  "water": false,
+  "underwater": false,
+  "air": false
+ },
+ "animations": {
+  "idle": "ground_idle",
+  "walk": "ground_walk",
+  "run": "ground_run",
+  "swim": "water_swim",
+  "fly": "air_fly",
+  "battleIdle": "battle_idle",
+  "attack": "physical",
+  "recoil": "recoil",
+  "faint": "faint",
+  "capture": "capture"
+ },
+ "behavior": {
+  "temperament": "timid",
+  "speed": 1.2
+ },
+ "learnset": [
+  {
+   "level": 1,
+   "move": "tackle"
+  },
+  {
+   "level": 1,
+   "move": "tail_whip"
+  },
+  {
+   "level": 5,
+   "move": "growl"
+  },
+  {
+   "level": 10,
+   "move": "quick_attack"
+  },
+  {
+   "level": 15,
+   "move": "bite"
+  },
+  {
+   "level": 20,
+   "move": "swift"
+  },
+  {
+   "level": 25,
+   "move": "take_down"
+  }
+ ]
+}

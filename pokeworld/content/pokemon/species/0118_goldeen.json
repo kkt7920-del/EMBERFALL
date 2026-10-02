@@ -1,0 +1,75 @@
+{
+ "id": "goldeen",
+ "dexNumber": 118,
+ "name": "Goldeen",
+ "types": [
+  "water"
+ ],
+ "baseStats": {
+  "hp": 45,
+  "atk": 67,
+  "def": 60,
+  "spa": 35,
+  "spd": 50,
+  "spe": 63
+ },
+ "catchRate": 225,
+ "baseExp": 64,
+ "height": 0.6,
+ "weight": 15.0,
+ "baseScale": 1.0,
+ "hitbox": {
+  "width": 0.5,
+  "height": 0.6
+ },
+ "genderRatio": 0.5,
+ "abilities": [
+  "Swift Swim"
+ ],
+ "modelId": "goldeen",
+ "textureId": "goldeen",
+ "movement": {
+  "land": false,
+  "water": true,
+  "underwater": true,
+  "air": false
+ },
+ "animations": {
+  "idle": "ground_idle",
+  "walk": "ground_walk",
+  "run": "ground_run",
+  "swim": "water_swim",
+  "fly": "air_fly",
+  "battleIdle": "battle_idle",
+  "attack": "physical",
+  "recoil": "recoil",
+  "faint": "faint",
+  "capture": "capture"
+ },
+ "behavior": {
+  "temperament": "neutral",
+  "speed": 1.0
+ },
+ "learnset": [
+  {
+   "level": 1,
+   "move": "peck"
+  },
+  {
+   "level": 1,
+   "move": "tail_whip"
+  },
+  {
+   "level": 5,
+   "move": "water_pulse"
+  },
+  {
+   "level": 9,
+   "move": "headbutt"
+  },
+  {
+   "level": 17,
+   "move": "aqua_tail"
+  }
+ ]
+}

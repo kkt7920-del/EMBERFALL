@@ -1,0 +1,72 @@
+{
+ "id": "dewgong",
+ "dexNumber": 87,
+ "name": "Dewgong",
+ "types": [
+  "water",
+  "ice"
+ ],
+ "baseStats": {
+  "hp": 90,
+  "atk": 70,
+  "def": 80,
+  "spa": 70,
+  "spd": 95,
+  "spe": 70
+ },
+ "catchRate": 75,
+ "baseExp": 166,
+ "height": 1.7,
+ "weight": 120.0,
+ "baseScale": 1.0,
+ "hitbox": {
+  "width": 1.6,
+  "height": 1.0
+ },
+ "genderRatio": 0.5,
+ "abilities": [
+  "Thick Fat"
+ ],
+ "modelId": "dewgong",
+ "textureId": "dewgong",
+ "movement": {
+  "land": true,
+  "water": true,
+  "underwater": true,
+  "air": false
+ },
+ "animations": {
+  "idle": "ground_idle",
+  "walk": "ground_walk",
+  "run": "ground_run",
+  "swim": "water_swim",
+  "fly": "air_fly",
+  "battleIdle": "battle_idle",
+  "attack": "physical",
+  "recoil": "recoil",
+  "faint": "faint",
+  "capture": "capture"
+ },
+ "behavior": {
+  "temperament": "neutral",
+  "speed": 1.0
+ },
+ "learnset": [
+  {
+   "level": 1,
+   "move": "headbutt"
+  },
+  {
+   "level": 1,
+   "move": "aurora_beam"
+  },
+  {
+   "level": 1,
+   "move": "aqua_tail"
+  },
+  {
+   "level": 34,
+   "move": "ice_beam"
+  }
+ ]
+}

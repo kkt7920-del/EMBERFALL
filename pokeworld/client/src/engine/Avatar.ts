@@ -1,5 +1,9 @@
 import type { Material } from "@babylonjs/core/Materials/material";
+import { StandardMaterial } from "@babylonjs/core/Materials/standardMaterial";
+import { Color3 } from "@babylonjs/core/Maths/math.color";
 import type { Mesh } from "@babylonjs/core/Meshes/mesh";
+import { CreateSphere } from "@babylonjs/core/Meshes/Builders/sphereBuilder";
+import type { BallLook } from "@shared/types/content";
 import { TransformNode } from "@babylonjs/core/Meshes/transformNode";
 import type { Scene } from "@babylonjs/core/scene";
 import { lerp } from "@shared/math/vec";
@@ -27,9 +31,15 @@ export class Avatar {
   private readonly meshes: Mesh[] = [];
   pose: AvatarPose = "idle";
   private t = Math.random() * 10;
-  private throwT = 0;
+  /** Throw motion time (s) since release; < 0 = not throwing. */
+  private throwT = -1;
+  private wind = 0;
+  private handBall: Mesh | null = null;
+  private handMat: StandardMaterial | null = null;
+  private readonly scene: Scene;
 
   constructor(scene: Scene, material: Material, look: AvatarLook, name = "avatar") {
+    this.scene = scene;
     this.root = new TransformNode(name, scene);
     this.body = new TransformNode(`${name}_body`, scene);
     this.body.parent = this.root;
@@ -76,8 +86,39 @@ export class Avatar {
     this.root.setEnabled(on);
   }
 
+  /** Shows a Poké Ball in the right hand (undefined hides it). */
+  holdBall(look: BallLook | undefined): void {
+    if (!look) {
+      if (this.handBall) {
+        this.handBall.setEnabled(false);
+        (this.handBall as Mesh & { _keep?: boolean })._keep = false;
+      }
+      return;
+    }
+    if (!this.handBall) {
+      this.handBall = CreateSphere("handBall", { diameter: 0.3, segments: 8 }, this.scene);
+      this.handMat = new StandardMaterial("handBallMat", this.scene);
+      this.handMat.specularColor = new Color3(0.8, 0.8, 0.8);
+      this.handBall.material = this.handMat;
+      this.handBall.parent = this.armR;
+      this.handBall.position.set(0, -0.62, 0.08);
+      this.handBall.isPickable = false;
+    }
+    this.handMat!.diffuseColor = Color3.FromHexString(look.top);
+    this.handBall.setEnabled(this.throwT < 0);
+    (this.handBall as Mesh & { _keep?: boolean })._keep = true;
+  }
+
+  /** Arm back and torso twisted while charging (0..1). */
+  windup(k: number): void {
+    this.wind = k;
+  }
+
+  /** Release: forward swing, then follow-through. */
   playThrow(): void {
-    this.throwT = 0.5;
+    this.throwT = 0;
+    this.wind = 0;
+    if (this.handBall) this.handBall.setEnabled(false);
   }
 
   update(dt: number): void {
@@ -101,6 +142,12 @@ export class Avatar {
         swing = 0.95;
         bob = 0.08;
         lean = 0.15;
+        break;
+      case "dive":
+        freq = 3;
+        swing = 0.5;
+        armRaise = 2.4;
+        lean = 1.4;
         break;
       case "swim":
         freq = 4;
@@ -135,18 +182,37 @@ export class Avatar {
     this.legR.rotation.z = legsForward ? 0.2 : 0;
     this.armL.rotation.x = -s * 0.9 - armRaise;
     this.armR.rotation.x = s * 0.9 - armRaise;
-    if (this.pose === "swim") {
+    if (this.pose === "swim" || this.pose === "dive") {
       this.armL.rotation.x = -armRaise + Math.sin(t * freq) * 1.2;
       this.armR.rotation.x = -armRaise + Math.sin(t * freq + Math.PI) * 1.2;
     }
-    if (this.throwT > 0) {
-      this.throwT -= dt;
-      const p = 1 - this.throwT / 0.5;
-      this.armR.rotation.x = p < 0.4 ? lerp(0, 2.6, p / 0.4) * -1 : lerp(-2.6, 0.6, (p - 0.4) / 0.6);
+    // Wind-up: arm drawn back over the shoulder, torso turned away
+    let twist = 0;
+    if (this.wind > 0) {
+      this.armR.rotation.x = lerp(this.armR.rotation.x, -2.7, this.wind);
+      this.armR.rotation.z = lerp(0, -0.35, this.wind);
+      this.armL.rotation.x = lerp(this.armL.rotation.x, -0.6, this.wind);
+      twist = -0.45 * this.wind;
+    } else this.armR.rotation.z = 0;
+    if (this.throwT >= 0) {
+      this.throwT += dt;
+      const p = this.throwT / 0.5;
+      // Fast forward swing, then follow-through and recovery
+      if (p < 0.3) {
+        this.armR.rotation.x = lerp(-2.7, 1.0, p / 0.3);
+        twist = lerp(-0.45, 0.35, p / 0.3);
+      } else if (p < 1) {
+        this.armR.rotation.x = lerp(1.0, 0, (p - 0.3) / 0.7);
+        twist = lerp(0.35, 0, (p - 0.3) / 0.7);
+      } else {
+        this.throwT = -1;
+        if (this.handBall && (this.handBall as Mesh & { _keep?: boolean })._keep) this.handBall.setEnabled(true);
+      }
     }
+    this.body.rotation.y = twist;
     this.body.position.y = 0.76 + Math.abs(Math.sin(t * freq)) * bob;
     this.body.rotation.x = lean;
-    this.head.rotation.x = this.pose === "swim" ? -0.9 : 0;
+    this.head.rotation.x = this.pose === "swim" ? -0.9 : this.pose === "dive" ? -1.1 : 0;
   }
 
   dispose(): void {

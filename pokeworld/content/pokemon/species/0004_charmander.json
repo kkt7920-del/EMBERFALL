@@ -1,0 +1,83 @@
+{
+ "id": "charmander",
+ "dexNumber": 4,
+ "name": "Charmander",
+ "types": [
+  "fire"
+ ],
+ "baseStats": {
+  "hp": 39,
+  "atk": 52,
+  "def": 43,
+  "spa": 60,
+  "spd": 50,
+  "spe": 65
+ },
+ "catchRate": 45,
+ "baseExp": 62,
+ "height": 0.6,
+ "weight": 8.5,
+ "baseScale": 1.0,
+ "hitbox": {
+  "width": 0.5,
+  "height": 0.6
+ },
+ "genderRatio": 0.125,
+ "abilities": [
+  "Blaze"
+ ],
+ "modelId": "charmander",
+ "textureId": "charmander",
+ "movement": {
+  "land": true,
+  "water": false,
+  "underwater": false,
+  "air": false
+ },
+ "animations": {
+  "idle": "ground_idle",
+  "walk": "ground_walk",
+  "run": "ground_run",
+  "swim": "water_swim",
+  "fly": "air_fly",
+  "battleIdle": "battle_idle",
+  "attack": "physical",
+  "recoil": "recoil",
+  "faint": "faint",
+  "capture": "capture"
+ },
+ "behavior": {
+  "temperament": "neutral",
+  "speed": 1.0
+ },
+ "learnset": [
+  {
+   "level": 1,
+   "move": "scratch"
+  },
+  {
+   "level": 1,
+   "move": "growl"
+  },
+  {
+   "level": 4,
+   "move": "ember"
+  },
+  {
+   "level": 8,
+   "move": "metal_claw"
+  },
+  {
+   "level": 12,
+   "move": "fire_fang"
+  },
+  {
+   "level": 16,
+   "move": "flame_wheel"
+  }
+ ],
+ "evolution": {
+  "to": "charmeleon",
+  "level": 16
+ }
+}

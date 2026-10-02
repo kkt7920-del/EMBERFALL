@@ -1,11 +1,10 @@
 import type { ContentDB } from "@shared/data/contentDb";
-import { computeStats, creatureName, maxHp } from "@shared/data/stats";
+import { creatureName, maxHp, statsOf } from "@shared/data/stats";
 import type { Rng } from "@shared/math/rng";
-import type { MoveDef, TrainerDef } from "@shared/types/content";
+import type { MoveDef, StatusCondition, TrainerDef } from "@shared/types/content";
 import type { BattleAction, BattleCreatureView, BattleEvent, BattleKind, BattleOutcome, BattleView, Side } from "@shared/types/battle";
 import type { CreatureInstance } from "@shared/types/game";
 import { expReward, grantExp } from "../pokemon/progression";
-import { rollCapture } from "./capture";
 import { computeDamage, effectiveStat, freshStages, type Stages } from "./damage";
 
 export interface BattleSetup {
@@ -19,8 +18,6 @@ export interface BattleSetup {
   entityId?: string;
   canCapture: boolean;
   canRun: boolean;
-  /** Extra capture multiplier (story encounters are easier to catch). */
-  captureBonus?: number;
 }
 
 export interface Inventory {
@@ -135,25 +132,20 @@ export class Battle {
         if (!item || item.kind !== "heal") return { error: "not a healing item" };
         if (!target || target.hp <= 0) return { error: "invalid target" };
         const max = maxHp(this.db, target);
-        if (target.hp >= max) return { error: "already at full HP" };
-        if (!inventory.consume(item.id)) return { error: "you have none left" };
-        const amount = Math.min(item.heal ?? 0, max - target.hp);
-        target.hp += amount;
-        if (action.target === this.activeIndex) events.push({ t: "heal", side: "player", amount, hp: target.hp, maxHp: max });
-        events.push({ t: "text", text: `${creatureName(this.db, target)}의 HP가 ${amount} 회복되었다!` });
-        this.foeOnlyTurn(events);
-        break;
-      }
-      case "capture": {
-        const item = this.db.items.get(action.item);
-        if (!this.setup.canCapture) return { error: "can't capture here" };
-        if (!item || item.kind !== "capture") return { error: "not a capture item" };
-        if (!inventory.consume(item.id)) return { error: "you have none left" };
-        const roll = rollCapture(this.db, this.foe, (item.captureBonus ?? 1) * (this.setup.captureBonus ?? 1), this.rng);
-        events.push({ t: "capture", item: item.id, shakes: roll.shakes, success: roll.success });
-        if (roll.success) {
-          this.outcome = "capture";
-          return { events, outcome: "capture", captured: this.foe };
+        if (item.cureStatus) {
+          if (!target.status) return { error: "no status to cure" };
+          if (!inventory.consume(item.id)) return { error: "you have none left" };
+          delete target.status;
+          delete target.statusTurns;
+          if (action.target === this.activeIndex) events.push({ t: "status", side: "player", status: null });
+          events.push({ t: "text", text: `${creatureName(this.db, target)}의 상태이상이 나았다!` });
+        } else {
+          if (target.hp >= max) return { error: "already at full HP" };
+          if (!inventory.consume(item.id)) return { error: "you have none left" };
+          const amount = Math.min(item.heal ?? 0, max - target.hp);
+          target.hp += amount;
+          if (action.target === this.activeIndex) events.push({ t: "heal", side: "player", amount, hp: target.hp, maxHp: max });
+          events.push({ t: "text", text: `${creatureName(this.db, target)}의 HP가 ${amount} 회복되었다!` });
         }
         this.foeOnlyTurn(events);
         break;
@@ -176,8 +168,42 @@ export class Battle {
         return { error: "unknown action" };
     }
 
+    this.endOfTurn(events);
     this.turn++;
     return { events, outcome: this.outcome ?? undefined };
+  }
+
+  /**
+   * A Poké Ball was thrown this turn (the throw happens in the world). On a
+   * miss or a breakout the foe still acts; a success ends the battle.
+   */
+  captureTurn(success: boolean, missed: boolean): TurnResult {
+    const events: BattleEvent[] = [];
+    if (this.ended) return { events };
+    if (success) {
+      this.outcome = "capture";
+      return { events, outcome: "capture", captured: this.foe };
+    }
+    events.push({ t: "text", text: missed ? "볼이 빗나갔다!" : "아깝다! 포켓몬이 볼에서 빠져나왔다!" });
+    this.foeOnlyTurn(events);
+    this.endOfTurn(events);
+    this.turn++;
+    return { events, outcome: this.outcome ?? undefined };
+  }
+
+  /** Poison and burn hurt at the end of each turn. */
+  private endOfTurn(events: BattleEvent[]): void {
+    for (const side of ["player", "foe"] as Side[]) {
+      if (this.ended || this.awaiting === "switch") return;
+      const c = side === "player" ? this.active : this.foe;
+      if (c.hp <= 0 || (c.status !== "poison" && c.status !== "burn")) continue;
+      const max = maxHp(this.db, c);
+      const dmg = Math.min(c.hp, Math.max(1, Math.floor(max / (c.status === "poison" ? 8 : 16))));
+      c.hp -= dmg;
+      events.push({ t: "damage", side, amount: dmg, hp: c.hp, maxHp: max, eff: 1, crit: false });
+      events.push({ t: "text", text: `${creatureName(this.db, c)}은(는) ${c.status === "poison" ? "독" : "화상"} 데미지를 입었다!` });
+      this.checkFaints(events);
+    }
   }
 
   private validateSwitch(index: number): string | null {
@@ -237,10 +263,38 @@ export class Battle {
     const dStages = side === "player" ? this.foeStages : this.playerStages;
     const other: Side = side === "player" ? "foe" : "player";
 
-    events.push({ t: "move", side, move: move.id, moveName: move.name, type: move.type, fx: move.fx ?? "melee" });
-    events.push({ t: "text", text: `${creatureName(this.db, attacker)}의 ${move.name}!` });
+    // Status conditions that stop a Pokémon from moving
+    const who = creatureName(this.db, attacker);
+    if (attacker.status === "sleep") {
+      attacker.statusTurns = (attacker.statusTurns ?? 1) - 1;
+      if (attacker.statusTurns > 0) {
+        events.push({ t: "text", text: `${who}은(는) 쿨쿨 잠들어 있다.` });
+        return;
+      }
+      delete attacker.status;
+      delete attacker.statusTurns;
+      events.push({ t: "status", side, status: null });
+      events.push({ t: "text", text: `${who}은(는) 잠에서 깼다!` });
+    } else if (attacker.status === "freeze") {
+      if (this.rng.next() < 0.2 || move.type === "fire") {
+        delete attacker.status;
+        events.push({ t: "status", side, status: null });
+        events.push({ t: "text", text: `${who}의 얼음이 녹았다!` });
+      } else {
+        events.push({ t: "text", text: `${who}은(는) 얼어붙어서 움직일 수 없다!` });
+        return;
+      }
+    } else if (attacker.status === "paralysis" && this.rng.next() < 0.25) {
+      events.push({ t: "text", text: `${who}은(는) 몸이 저려서 움직일 수 없다!` });
+      return;
+    }
 
-    const selfTargeted = move.category === "status" && (move.effect?.kind === "heal" || (move.effect?.kind === "stat" && move.effect.target === "self"));
+    events.push({ t: "move", side, move: move.id, moveName: move.name, type: move.type, fx: move.fx ?? "melee" });
+    events.push({ t: "text", text: `${who}의 ${move.name}!` });
+
+    const selfTargeted =
+      move.category === "status" &&
+      (move.effect?.kind === "heal" || move.effect?.kind === "rest" || move.effect?.kind === "none" || (move.effect?.kind === "stat" && move.effect.target === "self"));
     if (!selfTargeted && this.rng.next() * 100 >= move.accuracy) {
       events.push({ t: "miss", side: other });
       events.push({ t: "text", text: "공격이 빗나갔다!" });
@@ -293,9 +347,47 @@ export class Battle {
       const heal = Math.min(max - attacker.hp, Math.floor(max * effect.fraction));
       attacker.hp += heal;
       events.push({ t: "heal", side, amount: heal, hp: attacker.hp, maxHp: max });
+    } else if (effect?.kind === "status" && defender.hp > 0 && (effect.chance === undefined || this.rng.next() < effect.chance)) {
+      this.inflict(other, defender, effect.status, events, move.category === "status");
+    } else if (effect?.kind === "rest") {
+      const max = maxHp(this.db, attacker);
+      const heal = max - attacker.hp;
+      attacker.hp = max;
+      attacker.status = "sleep";
+      attacker.statusTurns = 3;
+      events.push({ t: "heal", side, amount: heal, hp: max, maxHp: max });
+      events.push({ t: "status", side, status: "sleep" });
+      events.push({ t: "text", text: `${who}은(는) 잠들어서 기운을 되찾았다!` });
+    } else if (effect?.kind === "none") {
+      events.push({ t: "text", text: "하지만 아무 일도 일어나지 않았다!" });
     }
 
     this.checkFaints(events);
+  }
+
+  private inflict(side: Side, c: CreatureInstance, status: StatusCondition, events: BattleEvent[], announceFail: boolean): void {
+    const types = this.db.speciesOf(c).types;
+    const immune =
+      (status === "burn" && types.includes("fire")) ||
+      (status === "paralysis" && types.includes("electric")) ||
+      (status === "freeze" && types.includes("ice")) ||
+      (status === "poison" && (types.includes("poison") || types.includes("steel")));
+    const name = creatureName(this.db, c);
+    if (c.status || immune) {
+      if (announceFail) events.push({ t: "text", text: c.status ? `${name}은(는) 이미 상태이상이다.` : `${name}에게는 효과가 없는 것 같다…` });
+      return;
+    }
+    c.status = status;
+    if (status === "sleep") c.statusTurns = 2 + Math.floor(this.rng.next() * 3);
+    events.push({ t: "status", side, status });
+    const text: Record<StatusCondition, string> = {
+      sleep: "잠들어 버렸다!",
+      freeze: "얼어붙었다!",
+      paralysis: "마비되어 기술이 나오기 어려워졌다!",
+      poison: "독에 걸렸다!",
+      burn: "화상을 입었다!",
+    };
+    events.push({ t: "text", text: `${name}은(는) ${text[status]}` });
   }
 
   private checkFaints(events: BattleEvent[]): void {
@@ -364,7 +456,11 @@ export class Battle {
       name: creatureName(this.db, c),
       level: c.level,
       hp: c.hp,
-      maxHp: computeStats(this.db.speciesOf(c), c.level, c.ivs).hp,
+      maxHp: statsOf(this.db, c).hp,
+      gender: c.gender,
+      status: c.status,
+      alpha: c.alpha,
+      size: c.size,
     };
   }
 }

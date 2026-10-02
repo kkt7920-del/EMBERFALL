@@ -1,104 +1,185 @@
 [
-  {
-    "id": "q_route_trainer",
-    "title": "1번 도로의 도전자",
-    "description": "1번 도로의 곤충소년 지훈이 배틀 상대를 찾고 있다.",
-    "type": "side",
-    "requires": [
-      "q_first_partner"
-    ],
-    "objectives": [
-      {
-        "id": "beat",
-        "kind": "defeat_trainer",
-        "trainer": "bugboy_jihun",
-        "text": "곤충소년 지훈에게 승리"
-      }
-    ],
-    "rewards": {
-      "money": 300
-    }
-  },
-  {
-    "id": "q_beach_trainer",
-    "title": "해변의 수영선수",
-    "description": "햇살 해변의 수영선수 미나에게 도전하자.",
-    "type": "side",
-    "requires": [
-      "q_first_partner"
-    ],
-    "objectives": [
-      {
-        "id": "visit",
-        "kind": "visit",
-        "area": "sunny_beach",
-        "text": "햇살 해변 방문"
-      },
-      {
-        "id": "beat",
-        "kind": "defeat_trainer",
-        "trainer": "swimmer_mina",
-        "text": "수영선수 미나에게 승리"
-      }
-    ],
-    "rewards": {
-      "items": [
-        {
-          "id": "great_orb",
-          "count": 2
-        }
-      ]
-    }
-  },
-  {
-    "id": "q_explore_cave",
-    "title": "메아리 동굴 탐험",
-    "description": "서쪽 언덕의 메아리 동굴 안으로 들어가 보자.",
-    "type": "exploration",
-    "requires": [
-      "q_first_partner"
-    ],
-    "objectives": [
-      {
-        "id": "visit",
-        "kind": "visit",
-        "area": "echo_cave",
-        "text": "메아리 동굴 들어가기"
-      }
-    ],
-    "rewards": {
-      "items": [
-        {
-          "id": "potion",
-          "count": 3
-        }
-      ]
-    }
-  },
-  {
-    "id": "q_battles",
-    "title": "배틀 연습",
-    "description": "야생 크리처와 배틀하며 파트너를 단련하자.",
-    "type": "side",
-    "requires": [
-      "q_first_partner"
-    ],
-    "objectives": [
-      {
-        "id": "wins",
-        "kind": "win_battles",
-        "count": 5,
-        "text": "배틀 5회 승리"
-      }
-    ],
-    "rewards": {
-      "money": 400,
-      "items": [
-        {
-          "id": "super_potion",
-          "count": 1
-        }
-      ]
-    }
+ {
+  "id": "q_route_trainer",
+  "title": "1번 도로의 도전자",
+  "description": "1번 도로의 곤충소년 지훈이 배틀 상대를 찾고 있다.",
+  "type": "side",
+  "requires": [
+   "q_first_partner"
+  ],
+  "objectives": [
+   {
+    "id": "beat",
+    "kind": "defeat_trainer",
+    "trainer": "bugboy_jihun",
+    "text": "곤충소년 지훈에게 승리"
+   }
+  ],
+  "rewards": {
+   "money": 300
   }
+ },
+ {
+  "id": "q_beach_trainer",
+  "title": "해변의 수영선수",
+  "description": "햇살 해변의 수영선수 미나에게 도전하자.",
+  "type": "side",
+  "requires": [
+   "q_first_partner"
+  ],
+  "objectives": [
+   {
+    "id": "visit",
+    "kind": "visit",
+    "area": "sunny_beach",
+    "text": "햇살 해변 방문"
+   },
+   {
+    "id": "beat",
+    "kind": "defeat_trainer",
+    "trainer": "swimmer_mina",
+    "text": "수영선수 미나에게 승리"
+   }
+  ],
+  "rewards": {
+   "items": [
+    {
+     "id": "great_ball",
+     "count": 2
+    }
+   ]
+  }
+ },
+ {
+  "id": "q_explore_cave",
+  "title": "메아리 동굴 탐험",
+  "description": "서쪽 언덕의 메아리 동굴 안으로 들어가 보자.",
+  "type": "exploration",
+  "requires": [
+   "q_first_partner"
+  ],
+  "objectives": [
+   {
+    "id": "visit",
+    "kind": "visit",
+    "area": "echo_cave",
+    "text": "메아리 동굴 들어가기"
+   }
+  ],
+  "rewards": {
+   "items": [
+    {
+     "id": "potion",
+     "count": 3
+    }
+   ]
+  }
+ },
+ {
+  "id": "q_battles",
+  "title": "배틀 연습",
+  "description": "야생 포켓몬와 배틀하며 파트너를 단련하자.",
+  "type": "side",
+  "requires": [
+   "q_first_partner"
+  ],
+  "objectives": [
+   {
+    "id": "wins",
+    "kind": "win_battles",
+    "count": 5,
+    "text": "배틀 5회 승리"
+   }
+  ],
+  "rewards": {
+   "money": 400,
+   "items": [
+    {
+     "id": "super_potion",
+     "count": 1
+    }
+   ]
+  }
+ },
+ {
+  "id": "q_explore_sea",
+  "title": "바다 탐험",
+  "description": "남쪽 바다 깊이 가라앉은 난파선을 찾아보자. 수영할 수 있는 포켓몬이 있으면 좋다.",
+  "type": "exploration",
+  "requires": [
+   "q_first_partner"
+  ],
+  "objectives": [
+   {
+    "id": "wreck",
+    "kind": "visit",
+    "area": "shipwreck",
+    "text": "난파선 찾기"
+   }
+  ],
+  "rewards": {
+   "items": [
+    {
+     "id": "dive_ball",
+     "count": 3
+    }
+   ]
+  }
+ },
+ {
+  "id": "q_explore_peaks",
+  "title": "서리 봉우리",
+  "description": "북서쪽 설산 꼭대기까지 올라가 보자. 은빛 폭포를 지나야 한다.",
+  "type": "exploration",
+  "requires": [
+   "q_first_partner"
+  ],
+  "objectives": [
+   {
+    "id": "falls",
+    "kind": "visit",
+    "area": "silver_falls",
+    "text": "은빛 폭포 보기"
+   },
+   {
+    "id": "peaks",
+    "kind": "visit",
+    "area": "frost_peaks",
+    "text": "서리 봉우리 도착"
+   }
+  ],
+  "rewards": {
+   "items": [
+    {
+     "id": "ultra_ball",
+     "count": 2
+    }
+   ]
+  }
+ },
+ {
+  "id": "q_explore_volcano",
+  "title": "불씨 화산",
+  "description": "북동쪽의 불씨 화산을 찾아가 보자.",
+  "type": "exploration",
+  "requires": [
+   "q_first_partner"
+  ],
+  "objectives": [
+   {
+    "id": "volcano",
+    "kind": "visit",
+    "area": "ember_volcano",
+    "text": "불씨 화산 도착"
+   }
+  ],
+  "rewards": {
+   "items": [
+    {
+     "id": "quick_ball",
+     "count": 3
+    }
+   ]
+  }
+ }
 ]

@@ -1,0 +1,83 @@
+{
+ "id": "snorlax",
+ "dexNumber": 143,
+ "name": "Snorlax",
+ "types": [
+  "normal"
+ ],
+ "baseStats": {
+  "hp": 160,
+  "atk": 110,
+  "def": 65,
+  "spa": 65,
+  "spd": 110,
+  "spe": 30
+ },
+ "catchRate": 25,
+ "baseExp": 189,
+ "height": 2.1,
+ "weight": 460.0,
+ "baseScale": 1.0,
+ "hitbox": {
+  "width": 2.0,
+  "height": 2.1
+ },
+ "genderRatio": 0.125,
+ "abilities": [
+  "Immunity"
+ ],
+ "modelId": "snorlax",
+ "textureId": "snorlax",
+ "movement": {
+  "land": true,
+  "water": false,
+  "underwater": false,
+  "air": false
+ },
+ "animations": {
+  "idle": "ground_idle",
+  "walk": "ground_walk",
+  "run": "ground_run",
+  "swim": "water_swim",
+  "fly": "air_fly",
+  "battleIdle": "battle_idle",
+  "attack": "physical",
+  "recoil": "recoil",
+  "faint": "faint",
+  "capture": "capture"
+ },
+ "behavior": {
+  "temperament": "neutral",
+  "speed": 0.4
+ },
+ "learnset": [
+  {
+   "level": 1,
+   "move": "tackle"
+  },
+  {
+   "level": 1,
+   "move": "defense_curl"
+  },
+  {
+   "level": 4,
+   "move": "lick"
+  },
+  {
+   "level": 9,
+   "move": "headbutt"
+  },
+  {
+   "level": 17,
+   "move": "rest"
+  },
+  {
+   "level": 25,
+   "move": "body_slam"
+  },
+  {
+   "level": 33,
+   "move": "crunch"
+  }
+ ]
+}

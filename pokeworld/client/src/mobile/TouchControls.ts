@@ -1,7 +1,7 @@
 import type { Action, Input } from "../engine/Input";
 
 interface ButtonDef {
-  action: Action | "jumpHold";
+  action: Action | "jumpHold" | "ballHold";
   label: string;
   cls: string;
 }
@@ -10,9 +10,11 @@ const BUTTONS: ButtonDef[] = [
   { action: "interact", label: "A", cls: "btn-a" },
   { action: "attack", label: "배틀", cls: "btn-attack" },
   { action: "jumpHold", label: "점프", cls: "btn-jump" },
-  { action: "capture", label: "포획", cls: "btn-capture" },
+  { action: "ballHold", label: "BALL", cls: "btn-ball" },
   { action: "mount", label: "탑승", cls: "btn-mount" },
 ];
+
+const LONG_PRESS_MS = 450;
 
 /**
  * On-screen controls for phones and tablets.
@@ -28,8 +30,12 @@ export class TouchControls {
   private readonly knob: HTMLDivElement;
   private joyId: number | null = null;
   private joyOrigin = { x: 0, y: 0 };
-  private readonly lookers = new Map<number, { x: number; y: number }>();
+  private readonly lookers = new Map<number, { x: number; y: number; sx: number; sy: number; at: number; moved: boolean; timer: number }>();
   private pinchDist = 0;
+  /** Whether a ball is in hand (tap on BALL then throws instead of equipping). */
+  ballEquipped = () => false;
+  /** Equip request from a BALL tap while not holding a ball. */
+  onEquip: () => void = () => {};
 
   constructor(
     root: HTMLElement,
@@ -67,8 +73,14 @@ export class TouchControls {
     if (!on) this.resetStick();
   }
 
+  /** Battle capture aim: only the BALL button and camera drag. */
+  setAimOnly(on: boolean): void {
+    this.el.classList.toggle("touch-aim-only", on);
+  }
+
   private bindButton(btn: HTMLButtonElement): void {
-    const action = btn.dataset.action as Action | "jumpHold";
+    const action = btn.dataset.action as Action | "jumpHold" | "ballHold";
+    let ballPress = false;
     const down = (e: Event) => {
       e.preventDefault();
       e.stopPropagation();
@@ -76,6 +88,12 @@ export class TouchControls {
       if (action === "jumpHold") {
         this.input.touchJumpHeld = true;
         this.input.press("jump");
+      } else if (action === "ballHold") {
+        // Tap = take a ball in hand; with a ball in hand, hold = aim/charge, release = throw
+        if (this.ballEquipped()) {
+          ballPress = true;
+          this.input.pressBall(true);
+        } else this.onEquip();
       } else this.input.press(action);
     };
     const up = (e: Event) => {
@@ -83,12 +101,18 @@ export class TouchControls {
       e.stopPropagation();
       btn.classList.remove("pressed");
       if (action === "jumpHold") this.input.touchJumpHeld = false;
+      if (action === "ballHold" && ballPress) {
+        ballPress = false;
+        this.input.pressBall(false);
+      }
     };
     if ("PointerEvent" in window) {
       btn.addEventListener("pointerdown", down);
       btn.addEventListener("pointerup", up);
       btn.addEventListener("pointercancel", up);
-      btn.addEventListener("pointerleave", up);
+      // The BALL button keeps its finger even if it slides off (aiming with the same thumb)
+      if (action !== "ballHold") btn.addEventListener("pointerleave", up);
+      else btn.addEventListener("pointerdown", (e) => btn.setPointerCapture?.((e as PointerEvent).pointerId));
     } else {
       btn.addEventListener("touchstart", down, { passive: false });
       btn.addEventListener("touchend", up, { passive: false });
@@ -126,7 +150,11 @@ export class TouchControls {
       this.knob.style.transform = "translate(-50%, -50%)";
       return;
     }
-    this.lookers.set(id, { x, y });
+    const timer = window.setTimeout(() => {
+      const l = this.lookers.get(id);
+      if (l && !l.moved) this.input.reportLongPress(l.x, l.y);
+    }, LONG_PRESS_MS);
+    this.lookers.set(id, { x, y, sx: x, sy: y, at: performance.now(), moved: false, timer });
     if (this.lookers.size === 2) this.pinchDist = this.lookerDistance();
   }
 
@@ -152,19 +180,24 @@ export class TouchControls {
     }
     const prev = this.lookers.get(id);
     if (!prev) return;
+    if (Math.hypot(x - prev.sx, y - prev.sy) > 12) prev.moved = true;
     if (this.lookers.size >= 2) {
-      this.lookers.set(id, { x, y });
+      prev.x = x;
+      prev.y = y;
       const d = this.lookerDistance();
       this.input.addZoom((this.pinchDist - d) * 0.03);
       this.pinchDist = d;
       return;
     }
     this.input.addLook((x - prev.x) * 1.4, (y - prev.y) * 1.4);
-    this.lookers.set(id, { x, y });
+    prev.x = x;
+    prev.y = y;
   }
 
   private end(id: number): void {
     if (id === this.joyId) this.resetStick();
+    const l = this.lookers.get(id);
+    if (l) clearTimeout(l.timer);
     this.lookers.delete(id);
   }
 

@@ -1,0 +1,94 @@
+{
+ "id": "lapras",
+ "dexNumber": 131,
+ "name": "Lapras",
+ "types": [
+  "water",
+  "ice"
+ ],
+ "baseStats": {
+  "hp": 130,
+  "atk": 85,
+  "def": 80,
+  "spa": 85,
+  "spd": 95,
+  "spe": 60
+ },
+ "catchRate": 45,
+ "baseExp": 187,
+ "height": 2.5,
+ "weight": 220.0,
+ "baseScale": 1.0,
+ "hitbox": {
+  "width": 2.2,
+  "height": 2.2
+ },
+ "genderRatio": 0.5,
+ "abilities": [
+  "Water Absorb"
+ ],
+ "modelId": "lapras",
+ "textureId": "lapras",
+ "movement": {
+  "land": false,
+  "water": true,
+  "underwater": true,
+  "air": false
+ },
+ "animations": {
+  "idle": "ground_idle",
+  "walk": "ground_walk",
+  "run": "ground_run",
+  "swim": "water_swim",
+  "fly": "air_fly",
+  "battleIdle": "battle_idle",
+  "attack": "physical",
+  "recoil": "recoil",
+  "faint": "faint",
+  "capture": "capture"
+ },
+ "behavior": {
+  "temperament": "neutral",
+  "speed": 0.9
+ },
+ "learnset": [
+  {
+   "level": 1,
+   "move": "water_gun"
+  },
+  {
+   "level": 1,
+   "move": "growl"
+  },
+  {
+   "level": 1,
+   "move": "sing"
+  },
+  {
+   "level": 10,
+   "move": "powder_snow"
+  },
+  {
+   "level": 20,
+   "move": "water_pulse"
+  },
+  {
+   "level": 25,
+   "move": "body_slam"
+  },
+  {
+   "level": 35,
+   "move": "ice_beam"
+  },
+  {
+   "level": 45,
+   "move": "surf"
+  }
+ ],
+ "mount": {
+  "modes": [
+   "swim"
+  ],
+  "speed": 1.3
+ }
+}

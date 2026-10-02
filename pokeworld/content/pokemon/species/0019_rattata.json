@@ -1,0 +1,79 @@
+{
+ "id": "rattata",
+ "dexNumber": 19,
+ "name": "Rattata",
+ "types": [
+  "normal"
+ ],
+ "baseStats": {
+  "hp": 30,
+  "atk": 56,
+  "def": 35,
+  "spa": 25,
+  "spd": 35,
+  "spe": 72
+ },
+ "catchRate": 255,
+ "baseExp": 51,
+ "height": 0.3,
+ "weight": 3.5,
+ "baseScale": 1.0,
+ "hitbox": {
+  "width": 0.5,
+  "height": 0.5
+ },
+ "genderRatio": 0.5,
+ "abilities": [
+  "Run Away"
+ ],
+ "modelId": "rattata",
+ "textureId": "rattata",
+ "movement": {
+  "land": true,
+  "water": false,
+  "underwater": false,
+  "air": false
+ },
+ "animations": {
+  "idle": "ground_idle",
+  "walk": "ground_walk",
+  "run": "ground_run",
+  "swim": "water_swim",
+  "fly": "air_fly",
+  "battleIdle": "battle_idle",
+  "attack": "physical",
+  "recoil": "recoil",
+  "faint": "faint",
+  "capture": "capture"
+ },
+ "behavior": {
+  "temperament": "neutral",
+  "speed": 1.3
+ },
+ "learnset": [
+  {
+   "level": 1,
+   "move": "tackle"
+  },
+  {
+   "level": 1,
+   "move": "tail_whip"
+  },
+  {
+   "level": 4,
+   "move": "quick_attack"
+  },
+  {
+   "level": 10,
+   "move": "bite"
+  },
+  {
+   "level": 16,
+   "move": "hyper_fang"
+  }
+ ],
+ "evolution": {
+  "to": "raticate",
+  "level": 20
+ }
+}

@@ -1,0 +1,79 @@
+{
+ "id": "sandshrew",
+ "dexNumber": 27,
+ "name": "Sandshrew",
+ "types": [
+  "ground"
+ ],
+ "baseStats": {
+  "hp": 50,
+  "atk": 75,
+  "def": 85,
+  "spa": 20,
+  "spd": 30,
+  "spe": 40
+ },
+ "catchRate": 255,
+ "baseExp": 60,
+ "height": 0.6,
+ "weight": 12.0,
+ "baseScale": 1.0,
+ "hitbox": {
+  "width": 0.5,
+  "height": 0.6
+ },
+ "genderRatio": 0.5,
+ "abilities": [
+  "Sand Veil"
+ ],
+ "modelId": "sandshrew",
+ "textureId": "sandshrew",
+ "movement": {
+  "land": true,
+  "water": false,
+  "underwater": false,
+  "air": false
+ },
+ "animations": {
+  "idle": "ground_idle",
+  "walk": "ground_walk",
+  "run": "ground_run",
+  "swim": "water_swim",
+  "fly": "air_fly",
+  "battleIdle": "battle_idle",
+  "attack": "physical",
+  "recoil": "recoil",
+  "faint": "faint",
+  "capture": "capture"
+ },
+ "behavior": {
+  "temperament": "timid",
+  "speed": 0.9
+ },
+ "learnset": [
+  {
+   "level": 1,
+   "move": "scratch"
+  },
+  {
+   "level": 1,
+   "move": "defense_curl"
+  },
+  {
+   "level": 6,
+   "move": "mud_slap"
+  },
+  {
+   "level": 12,
+   "move": "rock_tomb"
+  },
+  {
+   "level": 18,
+   "move": "dig"
+  }
+ ],
+ "evolution": {
+  "to": "sandslash",
+  "level": 22
+ }
+}

@@ -1,0 +1,79 @@
+{
+ "id": "poliwag",
+ "dexNumber": 60,
+ "name": "Poliwag",
+ "types": [
+  "water"
+ ],
+ "baseStats": {
+  "hp": 40,
+  "atk": 50,
+  "def": 40,
+  "spa": 40,
+  "spd": 40,
+  "spe": 90
+ },
+ "catchRate": 255,
+ "baseExp": 60,
+ "height": 0.6,
+ "weight": 12.4,
+ "baseScale": 1.0,
+ "hitbox": {
+  "width": 0.5,
+  "height": 0.6
+ },
+ "genderRatio": 0.5,
+ "abilities": [
+  "Water Absorb"
+ ],
+ "modelId": "poliwag",
+ "textureId": "poliwag",
+ "movement": {
+  "land": true,
+  "water": true,
+  "underwater": true,
+  "air": false
+ },
+ "animations": {
+  "idle": "ground_idle",
+  "walk": "ground_walk",
+  "run": "ground_run",
+  "swim": "water_swim",
+  "fly": "air_fly",
+  "battleIdle": "battle_idle",
+  "attack": "physical",
+  "recoil": "recoil",
+  "faint": "faint",
+  "capture": "capture"
+ },
+ "behavior": {
+  "temperament": "timid",
+  "speed": 1.0
+ },
+ "learnset": [
+  {
+   "level": 1,
+   "move": "water_gun"
+  },
+  {
+   "level": 1,
+   "move": "pound"
+  },
+  {
+   "level": 6,
+   "move": "bubble"
+  },
+  {
+   "level": 12,
+   "move": "bubble_beam"
+  },
+  {
+   "level": 18,
+   "move": "body_slam"
+  }
+ ],
+ "evolution": {
+  "to": "poliwhirl",
+  "level": 25
+ }
+}

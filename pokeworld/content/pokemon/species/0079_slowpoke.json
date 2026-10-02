@@ -1,0 +1,84 @@
+{
+ "id": "slowpoke",
+ "dexNumber": 79,
+ "name": "Slowpoke",
+ "types": [
+  "water",
+  "psychic"
+ ],
+ "baseStats": {
+  "hp": 90,
+  "atk": 65,
+  "def": 65,
+  "spa": 40,
+  "spd": 40,
+  "spe": 15
+ },
+ "catchRate": 190,
+ "baseExp": 63,
+ "height": 1.2,
+ "weight": 36.0,
+ "baseScale": 1.0,
+ "hitbox": {
+  "width": 0.96,
+  "height": 1.2
+ },
+ "genderRatio": 0.5,
+ "abilities": [
+  "Oblivious"
+ ],
+ "modelId": "slowpoke",
+ "textureId": "slowpoke",
+ "movement": {
+  "land": true,
+  "water": true,
+  "underwater": false,
+  "air": false
+ },
+ "animations": {
+  "idle": "ground_idle",
+  "walk": "ground_walk",
+  "run": "ground_run",
+  "swim": "water_swim",
+  "fly": "air_fly",
+  "battleIdle": "battle_idle",
+  "attack": "physical",
+  "recoil": "recoil",
+  "faint": "faint",
+  "capture": "capture"
+ },
+ "behavior": {
+  "temperament": "neutral",
+  "speed": 0.4
+ },
+ "learnset": [
+  {
+   "level": 1,
+   "move": "tackle"
+  },
+  {
+   "level": 1,
+   "move": "growl"
+  },
+  {
+   "level": 3,
+   "move": "water_gun"
+  },
+  {
+   "level": 9,
+   "move": "confusion"
+  },
+  {
+   "level": 15,
+   "move": "headbutt"
+  },
+  {
+   "level": 21,
+   "move": "water_pulse"
+  },
+  {
+   "level": 27,
+   "move": "psybeam"
+  }
+ ]
+}

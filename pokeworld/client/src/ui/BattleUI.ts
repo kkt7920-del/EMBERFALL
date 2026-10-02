@@ -11,6 +11,8 @@ export interface BattleMenuHandlers {
   run: () => void;
 }
 
+export const STATUS_LABEL: Record<string, string> = { sleep: "잠듦", freeze: "얼음", paralysis: "마비", poison: "독", burn: "화상" };
+
 /** Battle HUD: HP plates, message box and a large, thumb-friendly command menu. */
 export class BattleUI {
   readonly el: HTMLDivElement;
@@ -35,8 +37,14 @@ export class BattleUI {
 
   private plate(el: HTMLElement, c: BattleCreatureView, label: string, exp?: number): void {
     const ratio = c.hp / c.maxHp;
+    const gender = c.gender === "male" ? "♂" : c.gender === "female" ? "♀" : "";
     el.replaceChildren(
-      h("div", { class: "name" }, h("span", null, `${label}${c.name}`), h("span", null, `Lv.${c.level}`)),
+      h(
+        "div",
+        { class: "name" },
+        h("span", null, `${label}${c.name}`, gender ? h("b", { class: `gender ${c.gender}` }, gender) : null, c.alpha ? h("b", { class: "alpha-badge" }, "ALPHA") : null),
+        h("span", null, h("i", { class: `status-chip${c.status ? ` s-${c.status}` : " hidden"}` }, c.status ? STATUS_LABEL[c.status] : ""), ` Lv.${c.level}`),
+      ),
       h("div", { class: "bar" }, h("div", { class: "hpfill", style: { width: `${ratio * 100}%`, background: hpColor(ratio) } })),
       h("div", { class: "hpnum" }, `${Math.max(0, c.hp)} / ${c.maxHp}`),
       ...(exp !== undefined ? [h("div", { class: "bar exp" }, h("div", { style: { width: `${exp * 100}%` } }))] : []),
@@ -61,6 +69,19 @@ export class BattleUI {
       fill.style.background = hpColor(ratio);
     }
     if (num) num.textContent = `${Math.max(0, hp)} / ${max}`;
+  }
+
+  setStatus(side: "player" | "foe", status: string | null): void {
+    const el = side === "player" ? this.mine : this.foe;
+    const chip = el.querySelector<HTMLElement>(".status-chip");
+    if (!chip) return;
+    chip.className = `status-chip${status ? ` s-${status}` : " hidden"}`;
+    chip.textContent = status ? STATUS_LABEL[status] ?? status : "";
+  }
+
+  /** Aiming a ball during battle: the menu and message box step aside. */
+  setAiming(on: boolean): void {
+    this.el.classList.toggle("aiming", on);
   }
 
   say(text: string): void {
@@ -97,7 +118,7 @@ export class BattleUI {
       h("button", { class: cls, disabled, onclick: fn }, label, sub ? h("small", null, sub) : null);
     this.menu.replaceChildren(
       btn("싸운다", "기술 선택", "fight", () => this.movesMenu(handlers, opts)),
-      btn("포획", opts.canCapture ? `포획구 ${opts.orbs}개` : "불가", "catch", handlers.capture, !opts.canCapture || opts.orbs === 0),
+      btn("포획", opts.canCapture ? `볼 ${opts.orbs}개 · 직접 던지기` : "불가", "catch", handlers.capture, !opts.canCapture || opts.orbs === 0),
       btn("가방", "회복·아이템", "", handlers.bag),
       btn("교체", "파티", "", handlers.party),
       btn("도망친다", opts.canRun ? "" : "불가", "back", handlers.run, !opts.canRun),

@@ -1,0 +1,86 @@
+{
+ "id": "gyarados",
+ "dexNumber": 130,
+ "name": "Gyarados",
+ "types": [
+  "water",
+  "flying"
+ ],
+ "baseStats": {
+  "hp": 95,
+  "atk": 125,
+  "def": 79,
+  "spa": 60,
+  "spd": 100,
+  "spe": 81
+ },
+ "catchRate": 45,
+ "baseExp": 189,
+ "height": 6.5,
+ "weight": 235.0,
+ "baseScale": 1.0,
+ "hitbox": {
+  "width": 2.6,
+  "height": 4.0
+ },
+ "genderRatio": 0.5,
+ "abilities": [
+  "Intimidate"
+ ],
+ "modelId": "gyarados",
+ "textureId": "gyarados",
+ "movement": {
+  "land": false,
+  "water": true,
+  "underwater": true,
+  "air": false
+ },
+ "animations": {
+  "idle": "ground_idle",
+  "walk": "ground_walk",
+  "run": "ground_run",
+  "swim": "water_swim",
+  "fly": "air_fly",
+  "battleIdle": "battle_idle",
+  "attack": "physical",
+  "recoil": "recoil",
+  "faint": "faint",
+  "capture": "capture"
+ },
+ "behavior": {
+  "temperament": "aggressive",
+  "speed": 1.1
+ },
+ "learnset": [
+  {
+   "level": 1,
+   "move": "bite"
+  },
+  {
+   "level": 1,
+   "move": "twister"
+  },
+  {
+   "level": 1,
+   "move": "aqua_tail"
+  },
+  {
+   "level": 1,
+   "move": "dragon_breath"
+  },
+  {
+   "level": 30,
+   "move": "crunch"
+  },
+  {
+   "level": 40,
+   "move": "hydro_pump"
+  }
+ ],
+ "mount": {
+  "modes": [
+   "swim"
+  ],
+  "speed": 1.4
+ }
+}

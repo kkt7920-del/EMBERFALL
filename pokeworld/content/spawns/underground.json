@@ -1,0 +1,266 @@
+[
+ {
+  "id": "cv_zubat",
+  "species": "zubat",
+  "biomes": [
+   "cave",
+   "cavern",
+   "crystal_cave",
+   "mine",
+   "underground_river",
+   "deep_cave"
+  ],
+  "level": {
+   "min": 8,
+   "max": 14
+  },
+  "weight": 18,
+  "rarity": "common",
+  "alphaChance": 0.012,
+  "layer": "air"
+ },
+ {
+  "id": "cv_geodude",
+  "species": "geodude",
+  "biomes": [
+   "cave",
+   "cavern",
+   "mine"
+  ],
+  "level": {
+   "min": 8,
+   "max": 14
+  },
+  "weight": 12,
+  "rarity": "common",
+  "alphaChance": 0.012
+ },
+ {
+  "id": "cv_diglett",
+  "species": "diglett",
+  "biomes": [
+   "cave",
+   "mine"
+  ],
+  "level": {
+   "min": 8,
+   "max": 12
+  },
+  "weight": 6,
+  "rarity": "common",
+  "alphaChance": 0.012
+ },
+ {
+  "id": "cv_roggenrola",
+  "species": "roggenrola",
+  "biomes": [
+   "cave",
+   "cavern",
+   "mine",
+   "crystal_cave"
+  ],
+  "level": {
+   "min": 10,
+   "max": 15
+  },
+  "weight": 8,
+  "rarity": "common",
+  "alphaChance": 0.012
+ },
+ {
+  "id": "cv_paras",
+  "species": "paras",
+  "biomes": [
+   "cave",
+   "cavern"
+  ],
+  "level": {
+   "min": 8,
+   "max": 12
+  },
+  "weight": 4,
+  "rarity": "common",
+  "alphaChance": 0.012
+ },
+ {
+  "id": "cv_golbat",
+  "species": "golbat",
+  "biomes": [
+   "cavern",
+   "deep_cave"
+  ],
+  "level": {
+   "min": 22,
+   "max": 26
+  },
+  "weight": 4,
+  "rarity": "uncommon",
+  "alphaChance": 0.012,
+  "layer": "air"
+ },
+ {
+  "id": "cr_carbink",
+  "species": "carbink",
+  "biomes": [
+   "crystal_cave"
+  ],
+  "level": {
+   "min": 14,
+   "max": 20
+  },
+  "weight": 10,
+  "rarity": "common",
+  "alphaChance": 0.012
+ },
+ {
+  "id": "cr_sableye",
+  "species": "sableye",
+  "biomes": [
+   "crystal_cave",
+   "deep_cave"
+  ],
+  "level": {
+   "min": 14,
+   "max": 20
+  },
+  "weight": 6,
+  "rarity": "uncommon",
+  "alphaChance": 0.012
+ },
+ {
+  "id": "mi_machop",
+  "species": "machop",
+  "biomes": [
+   "mine"
+  ],
+  "level": {
+   "min": 12,
+   "max": 16
+  },
+  "weight": 6,
+  "rarity": "common",
+  "alphaChance": 0.012
+ },
+ {
+  "id": "ur_wooper",
+  "species": "wooper",
+  "biomes": [
+   "underground_river"
+  ],
+  "level": {
+   "min": 10,
+   "max": 15
+  },
+  "weight": 8,
+  "rarity": "common",
+  "alphaChance": 0.012
+ },
+ {
+  "id": "ur_magikarp",
+  "species": "magikarp",
+  "biomes": [
+   "underground_river"
+  ],
+  "level": {
+   "min": 10,
+   "max": 15
+  },
+  "weight": 8,
+  "rarity": "common",
+  "alphaChance": 0.012,
+  "layer": "water_surface"
+ },
+ {
+  "id": "dc_onix",
+  "species": "onix",
+  "biomes": [
+   "deep_cave"
+  ],
+  "level": {
+   "min": 20,
+   "max": 26
+  },
+  "weight": 4,
+  "rarity": "common",
+  "alphaChance": 0.012
+ },
+ {
+  "id": "dc_graveler",
+  "species": "graveler",
+  "biomes": [
+   "deep_cave"
+  ],
+  "level": {
+   "min": 22,
+   "max": 28
+  },
+  "weight": 6,
+  "rarity": "common",
+  "alphaChance": 0.012
+ },
+ {
+  "id": "ar_bronzor",
+  "species": "bronzor",
+  "biomes": [
+   "ancient_ruin",
+   "ruins"
+  ],
+  "level": {
+   "min": 18,
+   "max": 24
+  },
+  "weight": 8,
+  "rarity": "common",
+  "alphaChance": 0.012,
+  "layer": "air"
+ },
+ {
+  "id": "ar_golett",
+  "species": "golett",
+  "biomes": [
+   "ancient_ruin",
+   "ruins"
+  ],
+  "level": {
+   "min": 18,
+   "max": 24
+  },
+  "weight": 6,
+  "rarity": "common",
+  "alphaChance": 0.012
+ },
+ {
+  "id": "ar_abra",
+  "species": "abra",
+  "biomes": [
+   "ancient_ruin",
+   "ruins"
+  ],
+  "level": {
+   "min": 10,
+   "max": 16
+  },
+  "weight": 4,
+  "rarity": "uncommon",
+  "alphaChance": 0.012
+ },
+ {
+  "id": "ru_gastly",
+  "species": "gastly",
+  "biomes": [
+   "ruins"
+  ],
+  "level": {
+   "min": 14,
+   "max": 18
+  },
+  "weight": 6,
+  "rarity": "common",
+  "alphaChance": 0.012,
+  "time": [
+   "dusk",
+   "night"
+  ],
+  "layer": "air"
+ }
+]

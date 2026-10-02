@@ -1,112 +1,315 @@
 [
-  {
-    "id": "fo_meadowbug",
-    "species": "meadowbug",
-    "biomes": [
-      "forest"
-    ],
-    "level": {
-      "min": 3,
-      "max": 6
-    },
-    "weight": 20,
-    "rarity": "common"
+ {
+  "id": "fe_caterpie",
+  "species": "caterpie",
+  "biomes": [
+   "forest_edge",
+   "forest"
+  ],
+  "level": {
+   "min": 2,
+   "max": 5
   },
-  {
-    "id": "fo_silkmoth",
-    "species": "silkmoth",
-    "biomes": [
-      "forest"
-    ],
-    "level": {
-      "min": 10,
-      "max": 13
-    },
-    "weight": 4,
-    "rarity": "rare",
-    "layer": "air"
+  "weight": 16,
+  "rarity": "common",
+  "alphaChance": 0.012
+ },
+ {
+  "id": "fe_weedle",
+  "species": "weedle",
+  "biomes": [
+   "forest_edge",
+   "forest"
+  ],
+  "level": {
+   "min": 2,
+   "max": 5
   },
-  {
-    "id": "fo_glowshroom",
-    "species": "glowshroom",
-    "biomes": [
-      "forest"
-    ],
-    "level": {
-      "min": 5,
-      "max": 9
-    },
-    "weight": 12,
-    "rarity": "uncommon",
-    "time": [
-      "dusk",
-      "night"
-    ]
+  "weight": 14,
+  "rarity": "common",
+  "alphaChance": 0.012
+ },
+ {
+  "id": "fe_bellsprout",
+  "species": "bellsprout",
+  "biomes": [
+   "forest_edge",
+   "forest"
+  ],
+  "level": {
+   "min": 4,
+   "max": 8
   },
-  {
-    "id": "fo_nightowl",
-    "species": "nightowl",
-    "biomes": [
-      "forest",
-      "forest_edge"
-    ],
-    "level": {
-      "min": 7,
-      "max": 11
-    },
-    "weight": 8,
-    "rarity": "uncommon",
-    "time": [
-      "night"
-    ],
-    "layer": "air"
+  "weight": 8,
+  "rarity": "common",
+  "alphaChance": 0.012,
+  "time": [
+   "dawn",
+   "day",
+   "afternoon"
+  ]
+ },
+ {
+  "id": "fe_oddish",
+  "species": "oddish",
+  "biomes": [
+   "forest_edge",
+   "forest"
+  ],
+  "level": {
+   "min": 4,
+   "max": 8
   },
-  {
-    "id": "fo_foxfire",
-    "species": "foxfire",
-    "biomes": [
-      "forest_edge"
-    ],
-    "level": {
-      "min": 8,
-      "max": 12
-    },
-    "weight": 4,
-    "rarity": "rare",
-    "time": [
-      "dusk",
-      "night"
-    ]
+  "weight": 10,
+  "rarity": "common",
+  "alphaChance": 0.012,
+  "time": [
+   "dusk",
+   "night"
+  ]
+ },
+ {
+  "id": "fe_butterfree",
+  "species": "butterfree",
+  "biomes": [
+   "forest_edge",
+   "forest"
+  ],
+  "level": {
+   "min": 10,
+   "max": 13
   },
-  {
-    "id": "fo_stagleaf",
-    "species": "stagleaf",
-    "biomes": [
-      "forest"
-    ],
-    "level": {
-      "min": 12,
-      "max": 16
-    },
-    "weight": 2,
-    "rarity": "very_rare"
+  "weight": 2.5,
+  "rarity": "uncommon",
+  "alphaChance": 0.012,
+  "layer": "air",
+  "time": [
+   "dawn",
+   "day",
+   "afternoon"
+  ]
+ },
+ {
+  "id": "fe_hoothoot",
+  "species": "hoothoot",
+  "biomes": [
+   "forest_edge",
+   "forest",
+   "deep_forest"
+  ],
+  "level": {
+   "min": 5,
+   "max": 10
   },
-  {
-    "id": "fo_chirpling",
-    "species": "chirpling",
-    "biomes": [
-      "forest"
-    ],
-    "level": {
-      "min": 4,
-      "max": 7
-    },
-    "weight": 10,
-    "rarity": "common",
-    "time": [
-      "dawn",
-      "day",
-      "dusk"
-    ]
-  }
+  "weight": 9,
+  "rarity": "common",
+  "alphaChance": 0.012,
+  "time": [
+   "dusk",
+   "night"
+  ]
+ },
+ {
+  "id": "fe_venonat",
+  "species": "venonat",
+  "biomes": [
+   "forest",
+   "deep_forest"
+  ],
+  "level": {
+   "min": 6,
+   "max": 10
+  },
+  "weight": 7,
+  "rarity": "common",
+  "alphaChance": 0.012,
+  "time": [
+   "dusk",
+   "night"
+  ]
+ },
+ {
+  "id": "fo_metapod",
+  "species": "metapod",
+  "biomes": [
+   "forest"
+  ],
+  "level": {
+   "min": 7,
+   "max": 9
+  },
+  "weight": 5,
+  "rarity": "common",
+  "alphaChance": 0.012
+ },
+ {
+  "id": "fo_kakuna",
+  "species": "kakuna",
+  "biomes": [
+   "forest"
+  ],
+  "level": {
+   "min": 7,
+   "max": 9
+  },
+  "weight": 5,
+  "rarity": "common",
+  "alphaChance": 0.012
+ },
+ {
+  "id": "fo_paras",
+  "species": "paras",
+  "biomes": [
+   "forest",
+   "deep_forest",
+   "cave"
+  ],
+  "level": {
+   "min": 6,
+   "max": 11
+  },
+  "weight": 8,
+  "rarity": "common",
+  "alphaChance": 0.012
+ },
+ {
+  "id": "fo_pikachu",
+  "species": "pikachu",
+  "biomes": [
+   "forest"
+  ],
+  "level": {
+   "min": 6,
+   "max": 9
+  },
+  "weight": 3,
+  "rarity": "uncommon",
+  "alphaChance": 0.012
+ },
+ {
+  "id": "fo_scyther",
+  "species": "scyther",
+  "biomes": [
+   "forest",
+   "deep_forest"
+  ],
+  "level": {
+   "min": 14,
+   "max": 18
+  },
+  "weight": 0.8,
+  "rarity": "rare"
+ },
+ {
+  "id": "fo_pinsir",
+  "species": "pinsir",
+  "biomes": [
+   "forest",
+   "deep_forest"
+  ],
+  "level": {
+   "min": 14,
+   "max": 18
+  },
+  "weight": 0.8,
+  "rarity": "rare"
+ },
+ {
+  "id": "fo_heracross",
+  "species": "heracross",
+  "biomes": [
+   "forest",
+   "deep_forest"
+  ],
+  "level": {
+   "min": 14,
+   "max": 18
+  },
+  "weight": 0.8,
+  "rarity": "rare"
+ },
+ {
+  "id": "df_parasect",
+  "species": "parasect",
+  "biomes": [
+   "deep_forest"
+  ],
+  "level": {
+   "min": 16,
+   "max": 20
+  },
+  "weight": 3,
+  "rarity": "uncommon",
+  "alphaChance": 0.012
+ },
+ {
+  "id": "df_gloom",
+  "species": "gloom",
+  "biomes": [
+   "deep_forest"
+  ],
+  "level": {
+   "min": 16,
+   "max": 20
+  },
+  "weight": 4,
+  "rarity": "uncommon",
+  "alphaChance": 0.012,
+  "time": [
+   "dusk",
+   "night"
+  ]
+ },
+ {
+  "id": "df_beedrill",
+  "species": "beedrill",
+  "biomes": [
+   "deep_forest"
+  ],
+  "level": {
+   "min": 12,
+   "max": 16
+  },
+  "weight": 5,
+  "rarity": "common",
+  "alphaChance": 0.012,
+  "layer": "air"
+ },
+ {
+  "id": "df_gastly",
+  "species": "gastly",
+  "biomes": [
+   "deep_forest",
+   "ruins"
+  ],
+  "level": {
+   "min": 12,
+   "max": 16
+  },
+  "weight": 4,
+  "rarity": "uncommon",
+  "alphaChance": 0.012,
+  "time": [
+   "dusk",
+   "night"
+  ],
+  "layer": "air"
+ },
+ {
+  "id": "df_snorlax",
+  "species": "snorlax",
+  "biomes": [
+   "deep_forest"
+  ],
+  "level": {
+   "min": 20,
+   "max": 24
+  },
+  "weight": 0.35,
+  "rarity": "very_rare",
+  "subBiomes": [
+   "clearing",
+   "meadow"
+  ]
+ }
 ]

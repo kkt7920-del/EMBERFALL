@@ -1,7 +1,7 @@
 import { type QualityPresetId, type QualitySettings, presetSettings } from "@shared/config/quality";
 import { Device } from "./mobile/Device";
 
-const KEY = "pokeworld.settings.v1";
+const KEY = "pokeworld.settings.v2";
 
 export interface ClientSettings extends QualitySettings {
   renderer: "webgl2" | "webgpu";
@@ -10,6 +10,8 @@ export interface ClientSettings extends QualitySettings {
   cameraSensitivity: number;
   invertY: boolean;
   sound: boolean;
+  /** Phone / gamepad vibration on captures. */
+  vibration: boolean;
 }
 
 export function defaultPreset(): QualityPresetId {
@@ -25,6 +27,7 @@ export function defaultSettings(): ClientSettings {
     cameraSensitivity: 1,
     invertY: false,
     sound: true,
+    vibration: true,
   };
 }
 

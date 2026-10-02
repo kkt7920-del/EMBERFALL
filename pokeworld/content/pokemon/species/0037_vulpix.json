@@ -1,0 +1,79 @@
+{
+ "id": "vulpix",
+ "dexNumber": 37,
+ "name": "Vulpix",
+ "types": [
+  "fire"
+ ],
+ "baseStats": {
+  "hp": 38,
+  "atk": 41,
+  "def": 40,
+  "spa": 50,
+  "spd": 65,
+  "spe": 65
+ },
+ "catchRate": 190,
+ "baseExp": 60,
+ "height": 0.6,
+ "weight": 9.9,
+ "baseScale": 1.0,
+ "hitbox": {
+  "width": 0.5,
+  "height": 0.6
+ },
+ "genderRatio": 0.75,
+ "abilities": [
+  "Flash Fire"
+ ],
+ "modelId": "vulpix",
+ "textureId": "vulpix",
+ "movement": {
+  "land": true,
+  "water": false,
+  "underwater": false,
+  "air": false
+ },
+ "animations": {
+  "idle": "ground_idle",
+  "walk": "ground_walk",
+  "run": "ground_run",
+  "swim": "water_swim",
+  "fly": "air_fly",
+  "battleIdle": "battle_idle",
+  "attack": "physical",
+  "recoil": "recoil",
+  "faint": "faint",
+  "capture": "capture"
+ },
+ "behavior": {
+  "temperament": "timid",
+  "speed": 1.1
+ },
+ "learnset": [
+  {
+   "level": 1,
+   "move": "ember"
+  },
+  {
+   "level": 1,
+   "move": "tail_whip"
+  },
+  {
+   "level": 8,
+   "move": "quick_attack"
+  },
+  {
+   "level": 12,
+   "move": "fire_spin"
+  },
+  {
+   "level": 18,
+   "move": "flame_wheel"
+  },
+  {
+   "level": 24,
+   "move": "flamethrower"
+  }
+ ]
+}
