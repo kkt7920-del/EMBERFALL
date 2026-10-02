@@ -61,12 +61,14 @@ export function showTitle(root: HTMLElement, info: TitleInfo): Promise<TitleChoi
         );
       buttons.append(h("button", { class: info.save ? "" : "btn-primary", "data-action": "new", onclick: () => nameForm("new") }, "✦ 새 게임"));
       buttons.append(onlineBtn);
+      const installHint = h("div", { class: "title-save hidden" }, Device.iOS ? "Safari 공유 버튼 → '홈 화면에 추가'를 선택하세요." : "브라우저 메뉴 → '홈 화면에 추가'(또는 '앱 설치')를 선택하세요.");
       const installBtn = h("button", { "data-action": "install" }, "📲 앱으로 설치");
       installBtn.addEventListener("click", async () => {
+        // alert()/confirm() are unavailable in embedded viewers, so hints are shown in the page
         if (installPrompt) await installPrompt.prompt();
-        else alert(Device.iOS ? "Safari 공유 버튼 → '홈 화면에 추가'를 선택하세요." : "브라우저 메뉴 → '홈 화면에 추가'(또는 '앱 설치')를 선택하세요.");
+        else installHint.classList.remove("hidden");
       });
-      if (!Device.standalone) buttons.append(installBtn);
+      if (!Device.standalone && !import.meta.env.VITE_EMBEDDED) buttons.append(installBtn, installHint);
 
       const parts: (Node | null)[] = [
         h("div", { class: "title-logo" }, "PokeWorld"),
@@ -86,11 +88,20 @@ export function showTitle(root: HTMLElement, info: TitleInfo): Promise<TitleChoi
 
     const nameForm = (mode: "new" | "online") => {
       const input = h("input", { class: "text-input", maxlength: "12", placeholder: "트레이너 이름", value: storedName() || "트레이너", "aria-label": "트레이너 이름" }) as HTMLInputElement;
+      const warn = h("div", { class: "toast bad hidden", style: { animation: "none" } }, "기존 저장 데이터가 지워집니다. 계속하려면 한 번 더 누르세요.");
+      let confirmed = false;
       const start = () => {
         const name = input.value.trim().slice(0, 12) || "트레이너";
-        if (mode === "new" && info.save && !confirm("기존 저장 데이터를 지우고 새로 시작할까요?")) return;
+        // Overwriting a save asks for a second press (in-page; no confirm())
+        if (mode === "new" && info.save && !confirmed) {
+          confirmed = true;
+          warn.classList.remove("hidden");
+          startBtn.textContent = "저장 지우고 새로 시작";
+          return;
+        }
         done({ mode, name });
       };
+      const startBtn = h("button", { class: "btn btn-primary", "data-action": "start", onclick: () => start() }, mode === "new" ? "모험 시작!" : "접속하기");
       input.addEventListener("keydown", (e) => {
         if (e.key === "Enter") start();
       });
@@ -101,7 +112,8 @@ export function showTitle(root: HTMLElement, info: TitleInfo): Promise<TitleChoi
           { class: "title-form" },
           h("div", { class: "title-sub" }, mode === "new" ? "당신의 이름을 알려 주세요." : "같은 서버의 다른 플레이어와 같은 세계를 탐험합니다."),
           input,
-          h("button", { class: "btn btn-primary", "data-action": "start", onclick: start }, mode === "new" ? "모험 시작!" : "접속하기"),
+          warn,
+          startBtn,
           h("button", { class: "btn", onclick: main }, "← 돌아가기"),
         ),
       );

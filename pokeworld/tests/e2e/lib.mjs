@@ -35,8 +35,9 @@ export async function newGame(page, name = "테스터") {
   await page.waitForSelector(".title-screen", { timeout: 30000 });
   await page.click('[data-action="new"]');
   await page.fill(".text-input", name);
-  page.once("dialog", (d) => d.accept());
   await page.click('[data-action="start"]');
+  // Overwriting an existing save asks for a second press
+  if (await page.waitForSelector(".title-screen", { state: "detached", timeout: 1500 }).then(() => false).catch(() => true)) await page.click('[data-action="start"]');
   await waitGame(page);
 }
 

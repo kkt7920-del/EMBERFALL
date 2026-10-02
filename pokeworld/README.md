@@ -39,6 +39,8 @@ npm start            # :2567 에서 클라이언트·WebSocket(/ws)·/api/health
 1. **Node 서버 하나**: `npm start` 앞에 HTTPS 리버스 프록시(Caddy, nginx 등)를 두면 `https://game.example.com` 에서 정적 파일과 `wss://game.example.com/ws` 를 함께 제공합니다. WebSocket 업그레이드 헤더를 전달하도록 설정하세요.
 2. **정적 호스팅 + 게임 서버 분리**: `dist/client` 를 정적 호스팅에 올리고, 빌드할 때 `VITE_SERVER_URL=wss://server.example.com/ws` 를 주거나 접속 URL에 `?server=wss://…/ws` 를 붙입니다. 서버 없이 올리면 싱글 플레이만 동작합니다.
 
+서버 없이 싱글 플레이만 올릴 때는 `npm run build:embed` 를 쓰면 `dist/artifact` 에 경로가 상대적인 빌드가 만들어집니다(서비스 워커와 설치 버튼 없음). 아무 정적 호스팅의 하위 경로에 올려도 동작합니다.
+
 PostgreSQL로 옮길 때는 `server/src/persistence/PlayerStore.ts` 인터페이스를 구현해 `SqliteStore` 대신 넣으면 됩니다.
 
 ## 조작

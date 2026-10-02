@@ -22,7 +22,6 @@ await page.waitForSelector(".title-screen", { timeout: 30000 });
 await page.screenshot({ path: `${SHOTS}/mobile-01-title.png` });
 await page.tap('[data-action="new"]');
 await page.fill(".text-input", "모바일");
-page.once("dialog", (d) => d.accept());
 await page.tap('[data-action="start"]');
 await waitGame(page);
 await page.waitForTimeout(1500);

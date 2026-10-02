@@ -10,6 +10,8 @@ import { h } from "./ui/dom";
 import { showTitle } from "./ui/Title";
 
 async function checkOnline(): Promise<boolean> {
+  // Embedded single-player builds (e.g. a static share link) have no game server
+  if (import.meta.env.VITE_EMBEDDED && !new URLSearchParams(location.search).get("server")) return false;
   const url = serverUrl().replace(/^ws/, "http").replace(/\/ws$/, "/api/health");
   try {
     const ctrl = new AbortController();
@@ -41,8 +43,8 @@ async function boot(): Promise<void> {
   const overlayRoot = document.getElementById("overlays")!;
   lockBrowserGestures(document.body);
 
-  if (import.meta.env.PROD && "serviceWorker" in navigator) {
-    navigator.serviceWorker.register("/sw.js").catch((e) => console.warn("service worker", e));
+  if (import.meta.env.PROD && !import.meta.env.VITE_EMBEDDED && "serviceWorker" in navigator) {
+    navigator.serviceWorker.register(`${import.meta.env.BASE_URL}sw.js`).catch((e) => console.warn("service worker", e));
   }
 
   const rotate = document.getElementById("rotate-overlay");

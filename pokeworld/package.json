@@ -17,7 +17,8 @@
     "start": "node --no-warnings dist/server/main.js",
     "preview": "npm run build && npm start",
     "icons": "node scripts/make-icons.mjs",
-    "test:e2e": "node tests/e2e/run.mjs"
+    "test:e2e": "node tests/e2e/run.mjs",
+    "build:embed": "VITE_BASE=./ VITE_EMBEDDED=1 VITE_OUT_DIR=dist/artifact vite build"
   },
   "dependencies": {
     "@babylonjs/core": "9.29.0",

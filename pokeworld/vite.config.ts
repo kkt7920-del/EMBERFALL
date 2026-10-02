@@ -7,6 +7,8 @@ const SERVER_PORT = Number(process.env.POKEWORLD_PORT ?? 2567);
 
 export default defineConfig({
   root: ".",
+  // VITE_BASE=./ builds a relocatable client (static hosts, share links)
+  base: process.env.VITE_BASE ?? "/",
   publicDir: "public",
   resolve: {
     alias: {
@@ -25,7 +27,7 @@ export default defineConfig({
   },
   preview: { host: true, port: 4173 },
   build: {
-    outDir: "dist/client",
+    outDir: process.env.VITE_OUT_DIR ?? "dist/client",
     emptyOutDir: true,
     target: "es2022",
     sourcemap: true,
