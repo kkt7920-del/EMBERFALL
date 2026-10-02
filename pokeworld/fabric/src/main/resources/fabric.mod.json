@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "pokeworld",
+  "version": "${version}",
+  "name": "PokeWorld",
+  "description": "Open-world creature adventure built on Cobblemon: exploration, capture, battle, ruins, legendary events, mining, crafting, sea, underwater and air travel.",
+  "authors": [],
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      {
+        "adapter": "kotlin",
+        "value": "com.pokeworld.PokeWorldMod"
+      }
+    ],
+    "client": [
+      {
+        "adapter": "kotlin",
+        "value": "com.pokeworld.client.PokeWorldClient"
+      }
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "minecraft": "~${minecraft_version}",
+    "java": ">=21",
+    "fabric-api": "*",
+    "fabric-language-kotlin": ">=${fabric_kotlin_version}",
+    "cobblemon": ">=${cobblemon_min_version}"
+  },
+  "suggests": {
+    "mega_showdown": "*"
+  }
+}

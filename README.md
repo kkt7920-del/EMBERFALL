@@ -20,3 +20,7 @@
 ## 복원 원칙
 
 원본 JSON에서 확인되는 필드는 가능한 한 보존합니다. 원본 소스코드가 없어 전투 공식, 스킬 모션, 몬스터 AI 등 세이브만으로 확인할 수 없는 부분은 복원판 규칙으로 별도 설계합니다.
+
+## PokeWorld (Minecraft 모드)
+
+`pokeworld/` 디렉터리는 별도의 Minecraft 1.21.1 Fabric 모드 프로젝트입니다. 자세한 내용은 [pokeworld/README.md](pokeworld/README.md)를 참고하세요.
