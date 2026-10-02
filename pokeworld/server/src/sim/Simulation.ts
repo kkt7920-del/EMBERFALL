@@ -1130,6 +1130,16 @@ export class Simulation {
     return c.id;
   }
 
+  /** Debug/test hook: grants a creature (local single-player only). */
+  debugAddCreature(id: string, species: string, level: number): boolean {
+    if (this.opts.multiplayer) return false;
+    const p = this.players.get(id);
+    if (!p || !this.db.species.has(species)) return false;
+    this.receiveCreature(p, createCreature(this.db, species, level, this.rng));
+    this.sendState(p);
+    return true;
+  }
+
   /** For tests and the debug overlay. */
   inspect() {
     return {

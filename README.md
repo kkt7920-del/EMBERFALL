@@ -23,4 +23,4 @@
 
 ## PokeWorld (Minecraft 모드)
 
-`pokeworld/` 디렉터리는 웹 브라우저용 PokeWorld 게임입니다. 자세한 내용은 [pokeworld/README.md](pokeworld/README.md)를 참고하세요.
+`pokeworld/` 디렉터리는 설치 없이 브라우저(PC·모바일)에서 플레이하는 PokeWorld 웹 게임입니다. 자세한 내용은 [pokeworld/README.md](pokeworld/README.md)를 참고하세요.

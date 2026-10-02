@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+    <meta name="theme-color" content="#1c3b72" />
+    <meta name="description" content="PokeWorld — 설치 없이 브라우저에서 즐기는 크리처 수집 오픈월드 어드벤처" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="PokeWorld" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png" />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+    <title>PokeWorld</title>
+  </head>
+  <body>
+    <canvas id="game-canvas" tabindex="0" aria-label="PokeWorld 게임 화면"></canvas>
+    <div id="ui"></div>
+    <div id="overlays"></div>
+    <div id="reconnect-overlay" class="overlay hidden">
+      <div class="spinner"></div>
+      <div>서버와 연결이 끊겼습니다. 다시 연결하는 중…</div>
+      <div class="detail"></div>
+    </div>
+    <div id="rotate-overlay" class="overlay rotate-overlay">
+      <div class="phone"></div>
+      <div>가로 화면으로 회전해 주세요</div>
+    </div>
+    <noscript>PokeWorld를 플레이하려면 JavaScript를 켜 주세요.</noscript>
+    <script type="module" src="/client/src/main.ts"></script>
+  </body>
+</html>

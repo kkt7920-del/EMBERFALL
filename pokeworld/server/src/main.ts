@@ -2,6 +2,7 @@ import { existsSync, readFileSync, statSync } from "node:fs";
 import { createServer } from "node:http";
 import { extname, join, normalize, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { gzipSync } from "node:zlib";
 import { TICK_RATE } from "@shared/config/constants";
 import { attachWebSocketServer } from "./networking/WsServer";
 import { loadContentFromDisk } from "./persistence/contentLoader";
@@ -32,6 +33,9 @@ const MIME: Record<string, string> = {
   ".wasm": "application/wasm",
 };
 
+const COMPRESSIBLE = new Set([".html", ".js", ".css", ".json", ".webmanifest", ".svg", ".map"]);
+const gzipCache = new Map<string, Buffer>();
+
 async function main() {
   const db = loadContentFromDisk(CONTENT_DIR);
   log(`content: ${db.species.size} species, ${db.moves.size} moves, ${db.spawns.length} spawn rules`);
@@ -60,11 +64,20 @@ async function main() {
     if (!file.startsWith(STATIC_DIR) || !existsSync(file) || statSync(file).isDirectory()) file = join(STATIC_DIR, "index.html");
     const ext = extname(file);
     const immutable = file.includes(`${join(STATIC_DIR, "assets")}`);
-    res.writeHead(200, {
+    const headers: Record<string, string> = {
       "content-type": MIME[ext] ?? "application/octet-stream",
       "cache-control": immutable ? "public, max-age=31536000, immutable" : "no-cache",
-    });
-    res.end(readFileSync(file));
+    };
+    let body: Buffer = readFileSync(file);
+    if (COMPRESSIBLE.has(ext) && /\bgzip\b/.test(String(req.headers["accept-encoding"] ?? ""))) {
+      let gz = gzipCache.get(file);
+      if (!gz) gzipCache.set(file, (gz = gzipSync(body, { level: 9 })));
+      body = gz;
+      headers["content-encoding"] = "gzip";
+      headers.vary = "accept-encoding";
+    }
+    res.writeHead(200, headers);
+    res.end(body);
   });
 
   attachWebSocketServer(http, sim, log);
