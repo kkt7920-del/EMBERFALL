@@ -1,0 +1,37 @@
+[
+  {
+    "id": "ru_ironbeetle",
+    "species": "ironbeetle",
+    "biomes": [
+      "ruins",
+      "hills"
+    ],
+    "level": {
+      "min": 9,
+      "max": 13
+    },
+    "weight": 10,
+    "rarity": "uncommon",
+    "structure": {
+      "id": "dawn_ruins",
+      "radius": 40
+    }
+  },
+  {
+    "id": "ru_shadebat",
+    "species": "shadebat",
+    "biomes": [
+      "ruins"
+    ],
+    "level": {
+      "min": 8,
+      "max": 12
+    },
+    "weight": 8,
+    "rarity": "common",
+    "layer": "air",
+    "time": [
+      "night"
+    ]
+  }
+]

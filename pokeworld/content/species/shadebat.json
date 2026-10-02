@@ -1,0 +1,54 @@
+{
+  "id": "shadebat",
+  "name": "그늘박쥐",
+  "types": [
+    "dark",
+    "flying"
+  ],
+  "baseStats": {
+    "hp": 45,
+    "atk": 55,
+    "def": 40,
+    "spa": 45,
+    "spd": 45,
+    "spe": 70
+  },
+  "catchRate": 190,
+  "baseExp": 58,
+  "learnset": [
+    {
+      "level": 1,
+      "move": "bite"
+    },
+    {
+      "level": 1,
+      "move": "gust"
+    },
+    {
+      "level": 6,
+      "move": "quick_strike"
+    },
+    {
+      "level": 16,
+      "move": "night_slash"
+    }
+  ],
+  "model": {
+    "template": "bat",
+    "colors": {
+      "primary": "#5a4a7a",
+      "secondary": "#2a2040",
+      "accent": "#e85a7a",
+      "eye": "#f2e050"
+    },
+    "scale": 1.0
+  },
+  "behavior": {
+    "movement": [
+      "fly"
+    ],
+    "temperament": "aggressive",
+    "speed": 1.2
+  },
+  "description": "어두운 곳을 좋아하며 빛을 보면 달려든다."
+}

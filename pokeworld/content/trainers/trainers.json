@@ -1,0 +1,46 @@
+[
+  {
+    "id": "bugboy_jihun",
+    "name": "지훈",
+    "title": "곤충소년",
+    "team": [
+      {
+        "species": "meadowbug",
+        "level": 4
+      },
+      {
+        "species": "chirpling",
+        "level": 5
+      }
+    ],
+    "reward": 240,
+    "dialogue": {
+      "before": "내 벌레들이랑 한판 붙자!",
+      "win": "으앗, 졌다… 더 키워서 올게!",
+      "lose": "헤헤, 벌레를 얕보면 안 돼!",
+      "after": "숲에는 더 강한 벌레도 산대."
+    }
+  },
+  {
+    "id": "swimmer_mina",
+    "name": "미나",
+    "title": "수영선수",
+    "team": [
+      {
+        "species": "shellcrab",
+        "level": 7
+      },
+      {
+        "species": "coralfish",
+        "level": 8
+      }
+    ],
+    "reward": 420,
+    "dialogue": {
+      "before": "바다 크리처의 힘을 보여줄게!",
+      "win": "파도에 휩쓸린 기분이야…",
+      "lose": "바다는 넓고 강하지!",
+      "after": "헤엄칠 수 있는 크리처가 있으면 섬까지 갈 수 있어."
+    }
+  }
+]

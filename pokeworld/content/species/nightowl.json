@@ -1,0 +1,55 @@
+{
+  "id": "nightowl",
+  "name": "밤부엉이",
+  "types": [
+    "normal",
+    "psychic"
+  ],
+  "baseStats": {
+    "hp": 60,
+    "atk": 50,
+    "def": 50,
+    "spa": 70,
+    "spd": 70,
+    "spe": 60
+  },
+  "catchRate": 120,
+  "baseExp": 100,
+  "learnset": [
+    {
+      "level": 1,
+      "move": "peck"
+    },
+    {
+      "level": 1,
+      "move": "growl"
+    },
+    {
+      "level": 1,
+      "move": "mind_pulse"
+    },
+    {
+      "level": 18,
+      "move": "psy_beam"
+    }
+  ],
+  "model": {
+    "template": "bird",
+    "colors": {
+      "primary": "#8a6a4a",
+      "secondary": "#d8c0a0",
+      "accent": "#f2d040",
+      "eye": "#1d1d24"
+    },
+    "scale": 1.2
+  },
+  "behavior": {
+    "movement": [
+      "fly",
+      "walk"
+    ],
+    "temperament": "neutral",
+    "speed": 1.0
+  },
+  "description": "밤의 숲을 조용히 지켜본다."
+}

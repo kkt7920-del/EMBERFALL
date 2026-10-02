@@ -1,0 +1,38 @@
+{
+  "rig": "bird",
+  "idle": {
+    "bob": 0.02,
+    "speed": 3
+  },
+  "walk": {
+    "freq": 9,
+    "swing": 0.5,
+    "bob": 0.04
+  },
+  "run": {
+    "freq": 13,
+    "swing": 0.7,
+    "bob": 0.05
+  },
+  "swim": {
+    "freq": 4,
+    "sway": 0.15,
+    "bob": 0.04
+  },
+  "fly": {
+    "flapFreq": 9,
+    "flapAngle": 0.9,
+    "bob": 0.12
+  },
+  "battleIdle": {
+    "bob": 0.06,
+    "speed": 4
+  },
+  "attack": {
+    "lunge": 1.6,
+    "duration": 0.4
+  },
+  "faint": {
+    "duration": 0.8
+  }
+}

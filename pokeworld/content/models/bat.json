@@ -1,0 +1,185 @@
+{
+  "id": "bat",
+  "rig": "bat",
+  "parts": [
+    {
+      "name": "body",
+      "role": "body",
+      "size": [
+        0.32,
+        0.34,
+        0.3
+      ],
+      "pos": [
+        0,
+        0.55,
+        0
+      ],
+      "color": "primary"
+    },
+    {
+      "name": "head",
+      "role": "head",
+      "size": [
+        0.3,
+        0.26,
+        0.26
+      ],
+      "pos": [
+        0,
+        0.24,
+        0.04
+      ],
+      "color": "primary",
+      "parent": "body"
+    },
+    {
+      "name": "earL",
+      "role": "deco",
+      "size": [
+        0.08,
+        0.2,
+        0.06
+      ],
+      "pos": [
+        -0.1,
+        0.2,
+        0
+      ],
+      "color": "secondary",
+      "parent": "head"
+    },
+    {
+      "name": "earR",
+      "role": "deco",
+      "size": [
+        0.08,
+        0.2,
+        0.06
+      ],
+      "pos": [
+        0.1,
+        0.2,
+        0
+      ],
+      "color": "secondary",
+      "parent": "head"
+    },
+    {
+      "name": "eyeL",
+      "role": "deco",
+      "size": [
+        0.06,
+        0.06899999999999999,
+        0.02
+      ],
+      "pos": [
+        -0.08,
+        0.03,
+        0.14
+      ],
+      "color": "eye",
+      "parent": "head"
+    },
+    {
+      "name": "eyeR",
+      "role": "deco",
+      "size": [
+        0.06,
+        0.06899999999999999,
+        0.02
+      ],
+      "pos": [
+        0.08,
+        0.03,
+        0.14
+      ],
+      "color": "eye",
+      "parent": "head"
+    },
+    {
+      "name": "wingL",
+      "role": "wingL",
+      "size": [
+        0.62,
+        0.04,
+        0.36
+      ],
+      "pos": [
+        -0.14,
+        0.06,
+        0
+      ],
+      "color": "secondary",
+      "parent": "body",
+      "offset": [
+        -0.31,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wingR",
+      "role": "wingR",
+      "size": [
+        0.62,
+        0.04,
+        0.36
+      ],
+      "pos": [
+        0.14,
+        0.06,
+        0
+      ],
+      "color": "secondary",
+      "parent": "body",
+      "offset": [
+        0.31,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "legL",
+      "role": "legL",
+      "size": [
+        0.06,
+        0.14,
+        0.06
+      ],
+      "pos": [
+        -0.07,
+        -0.18,
+        0
+      ],
+      "color": "accent",
+      "parent": "body",
+      "offset": [
+        0,
+        -0.06,
+        0
+      ]
+    },
+    {
+      "name": "legR",
+      "role": "legR",
+      "size": [
+        0.06,
+        0.14,
+        0.06
+      ],
+      "pos": [
+        0.07,
+        -0.18,
+        0
+      ],
+      "color": "accent",
+      "parent": "body",
+      "offset": [
+        0,
+        -0.06,
+        0
+      ]
+    }
+  ]
+}

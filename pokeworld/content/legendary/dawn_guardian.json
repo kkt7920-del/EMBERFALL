@@ -1,0 +1,81 @@
+{
+  "id": "dawn_guardian",
+  "name": "새벽의 날개",
+  "start": "rumor",
+  "nodes": [
+    {
+      "id": "rumor",
+      "kind": "rumor",
+      "npc": "elder_moru",
+      "text": "모루 장로에게 유적의 전설을 듣자",
+      "next": [
+        "find_ruin"
+      ]
+    },
+    {
+      "id": "find_ruin",
+      "kind": "visit",
+      "area": "dawn_ruins",
+      "text": "북동쪽 언덕의 새벽의 유적 찾기",
+      "next": [
+        "tablet"
+      ]
+    },
+    {
+      "id": "tablet",
+      "kind": "interact",
+      "target": "ruin_tablet",
+      "text": "유적의 고대 석판 조사하기",
+      "next": [
+        "shard"
+      ]
+    },
+    {
+      "id": "shard",
+      "kind": "collect",
+      "item": "crystal_shard",
+      "count": 1,
+      "text": "메아리 동굴 깊은 곳에서 수정 조각 찾기",
+      "next": [
+        "offering"
+      ]
+    },
+    {
+      "id": "offering",
+      "kind": "condition",
+      "target": "ruin_altar",
+      "time": [
+        "night",
+        "dawn"
+      ],
+      "consumeItem": {
+        "id": "crystal_shard",
+        "count": 1
+      },
+      "text": "밤에 제단에 수정 조각 바치기",
+      "next": [
+        "guardian"
+      ]
+    },
+    {
+      "id": "guardian",
+      "kind": "guardian",
+      "target": "ruin_altar",
+      "species": "ancientguard",
+      "level": 18,
+      "text": "깨어난 고대수호자 쓰러뜨리기",
+      "next": [
+        "encounter"
+      ]
+    },
+    {
+      "id": "encounter",
+      "kind": "encounter",
+      "target": "ruin_altar",
+      "species": "aurorawing",
+      "level": 25,
+      "text": "새벽날개와 마주하기",
+      "next": []
+    }
+  ]
+}

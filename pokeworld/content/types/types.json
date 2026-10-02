@@ -1,0 +1,163 @@
+{
+  "id": "core_types",
+  "types": [
+    {
+      "id": "normal",
+      "name": "일반",
+      "color": "#a8a29a"
+    },
+    {
+      "id": "fire",
+      "name": "불",
+      "color": "#f0803c"
+    },
+    {
+      "id": "water",
+      "name": "물",
+      "color": "#4a90e0"
+    },
+    {
+      "id": "grass",
+      "name": "풀",
+      "color": "#5cb85c"
+    },
+    {
+      "id": "electric",
+      "name": "전기",
+      "color": "#f2c81e"
+    },
+    {
+      "id": "rock",
+      "name": "바위",
+      "color": "#b0985a"
+    },
+    {
+      "id": "ground",
+      "name": "땅",
+      "color": "#c89a5a"
+    },
+    {
+      "id": "bug",
+      "name": "벌레",
+      "color": "#9ab83a"
+    },
+    {
+      "id": "flying",
+      "name": "바람",
+      "color": "#8aa8f0"
+    },
+    {
+      "id": "dark",
+      "name": "어둠",
+      "color": "#5a4a6a"
+    },
+    {
+      "id": "fairy",
+      "name": "요정",
+      "color": "#f08ac8"
+    },
+    {
+      "id": "steel",
+      "name": "강철",
+      "color": "#a0a8b8"
+    },
+    {
+      "id": "psychic",
+      "name": "정신",
+      "color": "#e85a8a"
+    }
+  ],
+  "effectiveness": {
+    "normal": {
+      "rock": 0.5,
+      "steel": 0.5
+    },
+    "fire": {
+      "grass": 2,
+      "bug": 2,
+      "steel": 2,
+      "fire": 0.5,
+      "water": 0.5,
+      "rock": 0.5
+    },
+    "water": {
+      "fire": 2,
+      "rock": 2,
+      "ground": 2,
+      "water": 0.5,
+      "grass": 0.5
+    },
+    "grass": {
+      "water": 2,
+      "rock": 2,
+      "ground": 2,
+      "fire": 0.5,
+      "grass": 0.5,
+      "bug": 0.5,
+      "flying": 0.5,
+      "steel": 0.5
+    },
+    "electric": {
+      "water": 2,
+      "flying": 2,
+      "grass": 0.5,
+      "electric": 0.5,
+      "ground": 0
+    },
+    "rock": {
+      "fire": 2,
+      "bug": 2,
+      "flying": 2,
+      "ground": 0.5,
+      "steel": 0.5
+    },
+    "ground": {
+      "fire": 2,
+      "electric": 2,
+      "rock": 2,
+      "steel": 2,
+      "grass": 0.5,
+      "bug": 0.5,
+      "flying": 0
+    },
+    "bug": {
+      "grass": 2,
+      "psychic": 2,
+      "dark": 2,
+      "fire": 0.5,
+      "flying": 0.5,
+      "steel": 0.5,
+      "fairy": 0.5
+    },
+    "flying": {
+      "grass": 2,
+      "bug": 2,
+      "electric": 0.5,
+      "rock": 0.5,
+      "steel": 0.5
+    },
+    "dark": {
+      "psychic": 2,
+      "dark": 0.5,
+      "fairy": 0.5
+    },
+    "fairy": {
+      "dark": 2,
+      "fire": 0.5,
+      "steel": 0.5
+    },
+    "steel": {
+      "rock": 2,
+      "fairy": 2,
+      "fire": 0.5,
+      "water": 0.5,
+      "electric": 0.5,
+      "steel": 0.5
+    },
+    "psychic": {
+      "psychic": 0.5,
+      "steel": 0.5,
+      "dark": 0
+    }
+  }
+}

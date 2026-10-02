@@ -1,0 +1,37 @@
+{
+  "name": "pokeworld",
+  "version": "0.1.0",
+  "private": true,
+  "description": "PokeWorld — web-first open-world creature adventure (browser + Node server)",
+  "type": "module",
+  "engines": {
+    "node": ">=22.5"
+  },
+  "scripts": {
+    "dev": "concurrently -k -n client,server -c cyan,magenta \"vite\" \"tsx watch --clear-screen=false server/src/main.ts\"",
+    "dev:client": "vite",
+    "dev:server": "tsx watch --clear-screen=false server/src/main.ts",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "build": "npm run typecheck && vite build && node scripts/build-server.mjs",
+    "start": "node --no-warnings dist/server/main.js",
+    "preview": "npm run build && npm start",
+    "icons": "node scripts/make-icons.mjs",
+    "test:e2e": "node tests/e2e/run.mjs"
+  },
+  "dependencies": {
+    "@babylonjs/core": "9.29.0",
+    "ws": "8.22.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.0",
+    "@types/ws": "^8.18.1",
+    "concurrently": "^9.2.0",
+    "esbuild": "^0.25.0",
+    "playwright": "1.56.1",
+    "tsx": "^4.20.0",
+    "typescript": "5.9.3",
+    "vite": "^7.3.6",
+    "vitest": "^3.2.4"
+  }
+}

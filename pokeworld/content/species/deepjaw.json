@@ -1,0 +1,54 @@
+{
+  "id": "deepjaw",
+  "name": "심해턱",
+  "types": [
+    "water",
+    "dark"
+  ],
+  "baseStats": {
+    "hp": 70,
+    "atk": 95,
+    "def": 60,
+    "spa": 50,
+    "spd": 55,
+    "spe": 70
+  },
+  "catchRate": 45,
+  "baseExp": 150,
+  "learnset": [
+    {
+      "level": 1,
+      "move": "bite"
+    },
+    {
+      "level": 1,
+      "move": "water_gun"
+    },
+    {
+      "level": 1,
+      "move": "aqua_tail"
+    },
+    {
+      "level": 1,
+      "move": "night_slash"
+    }
+  ],
+  "model": {
+    "template": "fish",
+    "colors": {
+      "primary": "#2a3a5a",
+      "secondary": "#5a8ab0",
+      "accent": "#f2f2f2",
+      "eye": "#f2e050"
+    },
+    "scale": 1.8
+  },
+  "behavior": {
+    "movement": [
+      "swim"
+    ],
+    "temperament": "aggressive",
+    "speed": 1.4
+  },
+  "description": "깊은 바다에서 올라와 밤에만 수면에 모습을 보인다."
+}

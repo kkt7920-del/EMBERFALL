@@ -1,0 +1,126 @@
+[
+  {
+    "id": "wa_reedfrog",
+    "species": "reedfrog",
+    "biomes": [
+      "lake",
+      "wetland",
+      "river"
+    ],
+    "level": {
+      "min": 4,
+      "max": 8
+    },
+    "weight": 16,
+    "rarity": "common"
+  },
+  {
+    "id": "wa_reedfrog_swim",
+    "species": "reedfrog",
+    "biomes": [
+      "lake",
+      "river"
+    ],
+    "level": {
+      "min": 4,
+      "max": 8
+    },
+    "weight": 10,
+    "rarity": "common",
+    "layer": "water_surface"
+  },
+  {
+    "id": "wa_mossturtle",
+    "species": "mossturtle",
+    "biomes": [
+      "lake",
+      "wetland"
+    ],
+    "level": {
+      "min": 6,
+      "max": 10
+    },
+    "weight": 8,
+    "rarity": "uncommon",
+    "layer": "water_surface"
+  },
+  {
+    "id": "wa_riverotter",
+    "species": "riverotter",
+    "biomes": [
+      "river",
+      "lake"
+    ],
+    "level": {
+      "min": 8,
+      "max": 12
+    },
+    "weight": 5,
+    "rarity": "rare",
+    "layer": "water_surface"
+  },
+  {
+    "id": "wa_dropnewt",
+    "species": "dropnewt",
+    "biomes": [
+      "wetland",
+      "river"
+    ],
+    "level": {
+      "min": 4,
+      "max": 6
+    },
+    "weight": 2,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "wa_coralfish",
+    "species": "coralfish",
+    "biomes": [
+      "coast",
+      "ocean"
+    ],
+    "level": {
+      "min": 6,
+      "max": 10
+    },
+    "weight": 18,
+    "rarity": "common",
+    "layer": "water_surface"
+  },
+  {
+    "id": "wa_gullwing",
+    "species": "gullwing",
+    "biomes": [
+      "coast",
+      "ocean",
+      "beach",
+      "island"
+    ],
+    "level": {
+      "min": 5,
+      "max": 9
+    },
+    "weight": 12,
+    "rarity": "common",
+    "layer": "air"
+  },
+  {
+    "id": "wa_deepjaw",
+    "species": "deepjaw",
+    "biomes": [
+      "deep_ocean",
+      "ocean"
+    ],
+    "level": {
+      "min": 14,
+      "max": 18
+    },
+    "weight": 4,
+    "rarity": "rare",
+    "layer": "water_surface",
+    "time": [
+      "night"
+    ]
+  }
+]

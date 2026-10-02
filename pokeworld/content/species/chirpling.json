@@ -1,0 +1,67 @@
+{
+  "id": "chirpling",
+  "name": "짹짹새",
+  "types": [
+    "normal",
+    "flying"
+  ],
+  "baseStats": {
+    "hp": 40,
+    "atk": 45,
+    "def": 40,
+    "spa": 35,
+    "spd": 35,
+    "spe": 56
+  },
+  "catchRate": 255,
+  "baseExp": 50,
+  "learnset": [
+    {
+      "level": 1,
+      "move": "tackle"
+    },
+    {
+      "level": 1,
+      "move": "peck"
+    },
+    {
+      "level": 1,
+      "move": "growl"
+    },
+    {
+      "level": 5,
+      "move": "gust"
+    },
+    {
+      "level": 9,
+      "move": "quick_strike"
+    },
+    {
+      "level": 15,
+      "move": "aerial_dive"
+    }
+  ],
+  "model": {
+    "template": "bird",
+    "colors": {
+      "primary": "#c99a6b",
+      "secondary": "#8a5a3a",
+      "accent": "#f2c94b",
+      "eye": "#1d1d24"
+    },
+    "scale": 0.8
+  },
+  "behavior": {
+    "movement": [
+      "fly",
+      "walk"
+    ],
+    "temperament": "timid",
+    "speed": 1.1
+  },
+  "description": "아침마다 마을 지붕 위에서 지저귄다.",
+  "evolution": {
+    "to": "skyhawk",
+    "level": 18
+  }
+}

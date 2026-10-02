@@ -1,0 +1,58 @@
+{
+  "id": "crystalite",
+  "name": "수정령",
+  "types": [
+    "rock",
+    "fairy"
+  ],
+  "baseStats": {
+    "hp": 50,
+    "atk": 50,
+    "def": 90,
+    "spa": 75,
+    "spd": 90,
+    "spe": 45
+  },
+  "catchRate": 45,
+  "baseExp": 140,
+  "learnset": [
+    {
+      "level": 1,
+      "move": "pebble_toss"
+    },
+    {
+      "level": 1,
+      "move": "glitter"
+    },
+    {
+      "level": 1,
+      "move": "harden"
+    },
+    {
+      "level": 14,
+      "move": "rock_slam"
+    },
+    {
+      "level": 16,
+      "move": "moon_glow"
+    }
+  ],
+  "model": {
+    "template": "blob",
+    "colors": {
+      "primary": "#c9b0f2",
+      "secondary": "#8ae0f0",
+      "accent": "#ffffff",
+      "eye": "#1d1d24"
+    },
+    "scale": 0.9
+  },
+  "behavior": {
+    "movement": [
+      "walk"
+    ],
+    "temperament": "timid",
+    "speed": 0.8
+  },
+  "description": "동굴 깊은 곳 수정 속에서 태어났다고 한다."
+}

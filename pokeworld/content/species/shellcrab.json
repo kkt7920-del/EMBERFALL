@@ -1,0 +1,59 @@
+{
+  "id": "shellcrab",
+  "name": "소라게",
+  "types": [
+    "water",
+    "rock"
+  ],
+  "baseStats": {
+    "hp": 45,
+    "atk": 70,
+    "def": 85,
+    "spa": 30,
+    "spd": 40,
+    "spe": 35
+  },
+  "catchRate": 170,
+  "baseExp": 62,
+  "learnset": [
+    {
+      "level": 1,
+      "move": "tackle"
+    },
+    {
+      "level": 1,
+      "move": "harden"
+    },
+    {
+      "level": 5,
+      "move": "water_gun"
+    },
+    {
+      "level": 9,
+      "move": "pebble_toss"
+    },
+    {
+      "level": 18,
+      "move": "aqua_tail"
+    }
+  ],
+  "model": {
+    "template": "quad_low",
+    "colors": {
+      "primary": "#e86a5a",
+      "secondary": "#f2d8b0",
+      "accent": "#ffffff",
+      "eye": "#1d1d24"
+    },
+    "scale": 0.7
+  },
+  "behavior": {
+    "movement": [
+      "walk",
+      "swim"
+    ],
+    "temperament": "neutral",
+    "speed": 1.0
+  },
+  "description": "큰 껍데기를 집 삼아 해변을 걷는다."
+}

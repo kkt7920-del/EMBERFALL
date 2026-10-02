@@ -1,0 +1,64 @@
+{
+  "id": "bouldron",
+  "name": "바위거인",
+  "types": [
+    "rock",
+    "ground"
+  ],
+  "baseStats": {
+    "hp": 80,
+    "atk": 95,
+    "def": 105,
+    "spa": 40,
+    "spd": 55,
+    "spe": 35
+  },
+  "catchRate": 60,
+  "baseExp": 150,
+  "learnset": [
+    {
+      "level": 1,
+      "move": "pebble_toss"
+    },
+    {
+      "level": 1,
+      "move": "harden"
+    },
+    {
+      "level": 1,
+      "move": "rock_slam"
+    },
+    {
+      "level": 20,
+      "move": "headbutt"
+    },
+    {
+      "level": 24,
+      "move": "earth_crack"
+    }
+  ],
+  "model": {
+    "template": "biped",
+    "colors": {
+      "primary": "#8a8178",
+      "secondary": "#5e564d",
+      "accent": "#e0b060",
+      "eye": "#1d1d24"
+    },
+    "scale": 1.5
+  },
+  "behavior": {
+    "movement": [
+      "walk"
+    ],
+    "temperament": "neutral",
+    "speed": 0.7
+  },
+  "description": "한 걸음마다 땅이 울린다.",
+  "mount": {
+    "modes": [
+      "land"
+    ],
+    "speed": 1.1
+  }
+}

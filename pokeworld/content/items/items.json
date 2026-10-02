@@ -1,0 +1,45 @@
+[
+  {
+    "id": "capture_orb",
+    "name": "포획구",
+    "kind": "capture",
+    "price": 200,
+    "captureBonus": 1,
+    "color": "#e04848",
+    "description": "야생 크리처를 포획하는 기본 구슬."
+  },
+  {
+    "id": "great_orb",
+    "name": "슈퍼포획구",
+    "kind": "capture",
+    "price": 600,
+    "captureBonus": 1.5,
+    "color": "#3a7ae0",
+    "description": "포획구보다 잘 잡히는 구슬."
+  },
+  {
+    "id": "potion",
+    "name": "상처약",
+    "kind": "heal",
+    "price": 300,
+    "heal": 20,
+    "color": "#9a5ae0",
+    "description": "HP를 20 회복한다."
+  },
+  {
+    "id": "super_potion",
+    "name": "좋은상처약",
+    "kind": "heal",
+    "price": 700,
+    "heal": 60,
+    "color": "#e05ab0",
+    "description": "HP를 60 회복한다."
+  },
+  {
+    "id": "crystal_shard",
+    "name": "수정 조각",
+    "kind": "key",
+    "color": "#8ae0f0",
+    "description": "메아리 동굴 깊은 곳에서 빛나던 수정 조각."
+  }
+]

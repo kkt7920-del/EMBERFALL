@@ -1,0 +1,63 @@
+{
+  "id": "thornhare",
+  "name": "가시토끼",
+  "types": [
+    "grass"
+  ],
+  "baseStats": {
+    "hp": 65,
+    "atk": 70,
+    "def": 65,
+    "spa": 75,
+    "spd": 70,
+    "spe": 75
+  },
+  "catchRate": 45,
+  "baseExp": 142,
+  "learnset": [
+    {
+      "level": 1,
+      "move": "leaf_cut"
+    },
+    {
+      "level": 1,
+      "move": "quick_strike"
+    },
+    {
+      "level": 16,
+      "move": "vine_lash"
+    },
+    {
+      "level": 20,
+      "move": "headbutt"
+    },
+    {
+      "level": 30,
+      "move": "solar_beam"
+    }
+  ],
+  "model": {
+    "template": "quad_horned",
+    "colors": {
+      "primary": "#5fae4a",
+      "secondary": "#2f6e2a",
+      "accent": "#d65a7a",
+      "eye": "#1d1d24"
+    },
+    "scale": 1.15
+  },
+  "behavior": {
+    "movement": [
+      "walk"
+    ],
+    "temperament": "neutral",
+    "speed": 1.2
+  },
+  "description": "등의 가시 덩굴로 몸을 지킨다. 등에 태워 달릴 수 있다.",
+  "mount": {
+    "modes": [
+      "land"
+    ],
+    "speed": 1.35
+  }
+}

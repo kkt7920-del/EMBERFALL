@@ -1,0 +1,55 @@
+{
+  "id": "gullwing",
+  "name": "갈매기날개",
+  "types": [
+    "water",
+    "flying"
+  ],
+  "baseStats": {
+    "hp": 40,
+    "atk": 40,
+    "def": 35,
+    "spa": 50,
+    "spd": 40,
+    "spe": 70
+  },
+  "catchRate": 190,
+  "baseExp": 58,
+  "learnset": [
+    {
+      "level": 1,
+      "move": "peck"
+    },
+    {
+      "level": 1,
+      "move": "water_gun"
+    },
+    {
+      "level": 4,
+      "move": "gust"
+    },
+    {
+      "level": 14,
+      "move": "aerial_dive"
+    }
+  ],
+  "model": {
+    "template": "bird",
+    "colors": {
+      "primary": "#f2f2f2",
+      "secondary": "#8aa0b0",
+      "accent": "#f2c040",
+      "eye": "#1d1d24"
+    },
+    "scale": 1.0
+  },
+  "behavior": {
+    "movement": [
+      "fly",
+      "walk"
+    ],
+    "temperament": "timid",
+    "speed": 1.2
+  },
+  "description": "바닷바람을 타고 해안을 맴돈다."
+}

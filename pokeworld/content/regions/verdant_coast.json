@@ -1,0 +1,632 @@
+{
+  "id": "verdant_coast",
+  "name": "푸른해안 지방",
+  "seed": 20261002,
+  "spawn": {
+    "x": 0,
+    "z": 19
+  },
+  "respawn": {
+    "x": -22,
+    "z": -1
+  },
+  "starters": [
+    "leafbun",
+    "emberpup",
+    "dropnewt"
+  ],
+  "startingMoney": 3000,
+  "town": {
+    "x": 0,
+    "z": 0,
+    "radius": 48,
+    "height": 20
+  },
+  "roads": [
+    {
+      "points": [
+        [
+          0,
+          -42
+        ],
+        [
+          0,
+          18
+        ]
+      ],
+      "width": 4
+    },
+    {
+      "points": [
+        [
+          -30,
+          4
+        ],
+        [
+          30,
+          4
+        ]
+      ],
+      "width": 4
+    },
+    {
+      "points": [
+        [
+          -12,
+          18
+        ],
+        [
+          -12,
+          60
+        ],
+        [
+          -30,
+          120
+        ],
+        [
+          -42,
+          200
+        ]
+      ],
+      "width": 4
+    },
+    {
+      "points": [
+        [
+          -30,
+          4
+        ],
+        [
+          -120,
+          12
+        ],
+        [
+          -200,
+          32
+        ],
+        [
+          -257,
+          52
+        ]
+      ],
+      "width": 4
+    },
+    {
+      "points": [
+        [
+          0,
+          -42
+        ],
+        [
+          10,
+          -120
+        ],
+        [
+          30,
+          -200
+        ],
+        [
+          50,
+          -246
+        ]
+      ],
+      "width": 4
+    },
+    {
+      "points": [
+        [
+          30,
+          4
+        ],
+        [
+          110,
+          40
+        ],
+        [
+          190,
+          80
+        ]
+      ],
+      "width": 4
+    },
+    {
+      "points": [
+        [
+          110,
+          40
+        ],
+        [
+          170,
+          150
+        ],
+        [
+          218,
+          258
+        ]
+      ],
+      "width": 4
+    }
+  ],
+  "river": {
+    "points": [
+      [
+        120,
+        520
+      ],
+      [
+        100,
+        400
+      ],
+      [
+        130,
+        300
+      ],
+      [
+        90,
+        200
+      ],
+      [
+        72,
+        100
+      ],
+      [
+        76,
+        0
+      ],
+      [
+        62,
+        -120
+      ],
+      [
+        80,
+        -220
+      ],
+      [
+        92,
+        -330
+      ]
+    ],
+    "width": 10
+  },
+  "lakes": [
+    {
+      "x": 252,
+      "z": 112,
+      "rx": 55,
+      "rz": 40,
+      "depth": 5
+    }
+  ],
+  "coast": {
+    "z": -272,
+    "beachWidth": 26,
+    "deepZ": -420,
+    "eastX": 430
+  },
+  "forests": [
+    {
+      "x": -80,
+      "z": 240,
+      "rx": 130,
+      "rz": 95
+    },
+    {
+      "x": 310,
+      "z": 380,
+      "rx": 90,
+      "rz": 70
+    },
+    {
+      "x": -160,
+      "z": -140,
+      "rx": 60,
+      "rz": 48
+    }
+  ],
+  "hills": [
+    {
+      "x": -290,
+      "z": 60,
+      "radius": 100,
+      "height": 14
+    },
+    {
+      "x": 230,
+      "z": 270,
+      "radius": 50,
+      "height": 6
+    },
+    {
+      "x": -180,
+      "z": -210,
+      "radius": 70,
+      "height": 8
+    }
+  ],
+  "mountains": {
+    "northZ": 460,
+    "westX": -430
+  },
+  "islands": [
+    {
+      "x": 160,
+      "z": -385,
+      "radius": 26
+    },
+    {
+      "x": -120,
+      "z": -430,
+      "radius": 18
+    }
+  ],
+  "buildings": [
+    {
+      "id": "center",
+      "kind": "center",
+      "name": "회복 센터",
+      "x": -22,
+      "z": 10,
+      "w": 12,
+      "d": 10,
+      "h": 6,
+      "roof": "red",
+      "door": "s"
+    },
+    {
+      "id": "shop",
+      "kind": "shop",
+      "name": "상점",
+      "x": 22,
+      "z": 10,
+      "w": 10,
+      "d": 8,
+      "h": 5,
+      "roof": "blue",
+      "door": "s"
+    },
+    {
+      "id": "lab",
+      "kind": "lab",
+      "name": "레아 연구소",
+      "x": 0,
+      "z": 31,
+      "w": 16,
+      "d": 10,
+      "h": 7,
+      "roof": "green",
+      "door": "s"
+    },
+    {
+      "id": "house_a",
+      "kind": "house",
+      "name": "민가",
+      "x": -24,
+      "z": -22,
+      "w": 8,
+      "d": 8,
+      "h": 5,
+      "roof": "orange",
+      "door": "n"
+    },
+    {
+      "id": "house_b",
+      "kind": "house",
+      "name": "민가",
+      "x": 24,
+      "z": -24,
+      "w": 8,
+      "d": 8,
+      "h": 5,
+      "roof": "red",
+      "door": "n"
+    },
+    {
+      "id": "house_c",
+      "kind": "house",
+      "name": "민가",
+      "x": -6,
+      "z": -36,
+      "w": 8,
+      "d": 7,
+      "h": 5,
+      "roof": "blue",
+      "door": "e"
+    }
+  ],
+  "ruins": [],
+  "caves": [
+    {
+      "id": "echo_cave",
+      "name": "메아리 동굴",
+      "entrance": {
+        "x": -262,
+        "z": 52
+      },
+      "size": 160,
+      "seed": 777,
+      "start": {
+        "x": 80,
+        "z": 12
+      },
+      "tunnel": [
+        [
+          80,
+          8
+        ],
+        [
+          80,
+          40
+        ],
+        [
+          60,
+          70
+        ],
+        [
+          92,
+          100
+        ],
+        [
+          112,
+          128
+        ],
+        [
+          82,
+          146
+        ]
+      ]
+    }
+  ],
+  "npcs": [
+    {
+      "id": "prof_rhea",
+      "name": "레아 박사",
+      "role": "professor",
+      "x": 0,
+      "z": 23,
+      "facing": 3.14159,
+      "look": {
+        "skin": "#f0c8a0",
+        "hair": "#6a4a3a",
+        "shirt": "#f4f4f4",
+        "pants": "#4a5a7a"
+      },
+      "dialogue": [
+        "어서 와! 나는 레아. 이 지방의 크리처를 연구하고 있단다.",
+        "파트너와 함께 마을 밖 초원에 가 보렴. 약해진 야생 크리처에게 포획구를 던지면 동료가 될 거야."
+      ]
+    },
+    {
+      "id": "nurse_hana",
+      "name": "간호사 하나",
+      "role": "nurse",
+      "x": -22,
+      "z": 2,
+      "facing": 3.14159,
+      "look": {
+        "skin": "#f6d2b0",
+        "hair": "#e88aa0",
+        "shirt": "#ffffff",
+        "pants": "#e88aa0"
+      },
+      "dialogue": [
+        "회복 센터에 어서 오세요. 크리처들을 쉬게 해 드릴게요."
+      ]
+    },
+    {
+      "id": "clerk_tae",
+      "name": "점원 태오",
+      "role": "clerk",
+      "x": 22,
+      "z": 3,
+      "facing": 3.14159,
+      "look": {
+        "skin": "#e8c09a",
+        "hair": "#2a2a2a",
+        "shirt": "#4a8ad8",
+        "pants": "#2a3a5a"
+      },
+      "dialogue": [
+        "어서 오세요! 여행에 필요한 물건이 다 있어요."
+      ],
+      "shop": [
+        "capture_orb",
+        "great_orb",
+        "potion",
+        "super_potion"
+      ]
+    },
+    {
+      "id": "elder_moru",
+      "name": "모루 장로",
+      "role": "elder",
+      "x": -14,
+      "z": -12,
+      "facing": 0.6,
+      "look": {
+        "skin": "#e0b890",
+        "hair": "#e8e8e8",
+        "shirt": "#7a5a3a",
+        "pants": "#5a4a3a"
+      },
+      "dialogue": [
+        "북동쪽 언덕에 오래된 유적이 있지. 새벽이 오기 전, 제단에 빛나는 돌을 바치면 전설의 날개가 내려온다는 이야기가 전해진단다.",
+        "메아리 동굴 깊은 곳의 수정이 그 돌이라는 말도 있지…"
+      ]
+    },
+    {
+      "id": "kid_dain",
+      "name": "다인",
+      "role": "villager",
+      "x": 10,
+      "z": -8,
+      "facing": -0.8,
+      "look": {
+        "skin": "#f6d2b0",
+        "hair": "#c84a2a",
+        "shirt": "#f2c84a",
+        "pants": "#3a6a3a"
+      },
+      "dialogue": [
+        "파트너가 강해지면 등에 태워 줄 수도 있대! 탈 수 있는 크리처를 데리고 다니면 '탑승' 버튼을 눌러 봐.",
+        "바다를 건너려면 헤엄치는 크리처, 하늘을 날려면 나는 크리처가 필요해!"
+      ]
+    },
+    {
+      "id": "trainer_jihun",
+      "name": "곤충소년 지훈",
+      "role": "trainer",
+      "x": -20,
+      "z": 110,
+      "facing": 3.14159,
+      "look": {
+        "skin": "#f0c8a0",
+        "hair": "#3a2a1a",
+        "shirt": "#6ab04a",
+        "pants": "#c8a060"
+      },
+      "dialogue": [
+        "내 벌레들이랑 한판 붙자!"
+      ],
+      "trainer": "bugboy_jihun"
+    },
+    {
+      "id": "trainer_mina",
+      "name": "수영선수 미나",
+      "role": "trainer",
+      "x": 58,
+      "z": -252,
+      "facing": 0,
+      "look": {
+        "skin": "#d8a880",
+        "hair": "#1a1a2a",
+        "shirt": "#3ac0e0",
+        "pants": "#3ac0e0"
+      },
+      "dialogue": [
+        "바다 크리처의 힘을 보여줄게!"
+      ],
+      "trainer": "swimmer_mina"
+    }
+  ],
+  "interactables": [
+    {
+      "id": "town_sign",
+      "kind": "sign",
+      "name": "마을 표지판",
+      "x": 4,
+      "z": -44,
+      "text": [
+        "새싹마을 — 푸른해안 지방의 시작점",
+        "북: 1번 도로 · 속삭임 숲 / 서: 메아리 동굴 / 남: 햇살 해변 / 동: 맑은 호수"
+      ]
+    },
+    {
+      "id": "lab_sign",
+      "kind": "sign",
+      "name": "연구소 표지판",
+      "x": 10,
+      "z": 23,
+      "text": [
+        "레아 연구소 — 크리처 생태 연구"
+      ]
+    },
+    {
+      "id": "cave_entrance",
+      "kind": "cave_entrance",
+      "name": "메아리 동굴",
+      "x": -262,
+      "z": 52,
+      "cave": "echo_cave"
+    },
+    {
+      "id": "cave_exit",
+      "kind": "cave_exit",
+      "name": "동굴 출구",
+      "zone": "cave:echo_cave",
+      "x": 80,
+      "z": 9,
+      "cave": "echo_cave"
+    },
+    {
+      "id": "cave_crystal",
+      "kind": "crystal",
+      "name": "빛나는 수정",
+      "zone": "cave:echo_cave",
+      "x": 82,
+      "z": 144,
+      "item": {
+        "id": "crystal_shard",
+        "count": 1
+      },
+      "text": [
+        "동굴 깊은 곳에서 은은하게 빛나는 수정이다. 조각 하나를 챙겼다."
+      ]
+    }
+  ],
+  "areas": [
+    {
+      "id": "verdant_town",
+      "name": "새싹마을",
+      "x": 0,
+      "z": 0,
+      "radius": 60
+    },
+    {
+      "id": "route_1",
+      "name": "1번 도로",
+      "x": -20,
+      "z": 110,
+      "radius": 70
+    },
+    {
+      "id": "whisper_forest",
+      "name": "속삭임 숲",
+      "x": -80,
+      "z": 240,
+      "radius": 110
+    },
+    {
+      "id": "clear_lake",
+      "name": "맑은 호수",
+      "x": 252,
+      "z": 112,
+      "radius": 75
+    },
+    {
+      "id": "sunny_beach",
+      "name": "햇살 해변",
+      "x": 40,
+      "z": -262,
+      "radius": 80
+    },
+    {
+      "id": "echo_cave_mouth",
+      "name": "메아리 동굴 입구",
+      "x": -262,
+      "z": 52,
+      "radius": 30
+    },
+    {
+      "id": "echo_cave",
+      "name": "메아리 동굴",
+      "zone": "cave:echo_cave",
+      "x": 80,
+      "z": 80,
+      "radius": 140
+    },
+    {
+      "id": "west_hills",
+      "name": "서쪽 언덕",
+      "x": -200,
+      "z": 40,
+      "radius": 90
+    },
+    {
+      "id": "open_sea",
+      "name": "남쪽 바다",
+      "x": 60,
+      "z": -380,
+      "radius": 160
+    }
+  ]
+}

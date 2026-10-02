@@ -1,0 +1,112 @@
+[
+  {
+    "id": "fo_meadowbug",
+    "species": "meadowbug",
+    "biomes": [
+      "forest"
+    ],
+    "level": {
+      "min": 3,
+      "max": 6
+    },
+    "weight": 20,
+    "rarity": "common"
+  },
+  {
+    "id": "fo_silkmoth",
+    "species": "silkmoth",
+    "biomes": [
+      "forest"
+    ],
+    "level": {
+      "min": 10,
+      "max": 13
+    },
+    "weight": 4,
+    "rarity": "rare",
+    "layer": "air"
+  },
+  {
+    "id": "fo_glowshroom",
+    "species": "glowshroom",
+    "biomes": [
+      "forest"
+    ],
+    "level": {
+      "min": 5,
+      "max": 9
+    },
+    "weight": 12,
+    "rarity": "uncommon",
+    "time": [
+      "dusk",
+      "night"
+    ]
+  },
+  {
+    "id": "fo_nightowl",
+    "species": "nightowl",
+    "biomes": [
+      "forest",
+      "forest_edge"
+    ],
+    "level": {
+      "min": 7,
+      "max": 11
+    },
+    "weight": 8,
+    "rarity": "uncommon",
+    "time": [
+      "night"
+    ],
+    "layer": "air"
+  },
+  {
+    "id": "fo_foxfire",
+    "species": "foxfire",
+    "biomes": [
+      "forest_edge"
+    ],
+    "level": {
+      "min": 8,
+      "max": 12
+    },
+    "weight": 4,
+    "rarity": "rare",
+    "time": [
+      "dusk",
+      "night"
+    ]
+  },
+  {
+    "id": "fo_stagleaf",
+    "species": "stagleaf",
+    "biomes": [
+      "forest"
+    ],
+    "level": {
+      "min": 12,
+      "max": 16
+    },
+    "weight": 2,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "fo_chirpling",
+    "species": "chirpling",
+    "biomes": [
+      "forest"
+    ],
+    "level": {
+      "min": 4,
+      "max": 7
+    },
+    "weight": 10,
+    "rarity": "common",
+    "time": [
+      "dawn",
+      "day",
+      "dusk"
+    ]
+  }
+]

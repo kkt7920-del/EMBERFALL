@@ -1,0 +1,54 @@
+{
+  "id": "ironbeetle",
+  "name": "강철딱정벌레",
+  "types": [
+    "bug",
+    "steel"
+  ],
+  "baseStats": {
+    "hp": 55,
+    "atk": 80,
+    "def": 95,
+    "spa": 30,
+    "spd": 50,
+    "spe": 40
+  },
+  "catchRate": 90,
+  "baseExp": 120,
+  "learnset": [
+    {
+      "level": 1,
+      "move": "bug_bite"
+    },
+    {
+      "level": 1,
+      "move": "metal_claw"
+    },
+    {
+      "level": 1,
+      "move": "iron_guard"
+    },
+    {
+      "level": 12,
+      "move": "headbutt"
+    }
+  ],
+  "model": {
+    "template": "quad_low",
+    "colors": {
+      "primary": "#7a8a9a",
+      "secondary": "#4a5a6a",
+      "accent": "#e0c050",
+      "eye": "#1d1d24"
+    },
+    "scale": 0.9
+  },
+  "behavior": {
+    "movement": [
+      "walk"
+    ],
+    "temperament": "neutral",
+    "speed": 0.8
+  },
+  "description": "유적의 금속 조각을 갑옷 삼아 두른다."
+}

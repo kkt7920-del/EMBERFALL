@@ -1,0 +1,418 @@
+[
+  {
+    "id": "tackle",
+    "name": "몸통박치기",
+    "type": "normal",
+    "category": "physical",
+    "power": 40,
+    "accuracy": 100,
+    "pp": 35,
+    "fx": "melee"
+  },
+  {
+    "id": "quick_strike",
+    "name": "재빠른일격",
+    "type": "normal",
+    "category": "physical",
+    "power": 40,
+    "accuracy": 100,
+    "pp": 30,
+    "fx": "melee",
+    "priority": 1
+  },
+  {
+    "id": "growl",
+    "name": "으르렁",
+    "type": "normal",
+    "category": "status",
+    "power": 0,
+    "accuracy": 100,
+    "pp": 40,
+    "fx": "aura",
+    "effect": {
+      "kind": "stat",
+      "target": "foe",
+      "stat": "atk",
+      "stages": -1
+    }
+  },
+  {
+    "id": "headbutt",
+    "name": "머리받기",
+    "type": "normal",
+    "category": "physical",
+    "power": 70,
+    "accuracy": 100,
+    "pp": 15,
+    "fx": "melee"
+  },
+  {
+    "id": "ember",
+    "name": "불씨",
+    "type": "fire",
+    "category": "special",
+    "power": 40,
+    "accuracy": 100,
+    "pp": 25,
+    "fx": "projectile"
+  },
+  {
+    "id": "flame_fang",
+    "name": "화염송곳니",
+    "type": "fire",
+    "category": "physical",
+    "power": 65,
+    "accuracy": 95,
+    "pp": 15,
+    "fx": "melee"
+  },
+  {
+    "id": "heat_wave",
+    "name": "열풍",
+    "type": "fire",
+    "category": "special",
+    "power": 85,
+    "accuracy": 90,
+    "pp": 10,
+    "fx": "projectile"
+  },
+  {
+    "id": "water_gun",
+    "name": "물대포",
+    "type": "water",
+    "category": "special",
+    "power": 40,
+    "accuracy": 100,
+    "pp": 25,
+    "fx": "projectile"
+  },
+  {
+    "id": "bubble_jet",
+    "name": "거품분사",
+    "type": "water",
+    "category": "special",
+    "power": 65,
+    "accuracy": 100,
+    "pp": 20,
+    "fx": "projectile"
+  },
+  {
+    "id": "aqua_tail",
+    "name": "물결꼬리",
+    "type": "water",
+    "category": "physical",
+    "power": 85,
+    "accuracy": 90,
+    "pp": 10,
+    "fx": "melee"
+  },
+  {
+    "id": "leaf_cut",
+    "name": "잎날",
+    "type": "grass",
+    "category": "physical",
+    "power": 40,
+    "accuracy": 100,
+    "pp": 25,
+    "fx": "melee"
+  },
+  {
+    "id": "absorb",
+    "name": "흡수",
+    "type": "grass",
+    "category": "special",
+    "power": 40,
+    "accuracy": 100,
+    "pp": 25,
+    "fx": "projectile",
+    "effect": {
+      "kind": "drain",
+      "fraction": 0.5
+    }
+  },
+  {
+    "id": "vine_lash",
+    "name": "덩굴채찍",
+    "type": "grass",
+    "category": "physical",
+    "power": 65,
+    "accuracy": 100,
+    "pp": 20,
+    "fx": "melee"
+  },
+  {
+    "id": "solar_beam",
+    "name": "햇살광선",
+    "type": "grass",
+    "category": "special",
+    "power": 95,
+    "accuracy": 100,
+    "pp": 10,
+    "fx": "projectile"
+  },
+  {
+    "id": "spark",
+    "name": "불똥",
+    "type": "electric",
+    "category": "special",
+    "power": 40,
+    "accuracy": 100,
+    "pp": 30,
+    "fx": "projectile"
+  },
+  {
+    "id": "thunder_jolt",
+    "name": "번개충격",
+    "type": "electric",
+    "category": "special",
+    "power": 70,
+    "accuracy": 100,
+    "pp": 15,
+    "fx": "projectile"
+  },
+  {
+    "id": "charge_up",
+    "name": "충전",
+    "type": "electric",
+    "category": "status",
+    "power": 0,
+    "accuracy": 100,
+    "pp": 20,
+    "fx": "aura",
+    "effect": {
+      "kind": "stat",
+      "target": "self",
+      "stat": "spa",
+      "stages": 1
+    }
+  },
+  {
+    "id": "pebble_toss",
+    "name": "돌던지기",
+    "type": "rock",
+    "category": "physical",
+    "power": 40,
+    "accuracy": 95,
+    "pp": 25,
+    "fx": "melee"
+  },
+  {
+    "id": "rock_slam",
+    "name": "바위내려치기",
+    "type": "rock",
+    "category": "physical",
+    "power": 75,
+    "accuracy": 90,
+    "pp": 15,
+    "fx": "melee"
+  },
+  {
+    "id": "harden",
+    "name": "단단해지기",
+    "type": "rock",
+    "category": "status",
+    "power": 0,
+    "accuracy": 100,
+    "pp": 30,
+    "fx": "aura",
+    "effect": {
+      "kind": "stat",
+      "target": "self",
+      "stat": "def",
+      "stages": 1
+    }
+  },
+  {
+    "id": "mud_slap",
+    "name": "진흙뿌리기",
+    "type": "ground",
+    "category": "special",
+    "power": 40,
+    "accuracy": 100,
+    "pp": 20,
+    "fx": "projectile",
+    "effect": {
+      "kind": "stat",
+      "target": "foe",
+      "stat": "spe",
+      "stages": -1,
+      "chance": 0.5
+    }
+  },
+  {
+    "id": "earth_crack",
+    "name": "땅가르기",
+    "type": "ground",
+    "category": "physical",
+    "power": 80,
+    "accuracy": 100,
+    "pp": 10,
+    "fx": "melee"
+  },
+  {
+    "id": "bug_bite",
+    "name": "벌레물기",
+    "type": "bug",
+    "category": "physical",
+    "power": 40,
+    "accuracy": 100,
+    "pp": 25,
+    "fx": "melee"
+  },
+  {
+    "id": "silk_shot",
+    "name": "실뿜기",
+    "type": "bug",
+    "category": "status",
+    "power": 0,
+    "accuracy": 95,
+    "pp": 30,
+    "fx": "aura",
+    "effect": {
+      "kind": "stat",
+      "target": "foe",
+      "stat": "spe",
+      "stages": -1
+    }
+  },
+  {
+    "id": "signal_wing",
+    "name": "신호날개",
+    "type": "bug",
+    "category": "special",
+    "power": 70,
+    "accuracy": 100,
+    "pp": 15,
+    "fx": "projectile"
+  },
+  {
+    "id": "peck",
+    "name": "쪼기",
+    "type": "flying",
+    "category": "physical",
+    "power": 40,
+    "accuracy": 100,
+    "pp": 35,
+    "fx": "melee"
+  },
+  {
+    "id": "gust",
+    "name": "돌풍",
+    "type": "flying",
+    "category": "special",
+    "power": 40,
+    "accuracy": 100,
+    "pp": 30,
+    "fx": "projectile"
+  },
+  {
+    "id": "aerial_dive",
+    "name": "공중강하",
+    "type": "flying",
+    "category": "physical",
+    "power": 75,
+    "accuracy": 95,
+    "pp": 15,
+    "fx": "melee"
+  },
+  {
+    "id": "bite",
+    "name": "물기",
+    "type": "dark",
+    "category": "physical",
+    "power": 55,
+    "accuracy": 100,
+    "pp": 25,
+    "fx": "melee"
+  },
+  {
+    "id": "night_slash",
+    "name": "어둠베기",
+    "type": "dark",
+    "category": "physical",
+    "power": 70,
+    "accuracy": 100,
+    "pp": 15,
+    "fx": "melee"
+  },
+  {
+    "id": "glitter",
+    "name": "반짝임",
+    "type": "fairy",
+    "category": "special",
+    "power": 40,
+    "accuracy": 100,
+    "pp": 25,
+    "fx": "projectile"
+  },
+  {
+    "id": "moon_glow",
+    "name": "달빛치유",
+    "type": "fairy",
+    "category": "status",
+    "power": 0,
+    "accuracy": 100,
+    "pp": 10,
+    "fx": "aura",
+    "effect": {
+      "kind": "heal",
+      "fraction": 0.5
+    }
+  },
+  {
+    "id": "metal_claw",
+    "name": "강철발톱",
+    "type": "steel",
+    "category": "physical",
+    "power": 50,
+    "accuracy": 95,
+    "pp": 25,
+    "fx": "melee"
+  },
+  {
+    "id": "iron_guard",
+    "name": "철벽",
+    "type": "steel",
+    "category": "status",
+    "power": 0,
+    "accuracy": 100,
+    "pp": 15,
+    "fx": "aura",
+    "effect": {
+      "kind": "stat",
+      "target": "self",
+      "stat": "def",
+      "stages": 2
+    }
+  },
+  {
+    "id": "mind_pulse",
+    "name": "염파",
+    "type": "psychic",
+    "category": "special",
+    "power": 50,
+    "accuracy": 100,
+    "pp": 25,
+    "fx": "projectile"
+  },
+  {
+    "id": "psy_beam",
+    "name": "정신광선",
+    "type": "psychic",
+    "category": "special",
+    "power": 80,
+    "accuracy": 100,
+    "pp": 15,
+    "fx": "projectile"
+  },
+  {
+    "id": "dawn_ray",
+    "name": "새벽빛",
+    "type": "psychic",
+    "category": "special",
+    "power": 100,
+    "accuracy": 95,
+    "pp": 5,
+    "fx": "projectile"
+  }
+]

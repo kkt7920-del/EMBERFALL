@@ -1,0 +1,61 @@
+{
+  "id": "riverotter",
+  "name": "강수달",
+  "types": [
+    "water"
+  ],
+  "baseStats": {
+    "hp": 60,
+    "atk": 70,
+    "def": 55,
+    "spa": 55,
+    "spd": 55,
+    "spe": 75
+  },
+  "catchRate": 120,
+  "baseExp": 110,
+  "learnset": [
+    {
+      "level": 1,
+      "move": "water_gun"
+    },
+    {
+      "level": 1,
+      "move": "quick_strike"
+    },
+    {
+      "level": 1,
+      "move": "bite"
+    },
+    {
+      "level": 12,
+      "move": "aqua_tail"
+    }
+  ],
+  "model": {
+    "template": "quad_low",
+    "colors": {
+      "primary": "#8a6a50",
+      "secondary": "#d8c0a0",
+      "accent": "#3a3a3a",
+      "eye": "#1d1d24"
+    },
+    "scale": 1.1
+  },
+  "behavior": {
+    "movement": [
+      "walk",
+      "swim"
+    ],
+    "temperament": "neutral",
+    "speed": 1.3
+  },
+  "description": "강물을 미끄러지듯 헤엄친다.",
+  "mount": {
+    "modes": [
+      "swim",
+      "land"
+    ],
+    "speed": 1.5
+  }
+}

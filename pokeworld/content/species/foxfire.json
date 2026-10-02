@@ -1,0 +1,58 @@
+{
+  "id": "foxfire",
+  "name": "여우불",
+  "types": [
+    "fire",
+    "fairy"
+  ],
+  "baseStats": {
+    "hp": 50,
+    "atk": 55,
+    "def": 50,
+    "spa": 75,
+    "spd": 70,
+    "spe": 80
+  },
+  "catchRate": 75,
+  "baseExp": 120,
+  "learnset": [
+    {
+      "level": 1,
+      "move": "ember"
+    },
+    {
+      "level": 1,
+      "move": "glitter"
+    },
+    {
+      "level": 1,
+      "move": "quick_strike"
+    },
+    {
+      "level": 14,
+      "move": "flame_fang"
+    },
+    {
+      "level": 18,
+      "move": "moon_glow"
+    }
+  ],
+  "model": {
+    "template": "quad_small",
+    "colors": {
+      "primary": "#f2a050",
+      "secondary": "#fff0d8",
+      "accent": "#f25a8a",
+      "eye": "#1d1d24"
+    },
+    "scale": 1.05
+  },
+  "behavior": {
+    "movement": [
+      "walk"
+    ],
+    "temperament": "timid",
+    "speed": 1.3
+  },
+  "description": "해 질 녘 숲 가장자리에서 여우불을 피운다."
+}

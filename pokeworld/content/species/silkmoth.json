@@ -1,0 +1,58 @@
+{
+  "id": "silkmoth",
+  "name": "비단나방",
+  "types": [
+    "bug",
+    "flying"
+  ],
+  "baseStats": {
+    "hp": 60,
+    "atk": 45,
+    "def": 55,
+    "spa": 80,
+    "spd": 70,
+    "spe": 75
+  },
+  "catchRate": 120,
+  "baseExp": 140,
+  "learnset": [
+    {
+      "level": 1,
+      "move": "bug_bite"
+    },
+    {
+      "level": 1,
+      "move": "silk_shot"
+    },
+    {
+      "level": 10,
+      "move": "gust"
+    },
+    {
+      "level": 14,
+      "move": "signal_wing"
+    },
+    {
+      "level": 18,
+      "move": "glitter"
+    }
+  ],
+  "model": {
+    "template": "bat",
+    "colors": {
+      "primary": "#f2eadb",
+      "secondary": "#c9b8ea",
+      "accent": "#8a6ad8",
+      "eye": "#1d1d24"
+    },
+    "scale": 1.0
+  },
+  "behavior": {
+    "movement": [
+      "fly"
+    ],
+    "temperament": "neutral",
+    "speed": 1.1
+  },
+  "description": "날개 가루가 달빛에 반짝인다."
+}

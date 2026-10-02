@@ -1,0 +1,73 @@
+[
+  {
+    "id": "cv_pebblet",
+    "species": "pebblet",
+    "biomes": [
+      "cave"
+    ],
+    "level": {
+      "min": 6,
+      "max": 10
+    },
+    "weight": 20,
+    "rarity": "common",
+    "zone": "cave:echo_cave"
+  },
+  {
+    "id": "cv_shadebat",
+    "species": "shadebat",
+    "biomes": [
+      "cave"
+    ],
+    "level": {
+      "min": 6,
+      "max": 10
+    },
+    "weight": 16,
+    "rarity": "common",
+    "zone": "cave:echo_cave",
+    "layer": "air"
+  },
+  {
+    "id": "cv_glowshroom",
+    "species": "glowshroom",
+    "biomes": [
+      "cave"
+    ],
+    "level": {
+      "min": 7,
+      "max": 10
+    },
+    "weight": 8,
+    "rarity": "uncommon",
+    "zone": "cave:echo_cave"
+  },
+  {
+    "id": "cv_crystalite",
+    "species": "crystalite",
+    "biomes": [
+      "cave"
+    ],
+    "level": {
+      "min": 10,
+      "max": 14
+    },
+    "weight": 3,
+    "rarity": "rare",
+    "zone": "cave:echo_cave"
+  },
+  {
+    "id": "cv_bouldron",
+    "species": "bouldron",
+    "biomes": [
+      "cave"
+    ],
+    "level": {
+      "min": 18,
+      "max": 20
+    },
+    "weight": 1,
+    "rarity": "very_rare",
+    "zone": "cave:echo_cave"
+  }
+]

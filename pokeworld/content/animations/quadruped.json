@@ -1,0 +1,38 @@
+{
+  "rig": "quadruped",
+  "idle": {
+    "bob": 0.02,
+    "speed": 2.2
+  },
+  "walk": {
+    "freq": 7,
+    "swing": 0.55,
+    "bob": 0.03
+  },
+  "run": {
+    "freq": 12,
+    "swing": 0.85,
+    "bob": 0.06
+  },
+  "swim": {
+    "freq": 5,
+    "sway": 0.25,
+    "bob": 0.05
+  },
+  "fly": {
+    "flapFreq": 0,
+    "flapAngle": 0,
+    "bob": 0.1
+  },
+  "battleIdle": {
+    "bob": 0.04,
+    "speed": 4
+  },
+  "attack": {
+    "lunge": 1.4,
+    "duration": 0.45
+  },
+  "faint": {
+    "duration": 0.8
+  }
+}

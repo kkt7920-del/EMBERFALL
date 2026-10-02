@@ -1,0 +1,65 @@
+{
+  "id": "sparkmouse",
+  "name": "찌릿쥐",
+  "types": [
+    "electric"
+  ],
+  "baseStats": {
+    "hp": 35,
+    "atk": 50,
+    "def": 35,
+    "spa": 50,
+    "spd": 40,
+    "spe": 85
+  },
+  "catchRate": 190,
+  "baseExp": 60,
+  "learnset": [
+    {
+      "level": 1,
+      "move": "tackle"
+    },
+    {
+      "level": 1,
+      "move": "growl"
+    },
+    {
+      "level": 3,
+      "move": "spark"
+    },
+    {
+      "level": 6,
+      "move": "quick_strike"
+    },
+    {
+      "level": 10,
+      "move": "charge_up"
+    },
+    {
+      "level": 15,
+      "move": "thunder_jolt"
+    }
+  ],
+  "model": {
+    "template": "quad_small",
+    "colors": {
+      "primary": "#f2d64b",
+      "secondary": "#c9a52a",
+      "accent": "#e8584a",
+      "eye": "#1d1d24"
+    },
+    "scale": 0.8
+  },
+  "behavior": {
+    "movement": [
+      "walk"
+    ],
+    "temperament": "timid",
+    "speed": 1.3
+  },
+  "description": "볼에 모은 정전기로 몸을 지킨다.",
+  "evolution": {
+    "to": "voltail",
+    "level": 18
+  }
+}

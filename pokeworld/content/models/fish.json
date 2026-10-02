@@ -1,0 +1,148 @@
+{
+  "id": "fish",
+  "rig": "fish",
+  "parts": [
+    {
+      "name": "body",
+      "role": "body",
+      "size": [
+        0.3,
+        0.42,
+        0.8
+      ],
+      "pos": [
+        0,
+        0.32,
+        0
+      ],
+      "color": "primary"
+    },
+    {
+      "name": "stripe",
+      "role": "deco",
+      "size": [
+        0.32,
+        0.14,
+        0.5
+      ],
+      "pos": [
+        0,
+        0.02,
+        0.02
+      ],
+      "color": "secondary",
+      "parent": "body"
+    },
+    {
+      "name": "eyeL",
+      "role": "deco",
+      "size": [
+        0.08,
+        0.092,
+        0.02
+      ],
+      "pos": [
+        -0.155,
+        0.08,
+        0.38
+      ],
+      "color": "eye",
+      "parent": "body"
+    },
+    {
+      "name": "eyeR",
+      "role": "deco",
+      "size": [
+        0.08,
+        0.092,
+        0.02
+      ],
+      "pos": [
+        0.155,
+        0.08,
+        0.38
+      ],
+      "color": "eye",
+      "parent": "body"
+    },
+    {
+      "name": "dorsal",
+      "role": "deco",
+      "size": [
+        0.05,
+        0.2,
+        0.32
+      ],
+      "pos": [
+        0,
+        0.28,
+        -0.05
+      ],
+      "color": "accent",
+      "parent": "body"
+    },
+    {
+      "name": "tailfin",
+      "role": "tail",
+      "size": [
+        0.06,
+        0.4,
+        0.3
+      ],
+      "pos": [
+        0,
+        0,
+        -0.4
+      ],
+      "color": "accent",
+      "parent": "body",
+      "offset": [
+        0,
+        0,
+        -0.14
+      ]
+    },
+    {
+      "name": "finL",
+      "role": "wingL",
+      "size": [
+        0.24,
+        0.04,
+        0.16
+      ],
+      "pos": [
+        -0.15,
+        -0.08,
+        0.1
+      ],
+      "color": "accent",
+      "parent": "body",
+      "offset": [
+        -0.1,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "finR",
+      "role": "wingR",
+      "size": [
+        0.24,
+        0.04,
+        0.16
+      ],
+      "pos": [
+        0.15,
+        -0.08,
+        0.1
+      ],
+      "color": "accent",
+      "parent": "body",
+      "offset": [
+        0.1,
+        0,
+        0
+      ]
+    }
+  ]
+}

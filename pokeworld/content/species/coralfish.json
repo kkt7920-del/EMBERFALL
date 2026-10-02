@@ -1,0 +1,53 @@
+{
+  "id": "coralfish",
+  "name": "산호물고기",
+  "types": [
+    "water"
+  ],
+  "baseStats": {
+    "hp": 45,
+    "atk": 50,
+    "def": 45,
+    "spa": 55,
+    "spd": 50,
+    "spe": 70
+  },
+  "catchRate": 200,
+  "baseExp": 60,
+  "learnset": [
+    {
+      "level": 1,
+      "move": "water_gun"
+    },
+    {
+      "level": 1,
+      "move": "tackle"
+    },
+    {
+      "level": 10,
+      "move": "bubble_jet"
+    },
+    {
+      "level": 12,
+      "move": "glitter"
+    }
+  ],
+  "model": {
+    "template": "fish",
+    "colors": {
+      "primary": "#f28a9a",
+      "secondary": "#f2d0a0",
+      "accent": "#6ac8e0",
+      "eye": "#1d1d24"
+    },
+    "scale": 1.0
+  },
+  "behavior": {
+    "movement": [
+      "swim"
+    ],
+    "temperament": "timid",
+    "speed": 1.2
+  },
+  "description": "산호초 사이를 떼 지어 헤엄친다."
+}

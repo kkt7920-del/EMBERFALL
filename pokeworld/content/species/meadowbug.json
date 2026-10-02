@@ -1,0 +1,53 @@
+{
+  "id": "meadowbug",
+  "name": "풀벌레",
+  "types": [
+    "bug"
+  ],
+  "baseStats": {
+    "hp": 40,
+    "atk": 35,
+    "def": 40,
+    "spa": 30,
+    "spd": 35,
+    "spe": 40
+  },
+  "catchRate": 255,
+  "baseExp": 40,
+  "learnset": [
+    {
+      "level": 1,
+      "move": "tackle"
+    },
+    {
+      "level": 1,
+      "move": "silk_shot"
+    },
+    {
+      "level": 5,
+      "move": "bug_bite"
+    }
+  ],
+  "model": {
+    "template": "blob",
+    "colors": {
+      "primary": "#a6d65a",
+      "secondary": "#6b9a2a",
+      "accent": "#f0e6a0",
+      "eye": "#1d1d24"
+    },
+    "scale": 0.7
+  },
+  "behavior": {
+    "movement": [
+      "walk"
+    ],
+    "temperament": "neutral",
+    "speed": 0.8
+  },
+  "description": "풀잎 사이에서 이슬을 마신다.",
+  "evolution": {
+    "to": "silkmoth",
+    "level": 10
+  }
+}
