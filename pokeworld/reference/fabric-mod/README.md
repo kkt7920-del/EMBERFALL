@@ -1,5 +1,8 @@
 # PokeWorld
 
+> 참고용(REFERENCE ADAPTER) 프로젝트입니다. 실제 배포판은 상위 디렉터리의 웹 게임입니다.
+> 이 모듈은 시스템 설계와 데이터 구조 참고용으로 유지합니다.
+
 Cobblemon 기반 오픈월드 탐험 모드 (Minecraft Java 1.21.1 / Fabric / Kotlin).
 
 탐험 · 포획 · 배틀 · 육성 · 진화 · 유적 · 전설 이벤트 · 채광 · 제작 · 육상/해상/해저/공중 이동이 핵심입니다.
@@ -61,7 +64,7 @@ pokeworld/
 
 ## 의존성
 
-- 필수: Fabric Loader, Fabric API, Fabric Language Kotlin, **Cobblemon ≥ 1.8.1** (`fabric.mod.json`의 `depends`)
+- 필수: Fabric Loader 0.17.3, Fabric API 0.116.7+1.21.1 (0.116.17+1.21.1도 호환), Fabric Language Kotlin 1.13.7+kotlin.2.2.21, **Cobblemon ≥ 1.8.1** (`fabric.mod.json`의 `depends`)
 - 선택: Mega Showdown (`mega_showdown`). 없으면 배틀 기믹만 꺼진 채 정상 실행됩니다.
   PHASE 1은 감지만 하며, 실제 연동은 PHASE 14에서 공개 API로만 구현합니다.
 
@@ -77,5 +80,4 @@ pokeworld/
 ./gradlew :fabric:runClient    # 클라이언트 기동 확인
 ```
 
-`gradle.properties`의 Fabric API / Loader / Fabric Language Kotlin 버전은 출시 전에
-https://fabricmc.net/develop 에서 1.21.1 기준 최신 값으로 확인하세요.
+의존성 버전은 Mega Showdown 개발 저장소의 호환 기준으로 확인된 값입니다. Loom 플러그인 버전(`1.11-SNAPSHOT`)만 미확인입니다.
